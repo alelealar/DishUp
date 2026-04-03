@@ -12,6 +12,7 @@ import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -47,6 +48,12 @@ public final class FrmProductos extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         
         panProductos.setLayout(new GridLayout(0, 4, 10, 15));
+        JPanel contenedorAuxiliar = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        
+        contenedorAuxiliar.setBackground(Color.WHITE);
+        contenedorAuxiliar.add(panProductos);
+
+        jScrollPane2.setViewportView(contenedorAuxiliar);
         
         panPrincipal.setFocusable(true);
         
@@ -226,6 +233,11 @@ public final class FrmProductos extends javax.swing.JFrame {
                 txtBuscadorActionPerformed(evt);
             }
         });
+        txtBuscador.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscadorKeyReleased(evt);
+            }
+        });
 
         jScrollPane2.setBorder(null);
         jScrollPane2.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
@@ -347,8 +359,7 @@ public final class FrmProductos extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAtrasActionPerformed
 
     private void cbxTipoProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbxTipoProductoActionPerformed
-        TipoProducto tipo = (TipoProducto) cbxTipoProducto.getSelectedItem();
-        cargarProductosPorTipo(tipo);
+        refrescarProductosPorCategoria();
     }//GEN-LAST:event_cbxTipoProductoActionPerformed
 
     private void txtBuscadorFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscadorFocusGained
@@ -379,6 +390,17 @@ public final class FrmProductos extends javax.swing.JFrame {
         coordinador.frmProductosAFrmCliente(partes[1], numMesa);
         this.dispose();
     }//GEN-LAST:event_btnAtrasMouseClicked
+
+    private void txtBuscadorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscadorKeyReleased
+        String textoBusqueda = txtBuscador.getText().trim().toLowerCase();
+    
+        if (textoBusqueda.isEmpty() || textoBusqueda.equals("buscar...")) {
+            refrescarProductosPorCategoria();
+            return;
+        }
+
+        filtrarProductos(textoBusqueda);
+    }//GEN-LAST:event_txtBuscadorKeyReleased
 
     /**
      * @param args the command line arguments
@@ -538,8 +560,36 @@ public final class FrmProductos extends javax.swing.JFrame {
         panProductos.repaint();
     }
     
-    
+    public void filtrarProductos(String filtro) {
+        panProductos.removeAll();
+        int productosEncontrados = 0;
 
+        TipoProducto tipoActual = (TipoProducto) cbxTipoProducto.getSelectedItem();
+        List<ProductoDTO> productos = fachada.obtenerProductosPorTipo(tipoActual);
+
+        for (ProductoDTO producto : productos) {
+            if (producto.getNombre().toLowerCase().contains(filtro)) {
+                JPanel card = crearCardProducto(producto);
+                panProductos.add(card);
+                productosEncontrados++;
+            }
+        }
+        
+        if (productosEncontrados == 0) {
+            JLabel lblVacio = new JLabel("No se encontraron coincidencias para: " + filtro);
+            lblVacio.setFont(new Font("Arial", Font.ITALIC, 16));
+            lblVacio.setForeground(Color.GRAY);
+            panProductos.add(lblVacio);
+        }
+        
+        panProductos.revalidate();
+        panProductos.repaint();
+    }
+    
+    private void refrescarProductosPorCategoria() {
+        TipoProducto tipo = (TipoProducto) cbxTipoProducto.getSelectedItem();
+        cargarProductosPorTipo(tipo);
+    }
 }
 
 
