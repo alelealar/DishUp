@@ -6,6 +6,7 @@
 package dto;
 
 import enums.TipoProducto;
+import java.util.List;
 
 
 /**
@@ -95,7 +96,5 @@ public class ProductoDTO {
 
     public void setTipo(TipoProducto tipo) {
         this.tipo = tipo;
-    }
-    
-    
+    } 
 }

@@ -1,1 +1,6 @@
 /presentacion_DishUp/target/
+/dto_negocios/target/
+/negocios_gestionProductos/target/
+/negocios_gestionComandas/target/
+/negocios_gestionMesas/target/
+/negocios_gestionInventario/target/
