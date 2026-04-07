@@ -5,6 +5,7 @@
 package pantallas;
 
 import coordinador.CoordinadorInterfaces;
+import dto.IngredienteDTO;
 import dto.ProductoDTO;
 import enums.TipoProducto;
 import fachada.ProductoFachada;
@@ -93,7 +94,6 @@ public final class FrmProductos extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("FrameProductos");
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        setExtendedState(6);
 
         jScrollPane3.setBackground(new java.awt.Color(255, 255, 255));
         jScrollPane3.setBorder(null);
@@ -481,7 +481,11 @@ public final class FrmProductos extends javax.swing.JFrame {
             }
             @Override
             public void mousePressed(java.awt.event.MouseEvent e) {
-                txtBuscador.transferFocus(); // 👈 esto dispara el focusLost
+                txtBuscador.transferFocus();
+                
+                if(producto.estaDisponible()){
+                    productoSeleccionado(producto);
+                }
             }
             
         });
@@ -599,6 +603,12 @@ public final class FrmProductos extends javax.swing.JFrame {
     private void refrescarProductosPorCategoria() {
         TipoProducto tipo = (TipoProducto) cbxTipoProducto.getSelectedItem();
         cargarProductosPorTipo(tipo);
+    }
+    
+    private void productoSeleccionado(ProductoDTO producto){
+        List<IngredienteDTO> removibles = fachada.obtenerIngredientesRemovibles(producto.getId());
+        
+        coordinador.abrirPersonalizacionProducto(this, producto, removibles);
     }
 }
 

@@ -152,6 +152,12 @@ public class ProductoBO implements IProductoBO{
         return relaciones;
     }
     
+    /**
+     *
+     * @param idProducto
+     * @return
+     */
+    @Override
     public List<IngredienteDTO> obtenerIngredientesRemoviblesPorProducto(int idProducto) {
         List<IngredienteDTO> removibles = new ArrayList<>();
 

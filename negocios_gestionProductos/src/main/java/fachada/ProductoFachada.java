@@ -7,6 +7,7 @@ package fachada;
 
 import BO.ProductoBO;
 import Interface.IProductoBO;
+import dto.IngredienteDTO;
 import dto.ProductoDTO;
 import enums.TipoProducto;
 import java.util.List;
@@ -33,4 +34,9 @@ public class ProductoFachada {
     public List<ProductoDTO> obtenerProductosPorTipo(TipoProducto tipo) {
         return productoBO.obtenerProductosPorTipo(tipo);
     }
+    
+    public List<IngredienteDTO> obtenerIngredientesRemovibles(int idProducto) {
+        return productoBO.obtenerIngredientesRemoviblesPorProducto(idProducto);
+    }
+    
 }

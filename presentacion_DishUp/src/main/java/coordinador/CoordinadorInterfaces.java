@@ -5,7 +5,13 @@
 
 package coordinador;
 
+import dto.IngredienteDTO;
 import dto.MesaDTO;
+import dto.PedidoNuevoDTO;
+import dto.ProductoDTO;
+import java.util.ArrayList;
+import java.util.List;
+import pantallas.DlgModificarProducto;
 import pantallas.FrmCliente;
 import pantallas.FrmPantallaComandas;
 import pantallas.FrmProductos;
@@ -20,6 +26,8 @@ public class CoordinadorInterfaces {
     private FrmPantallaComandas frmComandas;
     private FrmCliente frmCliente;
     private FrmProductos frmProductos;
+    
+    private List<PedidoNuevoDTO> comandaTemporal = new ArrayList<>();
     
     public void mostrarRegistrarCliente(MesaDTO mesa){
         frmCliente = new FrmCliente();
@@ -45,6 +53,16 @@ public class CoordinadorInterfaces {
         frmCliente.setNombreCliente(nombreCliente);
         frmCliente.setNumeroMesa(numMesa);
         frmCliente.setVisible(true);
+    }
+    
+    public void abrirPersonalizacionProducto(java.awt.Frame padre, ProductoDTO producto, List<IngredienteDTO> removibles) {
+        DlgModificarProducto dlg = new DlgModificarProducto(padre, producto, removibles);
+        dlg.setVisible(true);
+
+        PedidoNuevoDTO pedido = dlg.getResultado();
+        if (pedido != null) {
+            comandaTemporal.add(pedido);
+        }
     }
 
 }
