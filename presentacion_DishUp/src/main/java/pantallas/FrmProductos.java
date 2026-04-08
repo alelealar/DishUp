@@ -29,8 +29,11 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 
 
 /**
@@ -55,33 +58,39 @@ public final class FrmProductos extends javax.swing.JFrame {
 
         this.setLocationRelativeTo(null);
 
-        pnlContenedorPedidos.removeAll();
-        pnlContenedorPedidos.setLayout(new BorderLayout());
-
+        // CONFIGURACIÓN pnlPedidos
         pnlPedidos.setLayout(new BoxLayout(pnlPedidos, BoxLayout.Y_AXIS));
-        pnlPedidos.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+        pnlPedidos.setBackground(new Color(217,217,217));
 
-        // Agregar pedidos al centro
-        pnlContenedorPedidos.add(pnlPedidos, BorderLayout.CENTER);
+        // IMPORTANTE: Liberar el tamaño para que crezca con los pedidos
+        pnlPedidos.setPreferredSize(null); 
 
-        // Botón fijo abajo
-        pnlContenedorPedidos.add(jPanel1, BorderLayout.SOUTH);
+        // Asegurar que el scroll sepa quién es su contenido
+        scrollPedidos.setViewportView(pnlPedidos);
+        scrollPedidos.setBorder(null); // Para que se vea limpio como en tu foto
 
         scrollPedidos.setVerticalScrollBarPolicy(
             javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
         );
 
+        // PRODUCTOS (Se ve bien)
         panProductos.setLayout(new GridLayout(0, 4, 10, 15));
         JPanel contenedorAuxiliar = new JPanel(new FlowLayout(FlowLayout.LEFT));
-
         contenedorAuxiliar.setBackground(Color.WHITE);
         contenedorAuxiliar.add(panProductos);
         jScrollPane2.setViewportView(contenedorAuxiliar);
 
         panPrincipal.setFocusable(true);
+
+        // CARGA INICIAL
         cargarCBX_TipoProducto();
         cbxTipoProducto.setSelectedItem(TipoProducto.BEBIDA);
         cargarProductosPorTipo(TipoProducto.BEBIDA);
+        
+
+        // OBLIGATORIO: Esto asegura que el panel gris use todo el espacio disponible
+        pnlContenedorPedidos.revalidate();
+        pnlContenedorPedidos.repaint();
     }
 
     /**
@@ -100,12 +109,7 @@ public final class FrmProductos extends javax.swing.JFrame {
         lblMesa = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         lblCliente = new javax.swing.JLabel();
-        scrollPedidos = new javax.swing.JScrollPane();
-        pnlContenedorPedidos = new javax.swing.JPanel();
-        pnlPedidos = new javax.swing.JPanel();
-        jPanel1 = new javax.swing.JPanel();
-        btnEnviarAComanda = new javax.swing.JButton();
-        jPanel3 = new javax.swing.JPanel();
+        pnlTituloPedidos = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         txtBuscador = new javax.swing.JTextField();
@@ -113,6 +117,11 @@ public final class FrmProductos extends javax.swing.JFrame {
         panProductos = new javax.swing.JPanel();
         cbxTipoProducto = new javax.swing.JComboBox<>();
         btnAtras = new javax.swing.JButton();
+        pnlContenedorPedidos = new javax.swing.JPanel();
+        scrollPedidos = new javax.swing.JScrollPane();
+        pnlPedidos = new javax.swing.JPanel();
+        pnlBoton = new javax.swing.JPanel();
+        btnEnviarAComanda = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("FrameProductos");
@@ -184,104 +193,35 @@ public final class FrmProductos extends javax.swing.JFrame {
                     .addGap(24, 24, 24)))
         );
 
-        scrollPedidos.setBorder(null);
-        scrollPedidos.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPedidos.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-        scrollPedidos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                scrollPedidosMousePressed(evt);
-            }
-        });
-
-        pnlContenedorPedidos.setBackground(new java.awt.Color(217, 217, 217));
-
-        pnlPedidos.setBackground(new java.awt.Color(217, 217, 217));
-
-        javax.swing.GroupLayout pnlPedidosLayout = new javax.swing.GroupLayout(pnlPedidos);
-        pnlPedidos.setLayout(pnlPedidosLayout);
-        pnlPedidosLayout.setHorizontalGroup(
-            pnlPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 215, Short.MAX_VALUE)
-        );
-        pnlPedidosLayout.setVerticalGroup(
-            pnlPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 504, Short.MAX_VALUE)
-        );
-
-        jPanel1.setBackground(new java.awt.Color(217, 217, 217));
-
-        btnEnviarAComanda.setBackground(new java.awt.Color(44, 44, 44));
-        btnEnviarAComanda.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnEnviarAComanda.setForeground(new java.awt.Color(255, 255, 255));
-        btnEnviarAComanda.setText("Enviar a comanda");
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(18, Short.MAX_VALUE)
-                .addComponent(btnEnviarAComanda)
-                .addGap(21, 21, 21))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(btnEnviarAComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-        );
-
-        javax.swing.GroupLayout pnlContenedorPedidosLayout = new javax.swing.GroupLayout(pnlContenedorPedidos);
-        pnlContenedorPedidos.setLayout(pnlContenedorPedidosLayout);
-        pnlContenedorPedidosLayout.setHorizontalGroup(
-            pnlContenedorPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(pnlContenedorPedidosLayout.createSequentialGroup()
-                .addGroup(pnlContenedorPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(pnlContenedorPedidosLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addComponent(pnlPedidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(66, Short.MAX_VALUE))
-        );
-        pnlContenedorPedidosLayout.setVerticalGroup(
-            pnlContenedorPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContenedorPedidosLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(pnlPedidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(305, 305, 305))
-        );
-
-        scrollPedidos.setViewportView(pnlContenedorPedidos);
-
-        jPanel3.setBackground(new java.awt.Color(217, 217, 217));
+        pnlTituloPedidos.setBackground(new java.awt.Color(217, 217, 217));
 
         jLabel2.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("PEDIDO");
+        jLabel2.setText("PEDIDOS");
 
         jSeparator1.setForeground(new java.awt.Color(163, 163, 163));
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(39, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+        javax.swing.GroupLayout pnlTituloPedidosLayout = new javax.swing.GroupLayout(pnlTituloPedidos);
+        pnlTituloPedidos.setLayout(pnlTituloPedidosLayout);
+        pnlTituloPedidosLayout.setHorizontalGroup(
+            pnlTituloPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlTituloPedidosLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(82, 82, 82))
+            .addGroup(pnlTituloPedidosLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
+        pnlTituloPedidosLayout.setVerticalGroup(
+            pnlTituloPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlTituloPedidosLayout.createSequentialGroup()
+                .addGap(27, 27, 27)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(11, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         txtBuscador.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
@@ -351,6 +291,45 @@ public final class FrmProductos extends javax.swing.JFrame {
             }
         });
 
+        pnlContenedorPedidos.setLayout(new java.awt.BorderLayout());
+
+        scrollPedidos.setBackground(new java.awt.Color(217, 217, 217));
+        scrollPedidos.setBorder(null);
+        scrollPedidos.setPreferredSize(new java.awt.Dimension(200, 200));
+
+        pnlPedidos.setBackground(new java.awt.Color(217, 217, 217));
+        pnlPedidos.setLayout(new javax.swing.BoxLayout(pnlPedidos, javax.swing.BoxLayout.Y_AXIS));
+        scrollPedidos.setViewportView(pnlPedidos);
+
+        pnlContenedorPedidos.add(scrollPedidos, java.awt.BorderLayout.CENTER);
+
+        pnlBoton.setBackground(new java.awt.Color(217, 217, 217));
+        pnlBoton.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        btnEnviarAComanda.setBackground(new java.awt.Color(44, 44, 44));
+        btnEnviarAComanda.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btnEnviarAComanda.setForeground(new java.awt.Color(255, 255, 255));
+        btnEnviarAComanda.setText("Enviar a comanda");
+
+        javax.swing.GroupLayout pnlBotonLayout = new javax.swing.GroupLayout(pnlBoton);
+        pnlBoton.setLayout(pnlBotonLayout);
+        pnlBotonLayout.setHorizontalGroup(
+            pnlBotonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlBotonLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(btnEnviarAComanda)
+                .addContainerGap(14, Short.MAX_VALUE))
+        );
+        pnlBotonLayout.setVerticalGroup(
+            pnlBotonLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlBotonLayout.createSequentialGroup()
+                .addContainerGap(21, Short.MAX_VALUE)
+                .addComponent(btnEnviarAComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
+        );
+
+        pnlContenedorPedidos.add(pnlBoton, java.awt.BorderLayout.SOUTH);
+
         javax.swing.GroupLayout panPrincipalLayout = new javax.swing.GroupLayout(panPrincipal);
         panPrincipal.setLayout(panPrincipalLayout);
         panPrincipalLayout.setHorizontalGroup(
@@ -363,7 +342,7 @@ public final class FrmProductos extends javax.swing.JFrame {
                         .addGroup(panPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panPrincipalLayout.createSequentialGroup()
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 696, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE))
                             .addGroup(panPrincipalLayout.createSequentialGroup()
                                 .addComponent(txtBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -374,8 +353,8 @@ public final class FrmProductos extends javax.swing.JFrame {
                         .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(panPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(scrollPedidos, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addComponent(pnlTituloPedidos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(pnlContenedorPedidos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         panPrincipalLayout.setVerticalGroup(
             panPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -384,7 +363,7 @@ public final class FrmProductos extends javax.swing.JFrame {
                     .addGroup(panPrincipalLayout.createSequentialGroup()
                         .addComponent(panHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(pnlTituloPedidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panPrincipalLayout.createSequentialGroup()
                         .addGap(126, 126, 126)
                         .addGroup(panPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -392,12 +371,16 @@ public final class FrmProductos extends javax.swing.JFrame {
                             .addComponent(cbxTipoProducto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addGroup(panPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(scrollPedidos, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panPrincipalLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 481, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnAtras))))
+                        .addComponent(btnAtras)
+                        .addGap(42, 42, 42))
+                    .addGroup(panPrincipalLayout.createSequentialGroup()
+                        .addGap(0, 0, 0)
+                        .addComponent(pnlContenedorPedidos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())))
         );
 
         jScrollPane3.setViewportView(panPrincipal);
@@ -410,7 +393,7 @@ public final class FrmProductos extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
         );
 
         pack();
@@ -442,10 +425,6 @@ public final class FrmProductos extends javax.swing.JFrame {
     private void panPrincipalMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panPrincipalMousePressed
         txtBuscador.transferFocus();
     }//GEN-LAST:event_panPrincipalMousePressed
-
-    private void scrollPedidosMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_scrollPedidosMousePressed
-        txtBuscador.transferFocus();
-    }//GEN-LAST:event_scrollPedidosMousePressed
 
     private void jScrollPane2MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane2MousePressed
         txtBuscador.transferFocus();
@@ -587,8 +566,6 @@ public final class FrmProductos extends javax.swing.JFrame {
     private javax.swing.JLabel imgLogo;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
@@ -597,8 +574,10 @@ public final class FrmProductos extends javax.swing.JFrame {
     private javax.swing.JPanel panHeader;
     private javax.swing.JPanel panPrincipal;
     private javax.swing.JPanel panProductos;
+    private javax.swing.JPanel pnlBoton;
     private javax.swing.JPanel pnlContenedorPedidos;
     private javax.swing.JPanel pnlPedidos;
+    private javax.swing.JPanel pnlTituloPedidos;
     private javax.swing.JScrollPane scrollPedidos;
     private javax.swing.JTextField txtBuscador;
     // End of variables declaration//GEN-END:variables
@@ -669,65 +648,393 @@ public final class FrmProductos extends javax.swing.JFrame {
         
         coordinador.abrirPersonalizacionProducto(this, producto, removibles);
     }
-    
+    /*
     public void agregarPedidoVisual(PedidoNuevoDTO pedido) {
+        // 1. Limpiar el 'pegamento' anterior para que los pedidos siempre queden arriba
+        pnlPedidos.setLayout(new BoxLayout(pnlPedidos, BoxLayout.Y_AXIS));
+        for (Component c : pnlPedidos.getComponents()) {
+            if (c instanceof Box.Filler) pnlPedidos.remove(c);
+        }
 
+        // 2. Crear la tarjeta (Item)
         JPanel item = new JPanel();
         item.setLayout(new BoxLayout(item, BoxLayout.Y_AXIS));
         item.setBackground(Color.WHITE);
-        item.setAlignmentX(Component.LEFT_ALIGNMENT);
+        item.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+        item.setAlignmentX(Component.CENTER_ALIGNMENT);
 
-        item.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
-
-        item.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(220, 220, 220), 1, true),
-            BorderFactory.createEmptyBorder(10, 10, 10, 10)
-        ));
-
+        // --- Header ---
         JPanel header = new JPanel(new BorderLayout());
         header.setOpaque(false);
-        header.setAlignmentX(Component.LEFT_ALIGNMENT);
+        header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
 
         JLabel lblNombre = new JLabel(pedido.getNombreProducto());
-        lblNombre.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
+        lblNombre.setFont(new Font("Segoe UI", Font.BOLD, 14));
 
-        JLabel btnEliminar = new JLabel("X");
-        btnEliminar.setFont(new Font("Arial", Font.BOLD, 16));
-        btnEliminar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        btnEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
+        JLabel btnX = new JLabel("X");
+        btnX.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnX.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 pnlPedidos.remove(item);
                 pnlPedidos.revalidate();
                 pnlPedidos.repaint();
             }
         });
-
         header.add(lblNombre, BorderLayout.WEST);
-        header.add(btnEliminar, BorderLayout.EAST);
+        header.add(btnX, BorderLayout.EAST);
 
-        String detallesFormateados = pedido.getEspecificaciones().replace(", ", "\n• ");
+        // --- Detalle ---
+        JTextField txt = new JTextField(pedido.getEspecificaciones());
+        txt.setEditable(false);
+        txt.setBackground(new Color(242, 242, 242));
+        txt.setBorder(BorderFactory.createEmptyBorder(5, 8, 5, 8));
 
-        JTextArea lblDetalles = new JTextArea("• " + detallesFormateados);
-        lblDetalles.setLineWrap(true);
-        lblDetalles.setWrapStyleWord(true);
-        lblDetalles.setEditable(false);
-        lblDetalles.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
-        lblDetalles.setBackground(new Color(245, 245, 245));
-        lblDetalles.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
-
-        lblDetalles.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+        JPanel wrap = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
+        wrap.setOpaque(false);
+        wrap.add(txt);
 
         item.add(header);
-        item.add(Box.createVerticalStrut(8));
-        item.add(lblDetalles);
+        item.add(Box.createVerticalStrut(5));
+        item.add(wrap);
+        item.setMaximumSize(new Dimension(Integer.MAX_VALUE, item.getPreferredSize().height));
 
+        // 3. Añadir, poner pegamento al final y refrescar
         pnlPedidos.add(item);
         pnlPedidos.add(Box.createVerticalStrut(10));
+        pnlPedidos.add(Box.createVerticalGlue()); // Esto empuja todo hacia ARRIBA
 
         pnlPedidos.revalidate();
         pnlPedidos.repaint();
+
+        // 4. Bajar el scroll automáticamente
+        SwingUtilities.invokeLater(() -> {
+            scrollPedidos.getVerticalScrollBar().setValue(scrollPedidos.getVerticalScrollBar().getMaximum());
+        });
     }
+    
+    public void agregarPedidoVisual(PedidoNuevoDTO pedido) {
+        // 1. Limpiar el 'pegamento' anterior
+        pnlPedidos.setLayout(new BoxLayout(pnlPedidos, BoxLayout.Y_AXIS));
+        for (Component c : pnlPedidos.getComponents()) {
+            if (c instanceof Box.Filler) pnlPedidos.remove(c);
+        }
+
+        // 2. Crear la tarjeta (Item)
+        JPanel item = new JPanel();
+        item.setLayout(new BoxLayout(item, BoxLayout.Y_AXIS));
+        item.setBackground(Color.WHITE);
+
+        // --- CAMBIO PARA CUADRITOS SEPARADOS ---
+        // El primer CompoundBorder crea el margen GRIS a los lados (10px) y entre cuadros (5px)
+        // El segundo crea el espacio BLANCO interno para que el texto no pegue al borde
+        item.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createEmptyBorder(5, 10, 5, 10), 
+            BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
+        item.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // --- Header ---
+        JPanel header = new JPanel(new BorderLayout());
+        header.setOpaque(false);
+        header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+
+        JLabel lblNombre = new JLabel(pedido.getNombreProducto().toUpperCase());
+        lblNombre.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+        JLabel btnX = new JLabel("X");
+        btnX.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnX.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlPedidos.remove(item);
+                pnlPedidos.revalidate();
+                pnlPedidos.repaint();
+            }
+        });
+        header.add(lblNombre, BorderLayout.WEST);
+        header.add(btnX, BorderLayout.EAST);
+
+        // --- Detalle (AJUSTADO PARA NO USAR SCROLL HORIZONTAL) ---
+        // Usamos JTextArea en lugar de JTextField
+        JTextArea txt = new JTextArea(pedido.getEspecificaciones());
+        txt.setEditable(false);
+        txt.setLineWrap(true);       // Activa el salto de línea
+        txt.setWrapStyleWord(true);  // Corta por palabras, no por letras
+        txt.setBackground(new Color(242, 242, 242));
+        txt.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        txt.setBorder(BorderFactory.createEmptyBorder(5, 8, 5, 8));
+
+        // Importante: El JTextArea debe alinearse a la izquierda
+        txt.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        // --- Ensamblaje ---
+        item.add(header);
+        item.add(Box.createVerticalStrut(8));
+        item.add(txt); // Añadimos el JTextArea directamente
+
+        // Ajustar el tamaño máximo: el alto debe ser el preferido (que crece con el texto)
+        // y el ancho debe ser el máximo posible para que el BoxLayout lo estire.
+        item.setMaximumSize(new Dimension(Integer.MAX_VALUE, item.getPreferredSize().height));
+
+        // 3. Añadir al panel y refrescar
+        pnlPedidos.add(item);
+        pnlPedidos.add(Box.createVerticalGlue()); 
+
+        pnlPedidos.revalidate();
+        pnlPedidos.repaint();
+
+        // 4. Bajar el scroll automáticamente
+        SwingUtilities.invokeLater(() -> {
+            scrollPedidos.getVerticalScrollBar().setValue(scrollPedidos.getVerticalScrollBar().getMaximum());
+        });
+    }
+    
+    public void agregarPedidoVisual(PedidoNuevoDTO pedido) {
+        pnlPedidos.setLayout(new BoxLayout(pnlPedidos, BoxLayout.Y_AXIS));
+
+        // 1. Tarjeta Blanca (Item)
+        JPanel item = new JPanel();
+        item.setLayout(new BoxLayout(item, BoxLayout.Y_AXIS));
+        item.setBackground(Color.WHITE);
+
+        // BORDE: El EmptyBorder externo (5, 15, 5, 15) crea el "aire" gris a los lados
+        item.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createEmptyBorder(8, 15, 8, 15), 
+            BorderFactory.createEmptyBorder(12, 12, 12, 12)
+        ));
+        item.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // --- Header (Nombre + X) ---
+        JPanel header = new JPanel(new BorderLayout());
+        header.setOpaque(false);
+        header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        header.setAlignmentX(Component.LEFT_ALIGNMENT); // Alineado a la izq dentro del cuadro
+
+        JLabel lblNombre = new JLabel(pedido.getNombreProducto().toUpperCase());
+        lblNombre.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+        JLabel btnX = new JLabel("X");
+        btnX.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnX.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlPedidos.remove(item);
+                pnlPedidos.revalidate();
+                pnlPedidos.repaint();
+            }
+        });
+        header.add(lblNombre, BorderLayout.WEST);
+        header.add(btnX, BorderLayout.EAST);
+
+        // --- Detalle (Recuadro Gris) ---
+        JTextArea txt = new JTextArea(pedido.getEspecificaciones());
+        txt.setEditable(false);
+        txt.setLineWrap(true);
+        txt.setWrapStyleWord(true);
+        txt.setBackground(new Color(242, 242, 242));
+        txt.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        txt.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
+
+        // CLAVE: Esto evita que se mueva a la derecha
+        txt.setAlignmentX(Component.LEFT_ALIGNMENT); 
+
+        // --- Ensamblaje ---
+        item.add(header);
+        item.add(Box.createVerticalStrut(10));
+        item.add(txt);
+
+        // Obligamos al item a ocupar todo el ancho disponible para que se vean los bordes
+        item.setMaximumSize(new Dimension(Integer.MAX_VALUE, item.getPreferredSize().height));
+
+        // 2. Añadir y refrescar
+        pnlPedidos.add(item);
+
+        pnlPedidos.revalidate();
+        pnlPedidos.repaint();
+
+        SwingUtilities.invokeLater(() -> {
+            scrollPedidos.getVerticalScrollBar().setValue(scrollPedidos.getVerticalScrollBar().getMaximum());
+        });
+    }
+    
+    
+    public void agregarPedidoVisual(PedidoNuevoDTO pedido) {
+        // 1. Limpieza de pegamento (Vertical Glue) para mantener el orden
+        pnlPedidos.setLayout(new BoxLayout(pnlPedidos, BoxLayout.Y_AXIS));
+        for (Component c : pnlPedidos.getComponents()) {
+            if (c instanceof Box.Filler) pnlPedidos.remove(c);
+        }
+
+        // 2. Creación de la Tarjeta (Item)
+        JPanel item = new JPanel();
+        item.setLayout(new BoxLayout(item, BoxLayout.Y_AXIS));
+        item.setBackground(Color.GRAY);
+
+        // --- EL BORDE QUE BUSCAS ---
+        // El primer EmptyBorder crea el margen GRIS (10 arriba/abajo, 18 a los lados)
+        // El segundo EmptyBorder crea el espacio BLANCO interno (12 px parejo)
+        item.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createEmptyBorder(8, 18, 8, 18), 
+            BorderFactory.createEmptyBorder(12, 12, 12, 12)
+        ));
+        item.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // --- Header ---
+        JPanel header = new JPanel(new BorderLayout());
+        header.setOpaque(false);
+        header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+
+        JLabel lblNombre = new JLabel(pedido.getNombreProducto().toUpperCase());
+        lblNombre.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+        JLabel btnX = new JLabel("X");
+        btnX.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnX.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlPedidos.remove(item);
+                pnlPedidos.revalidate();
+                pnlPedidos.repaint();
+            }
+        });
+        header.add(lblNombre, BorderLayout.WEST);
+        header.add(btnX, BorderLayout.EAST);
+
+        // --- Detalles en formato Lista/Texto Dinámico ---
+        // Usamos JTextArea pero configurado para que parezca una lista
+        JTextArea txtLista = new JTextArea();
+        txtLista.setEditable(false);
+        txtLista.setBackground(new Color(242, 242, 242));
+        txtLista.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        txtLista.setLineWrap(true);
+        txtLista.setWrapStyleWord(true);
+        txtLista.setAlignmentX(Component.LEFT_ALIGNMENT);
+        // Formateamos el texto con viñetas para que sea una lista real
+        String detallesFormateados = pedido.getEspecificaciones().replace(", ", "\n• ");
+        txtLista.setText("• " + detallesFormateados);
+
+        // --- EL TRUCO DE LA PROPORCIÓN ---
+        // Añadimos un borde interno al recuadro gris para que el "Sin Crema" 
+        // no quede pegado al fondo del recuadro, sin importar el largo.
+        txtLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        txtLista.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        // --- Ensamblaje ---
+        item.add(header);
+        item.add(Box.createVerticalStrut(10));
+        item.add(txtLista);
+
+        // Esto hace que la tarjeta crezca hacia abajo según los detalles, 
+        // pero mantenga el ancho de la columna.
+        item.setMaximumSize(new Dimension(Integer.MAX_VALUE, item.getPreferredSize().height));
+
+        // 3. Agregar y empujar hacia arriba
+        pnlPedidos.add(item);
+        pnlPedidos.add(Box.createVerticalGlue()); 
+
+        pnlPedidos.revalidate();
+        pnlPedidos.repaint();
+
+        // Auto-scroll
+        SwingUtilities.invokeLater(() -> {
+            scrollPedidos.getVerticalScrollBar().setValue(scrollPedidos.getVerticalScrollBar().getMaximum());
+        });
+    }
+    */
+    public void agregarPedidoVisual(PedidoNuevoDTO pedido) {
+        // 1. Limpieza de pegamentos anteriores
+        pnlPedidos.setLayout(new BoxLayout(pnlPedidos, BoxLayout.Y_AXIS));
+        for (Component c : pnlPedidos.getComponents()) {
+            if (c instanceof Box.Filler) pnlPedidos.remove(c);
+        }
+
+        // 2. Tarjeta Blanca (Item)
+        JPanel item = new JPanel();
+        item.setLayout(new BoxLayout(item, BoxLayout.Y_AXIS));
+        item.setBackground(Color.WHITE);
+        item.setOpaque(false);
+
+        Border margenGrisExterior = BorderFactory.createEmptyBorder(8, 18, 8, 18);
+
+        // 2. La línea gris del contorno (puedes ajustar el grosor o el tono de gris)
+        Border lineaGris = BorderFactory.createLineBorder(new Color(160, 160, 160), 2); 
+
+        // 3. Margen interior blanco (para que el texto no pegue a la línea gris)
+        Border margenInteriorBlanco = BorderFactory.createEmptyBorder(12, 12, 12, 12);
+        
+        item.setBorder(BorderFactory.createCompoundBorder(
+            margenGrisExterior, 
+            BorderFactory.createCompoundBorder(lineaGris, margenInteriorBlanco)
+        ));
+        /*
+        // Margen externo (Gris) y margen interno (Blanco)
+        item.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createEmptyBorder(8, 18, 8, 18), 
+            BorderFactory.createEmptyBorder(12, 12, 12, 12)
+        ));
+        */
+
+        // IMPORTANTE: Alineamos la tarjeta al centro del panel de pedidos
+        item.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // --- Header ---
+        JPanel header = new JPanel(new BorderLayout());
+        header.setOpaque(false);
+        header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        // CLAVE 1: Alinear el header a la izquierda dentro de la tarjeta blanca
+        header.setAlignmentX(Component.LEFT_ALIGNMENT); 
+
+        JLabel lblNombre = new JLabel(pedido.getNombreProducto().toUpperCase());
+        lblNombre.setFont(new Font("Segoe UI", Font.BOLD, 14));
+
+        JLabel btnX = new JLabel("X");
+        btnX.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnX.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlPedidos.remove(item);
+                pnlPedidos.revalidate();
+                pnlPedidos.repaint();
+            }
+        });
+        header.add(lblNombre, BorderLayout.WEST);
+        header.add(btnX, BorderLayout.EAST);
+
+        // --- Detalles (Recuadro Gris) ---
+        JTextArea txtLista = new JTextArea();
+        txtLista.setEditable(false);
+        txtLista.setBackground(new Color(242, 242, 242));
+        txtLista.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+        txtLista.setLineWrap(true);
+        txtLista.setWrapStyleWord(true);
+
+        // Formatear como lista
+        String detallesFormateados = pedido.getEspecificaciones().replace(", ", "\n• ");
+        txtLista.setText("• " + detallesFormateados);
+
+        // Relleno interno del recuadro gris
+        txtLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+
+        // CLAVE 2: Alinear el recuadro gris a la izquierda
+        txtLista.setAlignmentX(Component.LEFT_ALIGNMENT); 
+
+        // --- Ensamblaje ---
+        item.add(header);
+        item.add(Box.createVerticalStrut(10));
+        item.add(txtLista);
+
+        // Ajuste de tamaño máximo para que no se estire verticalmente
+        item.setMaximumSize(new Dimension(Integer.MAX_VALUE, item.getPreferredSize().height));
+
+        // 3. Agregar y poner pegamento al final
+        pnlPedidos.add(item);
+        pnlPedidos.add(Box.createVerticalGlue()); 
+
+        pnlPedidos.revalidate();
+        pnlPedidos.repaint();
+
+        // Auto-scroll
+        SwingUtilities.invokeLater(() -> {
+            scrollPedidos.getVerticalScrollBar().setValue(scrollPedidos.getVerticalScrollBar().getMaximum());
+        });
+    }
+    
 }
 
 
