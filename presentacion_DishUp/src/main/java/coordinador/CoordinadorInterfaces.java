@@ -55,13 +55,16 @@ public class CoordinadorInterfaces {
         frmCliente.setVisible(true);
     }
     
-    public void abrirPersonalizacionProducto(java.awt.Frame padre, ProductoDTO producto, List<IngredienteDTO> removibles) {
-        DlgModificarProducto dlg = new DlgModificarProducto(padre, producto, removibles);
+    public void abrirPersonalizacionProducto(FrmProductos frm, ProductoDTO producto, List<IngredienteDTO> removibles) {
+    
+        DlgModificarProducto dlg = new DlgModificarProducto(frm, producto, removibles);
         dlg.setVisible(true);
 
         PedidoNuevoDTO pedido = dlg.getResultado();
+
         if (pedido != null) {
             comandaTemporal.add(pedido);
+            frm.agregarPedidoVisual(pedido);
         }
     }
 

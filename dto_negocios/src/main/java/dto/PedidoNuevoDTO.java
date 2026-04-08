@@ -21,6 +21,7 @@ public class PedidoNuevoDTO {
     private Integer idProducto;
     private Integer cantidad;
     private String especificaciones;
+    private String nombreProducto;
 
     public PedidoNuevoDTO(Integer idProducto, Integer cantidad, String especificaciones) {
         this.idProducto = idProducto;
@@ -54,6 +55,13 @@ public class PedidoNuevoDTO {
     public void setEspecificaciones(String especificaciones) {
         this.especificaciones = especificaciones;
     }
-    
+
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
+    }
     
 }

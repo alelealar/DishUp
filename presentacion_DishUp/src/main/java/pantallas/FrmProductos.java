@@ -6,12 +6,15 @@ package pantallas;
 
 import coordinador.CoordinadorInterfaces;
 import dto.IngredienteDTO;
+import dto.PedidoNuevoDTO;
 import dto.ProductoDTO;
 import enums.TipoProducto;
 import fachada.ProductoFachada;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -21,9 +24,12 @@ import java.awt.GridLayout;
 import java.awt.Image;
 import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
 
@@ -46,18 +52,33 @@ public final class FrmProductos extends javax.swing.JFrame {
     public FrmProductos(CoordinadorInterfaces coor) {
         this.coordinador = coor;
         initComponents(); 
+
         this.setLocationRelativeTo(null);
-        
+
+        pnlContenedorPedidos.removeAll();
+        pnlContenedorPedidos.setLayout(new BorderLayout());
+
+        pnlPedidos.setLayout(new BoxLayout(pnlPedidos, BoxLayout.Y_AXIS));
+        pnlPedidos.setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+
+        // Agregar pedidos al centro
+        pnlContenedorPedidos.add(pnlPedidos, BorderLayout.CENTER);
+
+        // Botón fijo abajo
+        pnlContenedorPedidos.add(jPanel1, BorderLayout.SOUTH);
+
+        scrollPedidos.setVerticalScrollBarPolicy(
+            javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
+        );
+
         panProductos.setLayout(new GridLayout(0, 4, 10, 15));
         JPanel contenedorAuxiliar = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        
+
         contenedorAuxiliar.setBackground(Color.WHITE);
         contenedorAuxiliar.add(panProductos);
-
         jScrollPane2.setViewportView(contenedorAuxiliar);
-        
+
         panPrincipal.setFocusable(true);
-        
         cargarCBX_TipoProducto();
         cbxTipoProducto.setSelectedItem(TipoProducto.BEBIDA);
         cargarProductosPorTipo(TipoProducto.BEBIDA);
@@ -80,7 +101,9 @@ public final class FrmProductos extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         lblCliente = new javax.swing.JLabel();
         scrollPedidos = new javax.swing.JScrollPane();
-        jPanel2 = new javax.swing.JPanel();
+        pnlContenedorPedidos = new javax.swing.JPanel();
+        pnlPedidos = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         btnEnviarAComanda = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -136,7 +159,7 @@ public final class FrmProductos extends javax.swing.JFrame {
                 .addGroup(panHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(lblMesa, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 413, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(34, 34, 34))
+                .addGap(20, 20, 20))
             .addGroup(panHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(panHeaderLayout.createSequentialGroup()
                     .addGap(176, 176, 176)
@@ -170,31 +193,65 @@ public final class FrmProductos extends javax.swing.JFrame {
             }
         });
 
-        jPanel2.setBackground(new java.awt.Color(217, 217, 217));
+        pnlContenedorPedidos.setBackground(new java.awt.Color(217, 217, 217));
+
+        pnlPedidos.setBackground(new java.awt.Color(217, 217, 217));
+
+        javax.swing.GroupLayout pnlPedidosLayout = new javax.swing.GroupLayout(pnlPedidos);
+        pnlPedidos.setLayout(pnlPedidosLayout);
+        pnlPedidosLayout.setHorizontalGroup(
+            pnlPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 215, Short.MAX_VALUE)
+        );
+        pnlPedidosLayout.setVerticalGroup(
+            pnlPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 504, Short.MAX_VALUE)
+        );
+
+        jPanel1.setBackground(new java.awt.Color(217, 217, 217));
 
         btnEnviarAComanda.setBackground(new java.awt.Color(44, 44, 44));
         btnEnviarAComanda.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnEnviarAComanda.setForeground(new java.awt.Color(255, 255, 255));
         btnEnviarAComanda.setText("Enviar a comanda");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(22, 22, 22)
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(18, Short.MAX_VALUE)
                 .addComponent(btnEnviarAComanda)
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addGap(21, 21, 21))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(499, Short.MAX_VALUE)
-                .addComponent(btnEnviarAComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(95, 95, 95))
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(btnEnviarAComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
-        scrollPedidos.setViewportView(jPanel2);
+        javax.swing.GroupLayout pnlContenedorPedidosLayout = new javax.swing.GroupLayout(pnlContenedorPedidos);
+        pnlContenedorPedidos.setLayout(pnlContenedorPedidosLayout);
+        pnlContenedorPedidosLayout.setHorizontalGroup(
+            pnlContenedorPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlContenedorPedidosLayout.createSequentialGroup()
+                .addGroup(pnlContenedorPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(pnlContenedorPedidosLayout.createSequentialGroup()
+                        .addGap(14, 14, 14)
+                        .addComponent(pnlPedidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(66, Short.MAX_VALUE))
+        );
+        pnlContenedorPedidosLayout.setVerticalGroup(
+            pnlContenedorPedidosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlContenedorPedidosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(pnlPedidos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(305, 305, 305))
+        );
+
+        scrollPedidos.setViewportView(pnlContenedorPedidos);
 
         jPanel3.setBackground(new java.awt.Color(217, 217, 217));
 
@@ -211,9 +268,9 @@ public final class FrmProductos extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(24, 24, 24)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(82, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(82, 82, 82))
         );
@@ -317,8 +374,8 @@ public final class FrmProductos extends javax.swing.JFrame {
                         .addComponent(btnAtras, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(panPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(scrollPedidos, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                    .addComponent(scrollPedidos, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
         panPrincipalLayout.setVerticalGroup(
             panPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -530,7 +587,7 @@ public final class FrmProductos extends javax.swing.JFrame {
     private javax.swing.JLabel imgLogo;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
@@ -540,6 +597,8 @@ public final class FrmProductos extends javax.swing.JFrame {
     private javax.swing.JPanel panHeader;
     private javax.swing.JPanel panPrincipal;
     private javax.swing.JPanel panProductos;
+    private javax.swing.JPanel pnlContenedorPedidos;
+    private javax.swing.JPanel pnlPedidos;
     private javax.swing.JScrollPane scrollPedidos;
     private javax.swing.JTextField txtBuscador;
     // End of variables declaration//GEN-END:variables
@@ -609,6 +668,65 @@ public final class FrmProductos extends javax.swing.JFrame {
         List<IngredienteDTO> removibles = fachada.obtenerIngredientesRemovibles(producto.getId());
         
         coordinador.abrirPersonalizacionProducto(this, producto, removibles);
+    }
+    
+    public void agregarPedidoVisual(PedidoNuevoDTO pedido) {
+
+        JPanel item = new JPanel();
+        item.setLayout(new BoxLayout(item, BoxLayout.Y_AXIS));
+        item.setBackground(Color.WHITE);
+        item.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        item.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
+
+        item.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(220, 220, 220), 1, true),
+            BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        ));
+
+        JPanel header = new JPanel(new BorderLayout());
+        header.setOpaque(false);
+        header.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel lblNombre = new JLabel(pedido.getNombreProducto());
+        lblNombre.setFont(new Font("Trebuchet MS", Font.BOLD, 16));
+
+        JLabel btnEliminar = new JLabel("X");
+        btnEliminar.setFont(new Font("Arial", Font.BOLD, 16));
+        btnEliminar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+        btnEliminar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                pnlPedidos.remove(item);
+                pnlPedidos.revalidate();
+                pnlPedidos.repaint();
+            }
+        });
+
+        header.add(lblNombre, BorderLayout.WEST);
+        header.add(btnEliminar, BorderLayout.EAST);
+
+        String detallesFormateados = pedido.getEspecificaciones().replace(", ", "\n• ");
+
+        JTextArea lblDetalles = new JTextArea("• " + detallesFormateados);
+        lblDetalles.setLineWrap(true);
+        lblDetalles.setWrapStyleWord(true);
+        lblDetalles.setEditable(false);
+        lblDetalles.setFont(new Font("Trebuchet MS", Font.PLAIN, 14));
+        lblDetalles.setBackground(new Color(245, 245, 245));
+        lblDetalles.setBorder(BorderFactory.createEmptyBorder(10, 15, 10, 15));
+
+        lblDetalles.setMaximumSize(new Dimension(Integer.MAX_VALUE, 60));
+
+        item.add(header);
+        item.add(Box.createVerticalStrut(8));
+        item.add(lblDetalles);
+
+        pnlPedidos.add(item);
+        pnlPedidos.add(Box.createVerticalStrut(10));
+
+        pnlPedidos.revalidate();
+        pnlPedidos.repaint();
     }
 }
 

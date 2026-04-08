@@ -56,7 +56,6 @@ public class DlgModificarProducto extends javax.swing.JDialog {
         return resultado; 
     }
     
-    
     /**
      * Creates new form DlgModificarProducto
      */
@@ -248,17 +247,25 @@ public class DlgModificarProducto extends javax.swing.JDialog {
 
     private void btnListoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnListoActionPerformed
         StringBuilder especificaciones = new StringBuilder();
+
         for (JCheckBox chk : checksIngredientes) {
             if (chk.isSelected()) {
                 especificaciones.append(chk.getText()).append(", ");
             }
         }
         
+        if (especificaciones.length() > 0) {
+            especificaciones.setLength(especificaciones.length() - 2);
+        }
+
+
+        
         resultado = new PedidoNuevoDTO();
         resultado.setIdProducto(idProductoActual);
+        resultado.setNombreProducto(lblNombreProducto.getText());
         resultado.setCantidad(1);
         resultado.setEspecificaciones(especificaciones.toString());
-        
+
         this.dispose();
     }//GEN-LAST:event_btnListoActionPerformed
 
