@@ -7,6 +7,7 @@ package Interface;
 
 import dto.IngredienteDTO;
 import dto.ProductoDTO;
+import dto.ProductoIngredienteDTO;
 import enums.TipoProducto;
 import java.util.List;
 
@@ -23,4 +24,6 @@ public interface IProductoBO {
      */
     public List<ProductoDTO> obtenerProductosPorTipo(TipoProducto tipo);
     public List<IngredienteDTO> obtenerIngredientesRemoviblesPorProducto(int idProducto);
+    public List<ProductoIngredienteDTO> obtenerProductoIngredientes();
+    public List<String> obtenerModificadoresRemoviblesPorProducto(int idProducto);
 }

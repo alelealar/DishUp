@@ -20,10 +20,18 @@ import java.util.List;
 
 public class ProductoFachada {
     
+    private static ProductoFachada instancia;
     private IProductoBO productoBO;
 
     public ProductoFachada() {
         this.productoBO = ProductoBO.getInstancia();
+    }
+    
+    public static ProductoFachada getInstancia(){
+        if (instancia == null) {
+            instancia = new ProductoFachada();
+        }
+        return instancia;
     }
     
     /**
