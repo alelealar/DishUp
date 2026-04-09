@@ -2,22 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package dto;
 
-
 /**
- * PedidoNuevoDTO.
- * Representa la información necesaria para registrar un pedido
+ * PedidoNuevoDTO. Representa la información necesaria para registrar un pedido
  * de un producto dentro de una comanda en construcción.
  *
- * Este DTO se utiliza para almacenar temporalmente los pedidos
- * antes de generar la comanda final.
- * 
+ * Este DTO se utiliza para almacenar temporalmente los pedidos antes de generar
+ * la comanda final.
+ *
  * @author DishUp
  */
-
 public class PedidoNuevoDTO {
+
     private Integer idProducto;
     private Integer cantidad;
     private String especificaciones;
@@ -63,5 +60,13 @@ public class PedidoNuevoDTO {
     public void setNombreProducto(String nombreProducto) {
         this.nombreProducto = nombreProducto;
     }
-    
+
+    @Override
+    public String toString() {
+        String detalles = (especificaciones != null && !especificaciones.isEmpty())
+                ? " (" + especificaciones + ")"
+                : "";
+        return cantidad + " x " + nombreProducto + detalles;
+    }
+
 }

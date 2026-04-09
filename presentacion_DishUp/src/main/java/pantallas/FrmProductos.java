@@ -35,42 +35,43 @@ import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
-
 /**
  *
  * @author Dishup
  */
 public final class FrmProductos extends javax.swing.JFrame {
+
     CoordinadorInterfaces coordinador = new CoordinadorInterfaces();
-    
+
     ProductoFachada fachada = new ProductoFachada();
-    
+
     private Integer numMesa;
     private String nombreCliente;
-    
+
     /**
      * Creates new form FrmPantallaComandas
+     *
      * @param coor
      */
     public FrmProductos(CoordinadorInterfaces coor) {
         this.coordinador = coor;
-        initComponents(); 
+        initComponents();
 
         this.setLocationRelativeTo(null);
 
         // CONFIGURACIÓN pnlPedidos
         pnlPedidos.setLayout(new BoxLayout(pnlPedidos, BoxLayout.Y_AXIS));
-        pnlPedidos.setBackground(new Color(217,217,217));
+        pnlPedidos.setBackground(new Color(217, 217, 217));
 
         // IMPORTANTE: Liberar el tamaño para que crezca con los pedidos
-        pnlPedidos.setPreferredSize(null); 
+        pnlPedidos.setPreferredSize(null);
 
         // Asegurar que el scroll sepa quién es su contenido
         scrollPedidos.setViewportView(pnlPedidos);
         scrollPedidos.setBorder(null); // Para que se vea limpio como en tu foto
 
         scrollPedidos.setVerticalScrollBarPolicy(
-            javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
+                javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED
         );
 
         // PRODUCTOS (Se ve bien)
@@ -86,7 +87,6 @@ public final class FrmProductos extends javax.swing.JFrame {
         cargarCBX_TipoProducto();
         cbxTipoProducto.setSelectedItem(TipoProducto.BEBIDA);
         cargarProductosPorTipo(TipoProducto.BEBIDA);
-        
 
         // OBLIGATORIO: Esto asegura que el panel gris use todo el espacio disponible
         pnlContenedorPedidos.revalidate();
@@ -310,6 +310,11 @@ public final class FrmProductos extends javax.swing.JFrame {
         btnEnviarAComanda.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         btnEnviarAComanda.setForeground(new java.awt.Color(255, 255, 255));
         btnEnviarAComanda.setText("Enviar a comanda");
+        btnEnviarAComanda.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnviarAComandaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout pnlBotonLayout = new javax.swing.GroupLayout(pnlBoton);
         pnlBoton.setLayout(pnlBotonLayout);
@@ -378,7 +383,6 @@ public final class FrmProductos extends javax.swing.JFrame {
                         .addComponent(btnAtras)
                         .addGap(42, 42, 42))
                     .addGroup(panPrincipalLayout.createSequentialGroup()
-                        .addGap(0, 0, 0)
                         .addComponent(pnlContenedorPedidos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
         );
@@ -438,7 +442,7 @@ public final class FrmProductos extends javax.swing.JFrame {
 
     private void txtBuscadorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscadorKeyReleased
         String textoBusqueda = txtBuscador.getText().trim().toLowerCase();
-    
+
         if (textoBusqueda.isEmpty() || textoBusqueda.equals("buscar...")) {
             refrescarProductosPorCategoria();
             return;
@@ -446,6 +450,11 @@ public final class FrmProductos extends javax.swing.JFrame {
 
         filtrarProductos(textoBusqueda);
     }//GEN-LAST:event_txtBuscadorKeyReleased
+
+    private void btnEnviarAComandaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarAComandaActionPerformed
+
+        coordinador.abrirResumenComanda(this, numMesa, nombreCliente);
+    }//GEN-LAST:event_btnEnviarAComandaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -489,18 +498,18 @@ public final class FrmProductos extends javax.swing.JFrame {
             }
         });
     }
-    
+
     private JPanel crearCardProducto(ProductoDTO producto) {
-        
+
         JPanel card = new JPanel();
-        
+
         card.setFocusable(false);
-        
+
         card.setLayout(new BorderLayout());
         card.setPreferredSize(new Dimension(150, 180));
         card.setBackground(Color.decode("#FFE3AC"));
         card.setBorder(BorderFactory.createLineBorder(Color.decode("#767676"), 5, true));
-        
+
         card.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
@@ -515,15 +524,16 @@ public final class FrmProductos extends javax.swing.JFrame {
                     card.setBackground(Color.decode("#FFE3AC"));
                 }
             }
+
             @Override
             public void mousePressed(java.awt.event.MouseEvent e) {
                 txtBuscador.transferFocus();
-                
-                if(producto.estaDisponible()){
+
+                if (producto.estaDisponible()) {
                     productoSeleccionado(producto);
                 }
             }
-            
+
         });
 
         JLabel lblImagen = new JLabel() {
@@ -581,7 +591,7 @@ public final class FrmProductos extends javax.swing.JFrame {
     private javax.swing.JScrollPane scrollPedidos;
     private javax.swing.JTextField txtBuscador;
     // End of variables declaration//GEN-END:variables
-   
+
     private void cargarCBX_TipoProducto() {
         cbxTipoProducto.removeAllItems();
 
@@ -589,29 +599,29 @@ public final class FrmProductos extends javax.swing.JFrame {
             cbxTipoProducto.addItem(tipo);
         }
     }
-    
-    public void setMesaAndCliente(Integer numMesa, String cliente){
+
+    public void setMesaAndCliente(Integer numMesa, String cliente) {
         this.numMesa = numMesa;
         this.nombreCliente = cliente;
-        
-        lblMesa.setText("MESA "+numMesa);
-        lblCliente.setText("CLIENTE: "+cliente);
+
+        lblMesa.setText("MESA " + numMesa);
+        lblCliente.setText("CLIENTE: " + cliente);
     }
-    
-    public void cargarProductosPorTipo(TipoProducto tipo){
+
+    public void cargarProductosPorTipo(TipoProducto tipo) {
         panProductos.removeAll();
-        
+
         List<ProductoDTO> productos = fachada.obtenerProductosPorTipo(tipo);
-        
+
         for (ProductoDTO producto : productos) {
             JPanel card = crearCardProducto(producto);
             panProductos.add(card);
         }
-        
+
         panProductos.revalidate();
         panProductos.repaint();
     }
-    
+
     public void filtrarProductos(String filtro) {
         panProductos.removeAll();
         int productosEncontrados = 0;
@@ -626,28 +636,29 @@ public final class FrmProductos extends javax.swing.JFrame {
                 productosEncontrados++;
             }
         }
-        
+
         if (productosEncontrados == 0) {
             JLabel lblVacio = new JLabel("No se encontraron coincidencias para: " + filtro);
             lblVacio.setFont(new Font("Arial", Font.ITALIC, 16));
             lblVacio.setForeground(Color.GRAY);
             panProductos.add(lblVacio);
         }
-        
+
         panProductos.revalidate();
         panProductos.repaint();
     }
-    
+
     private void refrescarProductosPorCategoria() {
         TipoProducto tipo = (TipoProducto) cbxTipoProducto.getSelectedItem();
         cargarProductosPorTipo(tipo);
     }
-    
-    private void productoSeleccionado(ProductoDTO producto){
+
+    private void productoSeleccionado(ProductoDTO producto) {
         List<IngredienteDTO> removibles = fachada.obtenerIngredientesRemovibles(producto.getId());
-        
+
         coordinador.abrirPersonalizacionProducto(this, producto, removibles);
     }
+
     /*
     public void agregarPedidoVisual(PedidoNuevoDTO pedido) {
         // 1. Limpiar el 'pegamento' anterior para que los pedidos siempre queden arriba
@@ -937,12 +948,14 @@ public final class FrmProductos extends javax.swing.JFrame {
             scrollPedidos.getVerticalScrollBar().setValue(scrollPedidos.getVerticalScrollBar().getMaximum());
         });
     }
-    */
+     */
     public void agregarPedidoVisual(PedidoNuevoDTO pedido) {
         // 1. Limpieza de pegamentos anteriores
         pnlPedidos.setLayout(new BoxLayout(pnlPedidos, BoxLayout.Y_AXIS));
         for (Component c : pnlPedidos.getComponents()) {
-            if (c instanceof Box.Filler) pnlPedidos.remove(c);
+            if (c instanceof Box.Filler) {
+                pnlPedidos.remove(c);
+            }
         }
 
         // 2. Tarjeta Blanca (Item)
@@ -954,14 +967,14 @@ public final class FrmProductos extends javax.swing.JFrame {
         Border margenGrisExterior = BorderFactory.createEmptyBorder(8, 18, 8, 18);
 
         // 2. La línea gris del contorno (puedes ajustar el grosor o el tono de gris)
-        Border lineaGris = BorderFactory.createLineBorder(new Color(160, 160, 160), 2); 
+        Border lineaGris = BorderFactory.createLineBorder(new Color(160, 160, 160), 2);
 
         // 3. Margen interior blanco (para que el texto no pegue a la línea gris)
         Border margenInteriorBlanco = BorderFactory.createEmptyBorder(12, 12, 12, 12);
-        
+
         item.setBorder(BorderFactory.createCompoundBorder(
-            margenGrisExterior, 
-            BorderFactory.createCompoundBorder(lineaGris, margenInteriorBlanco)
+                margenGrisExterior,
+                BorderFactory.createCompoundBorder(lineaGris, margenInteriorBlanco)
         ));
         /*
         // Margen externo (Gris) y margen interno (Blanco)
@@ -969,7 +982,7 @@ public final class FrmProductos extends javax.swing.JFrame {
             BorderFactory.createEmptyBorder(8, 18, 8, 18), 
             BorderFactory.createEmptyBorder(12, 12, 12, 12)
         ));
-        */
+         */
 
         // IMPORTANTE: Alineamos la tarjeta al centro del panel de pedidos
         item.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -979,7 +992,7 @@ public final class FrmProductos extends javax.swing.JFrame {
         header.setOpaque(false);
         header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
         // CLAVE 1: Alinear el header a la izquierda dentro de la tarjeta blanca
-        header.setAlignmentX(Component.LEFT_ALIGNMENT); 
+        header.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         JLabel lblNombre = new JLabel(pedido.getNombreProducto().toUpperCase());
         lblNombre.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -1012,7 +1025,7 @@ public final class FrmProductos extends javax.swing.JFrame {
         txtLista.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // CLAVE 2: Alinear el recuadro gris a la izquierda
-        txtLista.setAlignmentX(Component.LEFT_ALIGNMENT); 
+        txtLista.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         // --- Ensamblaje ---
         item.add(header);
@@ -1024,7 +1037,7 @@ public final class FrmProductos extends javax.swing.JFrame {
 
         // 3. Agregar y poner pegamento al final
         pnlPedidos.add(item);
-        pnlPedidos.add(Box.createVerticalGlue()); 
+        pnlPedidos.add(Box.createVerticalGlue());
 
         pnlPedidos.revalidate();
         pnlPedidos.repaint();
@@ -1034,8 +1047,5 @@ public final class FrmProductos extends javax.swing.JFrame {
             scrollPedidos.getVerticalScrollBar().setValue(scrollPedidos.getVerticalScrollBar().getMaximum());
         });
     }
-    
+
 }
-
-
-

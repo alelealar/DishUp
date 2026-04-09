@@ -12,6 +12,7 @@ import dto.ProductoDTO;
 import java.util.ArrayList;
 import java.util.List;
 import pantallas.DlgModificarProducto;
+import pantallas.DlgResumenComanda;
 import pantallas.FrmCliente;
 import pantallas.FrmPantallaComandas;
 import pantallas.FrmProductos;
@@ -28,6 +29,8 @@ public class CoordinadorInterfaces {
     private FrmProductos frmProductos;
     
     private List<PedidoNuevoDTO> comandaTemporal = new ArrayList<>();
+    
+    
     
     public void mostrarRegistrarCliente(MesaDTO mesa){
         frmCliente = new FrmCliente();
@@ -67,5 +70,13 @@ public class CoordinadorInterfaces {
             frm.agregarPedidoVisual(pedido);
         }
     }
+    
+    public void abrirResumenComanda (FrmProductos frm, int mesa, String nombreCliente){
+        DlgResumenComanda dlg = new DlgResumenComanda(frm, comandaTemporal);
+        dlg.setMesaAndCliente(mesa, nombreCliente);
+        dlg.setVisible(true);
+        
+    }
+    
 
 }
