@@ -33,6 +33,7 @@ public class IngredienteBO implements IIngredienteBO{
     public List<IngredienteDTO> obtenerIngredientes() {
         List<IngredienteDTO> ingredientes = new ArrayList<>();
 
+        //bebidas
         ingredientes.add(new IngredienteDTO(1, "Jugo de tomate", 30, 5));
         ingredientes.add(new IngredienteDTO(2, "Vodka", 20, 5));
         ingredientes.add(new IngredienteDTO(3, "Hielo", 100, 20));
@@ -49,6 +50,33 @@ public class IngredienteBO implements IIngredienteBO{
         ingredientes.add(new IngredienteDTO(14, "Crema de coco", 15, 5));
         ingredientes.add(new IngredienteDTO(15, "Jugo de naranja", 25, 5));
         ingredientes.add(new IngredienteDTO(16, "Whiskey", 20, 5));
+        
+        //botanas
+        ingredientes.add(new IngredienteDTO(17, "Papas", 100, 20));
+        ingredientes.add(new IngredienteDTO(18, "Queso", 80, 15));
+        ingredientes.add(new IngredienteDTO(19, "Pollo", 90, 20));
+        ingredientes.add(new IngredienteDTO(20, "Aceite", 100, 30));
+        ingredientes.add(new IngredienteDTO(21, "Sal", 200, 50));
+        ingredientes.add(new IngredienteDTO(22, "Sazonador", 100, 20));
+        ingredientes.add(new IngredienteDTO(23, "Maíz palomero", 80, 15));
+        ingredientes.add(new IngredienteDTO(24, "Mantequilla", 70, 10));
+        ingredientes.add(new IngredienteDTO(25, "Totopos", 100, 20));
+        ingredientes.add(new IngredienteDTO(26, "Frijoles", 60, 10));
+        ingredientes.add(new IngredienteDTO(27, "Salsa", 90, 15));
+        ingredientes.add(new IngredienteDTO(28, "Aceitunas", 50, 10));
+        ingredientes.add(new IngredienteDTO(29, "pollo empanizado", 80, 15));
+        ingredientes.add(new IngredienteDTO(30, "Aros de cebolla", 70, 10));
+        ingredientes.add(new IngredienteDTO(31, "Ketchup", 80, 15));
+        
+        
+        //comida
+        ingredientes.add(new IngredienteDTO(32, "Tortilla", 100, 20));
+        ingredientes.add(new IngredienteDTO(33, "Carne", 90, 20));
+        ingredientes.add(new IngredienteDTO(34, "Pan", 80, 15));
+        ingredientes.add(new IngredienteDTO(35, "Lechuga", 70, 10));
+        ingredientes.add(new IngredienteDTO(36, "Tomate", 70, 10));
+        ingredientes.add(new IngredienteDTO(37, "Pepperoni", 60, 10));
+        ingredientes.add(new IngredienteDTO(38, "Aderezo César", 50, 10));
 
         return ingredientes;
     }
