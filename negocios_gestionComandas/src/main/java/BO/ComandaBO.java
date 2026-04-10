@@ -5,6 +5,9 @@
 
 package BO;
 
+import dto.PedidoNuevoDTO;
+import java.util.List;
+
 
 /**
  *
@@ -12,5 +15,6 @@ package BO;
  */
 
 public class ComandaBO {
+        
 
 }

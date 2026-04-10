@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package coordinador;
 
+import dto.ComandaDTO;
 import dto.IngredienteDTO;
 import dto.MesaDTO;
 import dto.PedidoNuevoDTO;
@@ -17,49 +17,44 @@ import pantallas.FrmCliente;
 import pantallas.FrmPantallaComandas;
 import pantallas.FrmProductos;
 
-
 /**
  *
  * @author DishUp
  */
-
 public class CoordinadorInterfaces {
+
     private FrmPantallaComandas frmComandas;
     private FrmCliente frmCliente;
     private FrmProductos frmProductos;
-    
+
     private List<PedidoNuevoDTO> comandaTemporal = new ArrayList<>();
-    
-    
-    
-    public void mostrarRegistrarCliente(MesaDTO mesa){
+
+    public void mostrarRegistrarCliente(MesaDTO mesa) {
         frmCliente = new FrmCliente();
         frmCliente.setNumeroMesa(mesa.getNumeroMesa());
         frmCliente.setVisible(true);
     }
-    
-    public void regresarFrmComandas(){
+
+    public void regresarFrmComandas() {
         frmComandas = new FrmPantallaComandas(this);
         frmComandas.setVisible(true);
     }
-    
-    
-    public void frmClienteAFrmProductos(Integer mesa, String nombreCliente){
+
+    public void frmClienteAFrmProductos(Integer mesa, String nombreCliente) {
         frmProductos = new FrmProductos(this);
         frmProductos.setMesaAndCliente(mesa, nombreCliente);
         frmProductos.setVisible(true);
     }
-    
-    
-    public void frmProductosAFrmCliente(String nombreCliente, Integer numMesa){
+
+    public void frmProductosAFrmCliente(String nombreCliente, Integer numMesa) {
         frmCliente = new FrmCliente();
         frmCliente.setNombreCliente(nombreCliente);
         frmCliente.setNumeroMesa(numMesa);
         frmCliente.setVisible(true);
     }
-    
+
     public void abrirPersonalizacionProducto(FrmProductos frm, ProductoDTO producto, List<IngredienteDTO> removibles) {
-    
+
         DlgModificarProducto dlg = new DlgModificarProducto(frm, producto, removibles);
         dlg.setVisible(true);
 
@@ -70,13 +65,33 @@ public class CoordinadorInterfaces {
             frm.agregarPedidoVisual(pedido);
         }
     }
-    
-    public void abrirResumenComanda (FrmProductos frm, int mesa, String nombreCliente){
-        DlgResumenComanda dlg = new DlgResumenComanda(frm, comandaTemporal);
+
+    public void abrirResumenComanda(FrmProductos frm, int mesa, String nombreCliente) {
+        DlgResumenComanda dlg = new DlgResumenComanda(frm, comandaTemporal, mesa, nombreCliente);
         dlg.setMesaAndCliente(mesa, nombreCliente);
         dlg.setVisible(true);
-        
+
     }
-    
+
+    public void enviarComandaAFinal(String nombreClinte, int numeroMesa, List<PedidoNuevoDTO> pedidos) {
+        ComandaDTO nuevaComanda = new ComandaDTO(
+                nombreClinte,
+                java.time.LocalDate.now(),
+                pedidos,
+                numeroMesa
+        );
+
+        if (this.frmComandas == null) {
+            this.frmComandas = new FrmPantallaComandas(this);
+        }
+
+        this.frmComandas.añadirNuevaComanda(nuevaComanda);
+
+        this.frmComandas.setVisible(true);
+        this.frmComandas.toFront();
+
+        frmProductos.dispose();
+
+    }
 
 }

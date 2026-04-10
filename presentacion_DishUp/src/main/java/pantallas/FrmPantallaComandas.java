@@ -5,11 +5,15 @@
 package pantallas;
 
 import coordinador.CoordinadorInterfaces;
+import dto.ComandaDTO;
 import dto.MesaDTO;
+import dto.PedidoNuevoDTO;
 import fachada.MesaFachada;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.IOException;
@@ -21,7 +25,11 @@ import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 /**
  *
@@ -31,11 +39,12 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
     private coordinador.CoordinadorInterfaces coordinador;
     int idMesero = 1;
-    
+
     MesaFachada fachada = new MesaFachada();
-    
+
     /**
      * Creates new form FrmPantallaComandas
+     *
      * @param coordinador
      */
     public FrmPantallaComandas(CoordinadorInterfaces coordinador) {
@@ -44,6 +53,8 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         panMesas.setLayout(new BoxLayout(panMesas, BoxLayout.Y_AXIS));
         cargarMesas();
+        panComandas.revalidate();
+        panComandas.repaint();
     }
 
     /**
@@ -235,10 +246,10 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
     private void btnLevantarComandaMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnLevantarComandaMousePressed
 
-        btnLevantarComanda.setFocusPainted(false);     
+        btnLevantarComanda.setFocusPainted(false);
         btnLevantarComanda.setContentAreaFilled(false);
         btnLevantarComanda.setOpaque(true);
-        
+
         btnLevantarComanda.setBackground(Color.decode("#F3AE29"));
         btnLevantarComanda.setBorder(BorderFactory.createLineBorder(Color.decode("#C79A42"), 2));
     }//GEN-LAST:event_btnLevantarComandaMousePressed
@@ -254,7 +265,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         } else {
             System.out.println("Selecciona una mesa primero");
         }
-        
+
         this.dispose();
     }//GEN-LAST:event_btnLevantarComandaMouseClicked
 
@@ -311,48 +322,45 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
     private JButton btnSeleccionado = null;
     private MesaDTO mesaSeleccionada = null;
-    
+
     public void cargarMesas() {
         panMesas.removeAll();
         btnLevantarComanda.setVisible(false);
 
-         List<MesaDTO> mesas = fachada.obtenerMesasPorMesero(idMesero);
-
+        List<MesaDTO> mesas = fachada.obtenerMesasPorMesero(idMesero);
 
         for (MesaDTO mesa : mesas) {
             JButton btn = new JButton("Mesa " + mesa.getNumeroMesa());
-            
+
             btn.setAlignmentX(Component.CENTER_ALIGNMENT);
             btn.setMaximumSize(new Dimension(150, 60));
 
             btn.setFocusPainted(false);
 
             btn.addActionListener(e -> {
-                
+
                 panComandas.remove(lblSeleccioneMesa);
                 btnLevantarComanda.setVisible(true);
                 panComandas.revalidate();
-                panComandas.repaint(); 
-                
-                
+                panComandas.repaint();
+
                 if (btnSeleccionado != null) {
-                    
+
                     btnSeleccionado.setBackground(Color.decode("#FFE3AC"));
                     btnSeleccionado.setFont(new Font("Arial", Font.PLAIN, 18));
                     btnSeleccionado.setBorder(null);
                 }
 
-                
                 btn.setBackground(Color.decode("#FFD481"));
                 btn.setFont(new Font("Arial", Font.BOLD, 18));
                 btn.setBorder(BorderFactory.createLineBorder(Color.decode("#FFBE41"), 2));
 
                 btnSeleccionado = btn;
                 mesaSeleccionada = mesa;
-                
+
                 System.out.println("Seleccionaste Mesa " + mesa);
             });
-            
+
             btn.setBackground(Color.decode("#FFE3AC"));
             btn.setFont(new Font("Arial", Font.PLAIN, 18));
             btn.setBorder(null);
@@ -364,8 +372,57 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         panMesas.revalidate();
         panMesas.repaint();
     }
+    private JPanel contenedorComandas;
+
+    public void añadirNuevaComanda(ComandaDTO comanda) {
+        ComandaCard card = new ComandaCard(comanda);
+        this.panComandas.add(card);
+
+        this.panComandas.revalidate();
+        this.panComandas.repaint();
+    }
+
+    public class ComandaCard extends JPanel {
+
+        public ComandaCard(ComandaDTO comanda) {
+            setLayout(new BorderLayout());
+            setBorder(new javax.swing.border.LineBorder(Color.ORANGE, 2, true));
+            setBackground(new Color(255, 235, 205));
+
+            JLabel lblTitulo = new JLabel(comanda.getNombreCliente().toUpperCase() + ": PENDIENTE");
+            lblTitulo.setFont(new Font("Arial", Font.BOLD, 14));
+            lblTitulo.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
+            add(lblTitulo, BorderLayout.NORTH);
+
+            StringBuilder sb = new StringBuilder();
+            int contador = 1;
+            for (PedidoNuevoDTO ped : comanda.getListaPedidos()) {
+                sb.append("Pedido ").append(contador).append(": ")
+                        .append(ped.toString())
+                        .append("\n");
+                contador++;
+            }
+
+            JTextArea txtPedidos = new JTextArea(sb.toString());
+            txtPedidos.setEditable(false);
+            txtPedidos.setOpaque(false);
+            txtPedidos.setFont(new Font("Monospaced", Font.PLAIN, 12));
+            txtPedidos.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
+            add(txtPedidos, BorderLayout.CENTER);
+
+            JPanel pnlBotones = new JPanel();
+            pnlBotones.setOpaque(false);
+            pnlBotones.setLayout(new FlowLayout(FlowLayout.RIGHT));
+            JButton btnAgregar = new JButton("Agregar");
+            JButton btnCancelar = new JButton("Cancelar");
+
+            btnCancelar.setBackground(new Color(255, 153, 153));
+            btnAgregar.setBackground(new Color(255, 204, 102));
+
+            pnlBotones.add(btnAgregar);
+            pnlBotones.add(btnCancelar);
+            add(pnlBotones, BorderLayout.SOUTH);
+        }
+    }
 
 }
-
-
-

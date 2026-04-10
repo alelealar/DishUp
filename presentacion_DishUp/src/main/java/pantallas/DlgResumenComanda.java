@@ -1,6 +1,10 @@
 package pantallas;
 
+import BO.ComandaBO;
+import coordinador.CoordinadorInterfaces;
 import dto.PedidoNuevoDTO;
+import dto.ComandaDTO;
+import java.time.LocalDate;
 import java.util.List;
 import javax.swing.BoxLayout;
 
@@ -10,16 +14,24 @@ import javax.swing.BoxLayout;
  */
 public class DlgResumenComanda extends javax.swing.JDialog {
 
+    private Integer numMesa;
+    private String nombreCliente;
+    private List<PedidoNuevoDTO> productos;
+
+    CoordinadorInterfaces coordinador = new CoordinadorInterfaces();
 
     /**
      * Creates new form DlgResumenComanda
      */
-    public DlgResumenComanda(java.awt.Frame parent, List<PedidoNuevoDTO> comandaTemporal) {
+    public DlgResumenComanda(java.awt.Frame parent, List<PedidoNuevoDTO> productos, Integer numMesa, String nombreCliente) {
         super(parent, true);
         initComponents();
-        configurarListaPedidos(comandaTemporal);
-        this.setLocationRelativeTo(null);
+        this.productos = productos;
+        this.numMesa = numMesa;
+        this.nombreCliente = nombreCliente;
 
+        configurarListaPedidos(productos);
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -132,6 +144,8 @@ public class DlgResumenComanda extends javax.swing.JDialog {
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
 
+        coordinador.enviarComandaAFinal(nombreCliente, numMesa, productos);
+        this.dispose();
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnConfirmarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnConfirmarMouseClicked
@@ -169,9 +183,10 @@ public class DlgResumenComanda extends javax.swing.JDialog {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 java.util.List<dto.PedidoNuevoDTO> listaPrueba = new java.util.ArrayList<>();
+                Integer mesaPrueba = 1;
+                String clientePrueba = "Prueba";
 
-                // Cambia el "true" por la lista
-                DlgResumenComanda dialog = new DlgResumenComanda(new javax.swing.JFrame(), listaPrueba);
+                DlgResumenComanda dialog = new DlgResumenComanda(new javax.swing.JFrame(), listaPrueba, mesaPrueba, clientePrueba);
 
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
@@ -194,33 +209,29 @@ public class DlgResumenComanda extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     public void setMesaAndCliente(Integer numMesa, String cliente) {
-       
 
         lblNombreMesa.setText("Mesa " + numMesa);
         lblNombreCliente.setText("Resumen comanda: " + cliente);
     }
 
     private void configurarListaPedidos(List<PedidoNuevoDTO> comandaTemporal) {
+        productos = comandaTemporal;
         pnlListaProductos.setLayout(new javax.swing.BoxLayout(pnlListaProductos, javax.swing.BoxLayout.Y_AXIS));
-        pnlListaProductos.removeAll(); // Limpia lo anterior
+        pnlListaProductos.removeAll();
 
-        // Estilo del scroll (opcional, basado en tu código)
         jScrollPane.getViewport().setBackground(new java.awt.Color(255, 248, 235));
         for (PedidoNuevoDTO ped : comandaTemporal) {
-            // Creamos la etiqueta con el toString() que definimos al principio
+
             javax.swing.JLabel lblPedido = new javax.swing.JLabel(ped.toString());
 
-            // Alineación a la izquierda para que no se amontonen al centro
             lblPedido.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
 
-            // Estilo visual
             lblPedido.setFont(new java.awt.Font("Trebuchet MS", java.awt.Font.PLAIN, 14));
             lblPedido.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
             pnlListaProductos.add(lblPedido);
         }
 
-        // ESTO ES CLAVE: Avisa a Swing que el contenido cambió
         pnlListaProductos.revalidate();
         pnlListaProductos.repaint();
     }

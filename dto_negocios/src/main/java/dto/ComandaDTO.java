@@ -28,14 +28,21 @@ public class ComandaDTO {
     private List<PedidoNuevoDTO> listaPedidos;
     private Integer idMesa;
 
-    public ComandaDTO(Integer id, String nombreCliente, LocalDate fecha, Double total, List<PedidoNuevoDTO> listaPedidos, Integer idMesa) {
-        this.id = id;
+    public ComandaDTO( String nombreCliente, LocalDate fecha, List<PedidoNuevoDTO> listaPedidos, Integer idMesa) {
+       
         this.nombreCliente = nombreCliente;
         this.fecha = fecha;
-        this.total = total;
         this.listaPedidos = listaPedidos;
         this.idMesa = idMesa;
     }
+      
+    public void calcularTotal(){
+        int cantidadProductos = listaPedidos.size();
+        double resultado = cantidadProductos*100;
+        setTotal(resultado);
+    }
+    
+   
 
     public Integer getId() {
         return id;
@@ -60,7 +67,7 @@ public class ComandaDTO {
     public void setFecha(LocalDate fecha) {
         this.fecha = fecha;
     }
-
+  
     public Double getTotal() {
         return total;
     }
@@ -84,6 +91,8 @@ public class ComandaDTO {
     public void setIdMesa(Integer idMesa) {
         this.idMesa = idMesa;
     }
+    
+    
     
     
 }
