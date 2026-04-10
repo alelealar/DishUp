@@ -332,6 +332,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
     public void botonesVisibles() {
         btnPagoGeneral.setVisible(true);
         btnEnviarComandas.setVisible(true);
+        btnLevantarComanda.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -467,7 +468,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         body.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         body.add(txtPedidos, BorderLayout.CENTER);
 
-        JPanel footer = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+        JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
         footer.setBackground(Color.WHITE);
 
         JButton btnAgregar = new JButton("Agregar pedido");
