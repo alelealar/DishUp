@@ -456,7 +456,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             for (PedidoNuevoDTO ped : comanda.getListaPedidos()) {
 
                 JLabel lblPedido = new JLabel(
-                    "<html><b>Pedido " + contador + ":</b> " + ped.toString() + "</html>"
+                    "<html>" + ped.toString() + "</html>"
                 );
 
                 lblPedido.setFont(new Font("Arial", Font.PLAIN, 13));

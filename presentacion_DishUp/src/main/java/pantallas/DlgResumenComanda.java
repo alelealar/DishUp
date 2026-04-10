@@ -20,7 +20,6 @@ public class DlgResumenComanda extends javax.swing.JDialog {
     private List<PedidoNuevoDTO> productos;
     private CoordinadorInterfaces coordinador;
 
-
     /**
      * Creates new form DlgResumenComanda
      */
@@ -146,18 +145,18 @@ public class DlgResumenComanda extends javax.swing.JDialog {
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
 
-        
+
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnConfirmarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnConfirmarMouseClicked
         if (productos == null || productos.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                "Debes agregar al menos un producto para crear la comanda",
-                "Validación",
-                JOptionPane.WARNING_MESSAGE);
+                    "Debes agregar al menos un producto para crear la comanda",
+                    "Validación",
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
-        
+
         coordinador.enviarComandaAFinal(nombreCliente, numMesa, productos);
         this.dispose();
     }//GEN-LAST:event_btnConfirmarMouseClicked
@@ -184,12 +183,19 @@ public class DlgResumenComanda extends javax.swing.JDialog {
         pnlListaProductos.removeAll();
 
         jScrollPane.getViewport().setBackground(new java.awt.Color(255, 248, 235));
-        for (PedidoNuevoDTO ped : comandaTemporal) {
 
-            javax.swing.JLabel lblPedido = new javax.swing.JLabel(ped.toString());
+        java.util.Map<String, Integer> agrupador = new java.util.HashMap<>();
+        for (PedidoNuevoDTO ped : comandaTemporal) {
+            String detalle = ped.toString();
+            agrupador.put(detalle, agrupador.getOrDefault(detalle, 0) + 1);
+        }
+
+        for (java.util.Map.Entry<String, Integer> entry : agrupador.entrySet()) {
+            String textoAgrupado = entry.getValue() + " x " + entry.getKey();
+
+            javax.swing.JLabel lblPedido = new javax.swing.JLabel(textoAgrupado);
 
             lblPedido.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
-
             lblPedido.setFont(new java.awt.Font("Trebuchet MS", java.awt.Font.PLAIN, 14));
             lblPedido.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
