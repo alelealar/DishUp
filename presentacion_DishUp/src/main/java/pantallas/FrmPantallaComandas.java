@@ -33,7 +33,7 @@ import javax.swing.border.LineBorder;
 
 /**
  *
- * @author Home
+ * @author Piña
  */
 public class FrmPantallaComandas extends javax.swing.JFrame {
 
@@ -55,7 +55,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         cargarMesas();
         panComandas.revalidate();
         panComandas.repaint();
-        
+
         btnEnviarComandas.setVisible(false);
         btnPagoGeneral.setVisible(false);
     }
@@ -324,11 +324,12 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_btnPagoGeneralActionPerformed
 
-    public void quitarLabels(){
+    public void quitarLabels() {
         lblSeleccioneMesa.setVisible(false);
         lblEspacio.setVisible(false);
     }
-    public void botonesVisibles(){
+
+    public void botonesVisibles() {
         btnPagoGeneral.setVisible(true);
         btnEnviarComandas.setVisible(true);
     }
@@ -414,88 +415,82 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
         this.panComandasLlenas.revalidate();
         this.panComandasLlenas.repaint();
+
     }
 
     public class ComandaCard extends JPanel {
 
-        public ComandaCard(ComandaDTO comanda) {
-            setLayout(new BorderLayout());
-            setBorder(BorderFactory.createLineBorder(Color.ORANGE, 2, true));
-            setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
-            setBackground(Color.WHITE);
-            setAlignmentX(Component.LEFT_ALIGNMENT);
+       public ComandaCard(ComandaDTO comanda) {
+        setLayout(new BorderLayout());
+        setBorder(BorderFactory.createLineBorder(Color.ORANGE, 2, true));
+        setBackground(Color.WHITE);
+        setAlignmentX(Component.LEFT_ALIGNMENT);
+        
+        JPanel header = new JPanel(new BorderLayout());
+        header.setBackground(Color.decode("#FFDA92"));
+        header.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
-            // ===== HEADER =====
-            JPanel header = new JPanel(new BorderLayout());
-            header.setBackground(Color.decode("#FFDA92")); // beige
-            header.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        JLabel lblTitulo = new JLabel(comanda.getNombreCliente().toUpperCase() + ": PENDIENTE");
+        lblTitulo.setFont(new Font("Arial", Font.BOLD, 14));
 
-            JLabel lblTitulo = new JLabel(comanda.getNombreCliente() + ": PENDIENTE");
-            lblTitulo.setFont(new Font("Arial", Font.BOLD, 14));
+        JButton btnPago = new JButton("Pago");
+        btnPago.setBackground(Color.decode("#FFB21D"));
+        btnPago.setPreferredSize(new Dimension(80, 30));
+        btnPago.setFocusPainted(false);
 
-            JButton btnPago = new JButton("Pago");
-            btnPago.setBackground(Color.decode("#FFB21D"));
-            btnPago.setBorder(BorderFactory.createLineBorder(Color.decode("#90743E"), 1));
-            btnPago.setPreferredSize(new Dimension(80, 30));
-            btnPago.setContentAreaFilled(true);
-            btnPago.setOpaque(true);
-            btnPago.setFocusPainted(false);
+        header.add(lblTitulo, BorderLayout.WEST);
+        header.add(btnPago, BorderLayout.EAST);
 
-            header.add(lblTitulo, BorderLayout.WEST);
-            header.add(btnPago, BorderLayout.EAST);
+        StringBuilder sb = new StringBuilder();
+        java.util.Map<String, Integer> agrupador = new java.util.LinkedHashMap<>();
 
-            // ===== PEDIDOS =====
-            JPanel body = new JPanel();
-            body.setLayout(new BoxLayout(body, BoxLayout.Y_AXIS));
-            body.setBackground(Color.decode("#D9D9D9")); // gris
-            body.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
-            body.setPreferredSize(new Dimension(0, body.getPreferredSize().height));
-            body.setMaximumSize(new Dimension(Integer.MAX_VALUE, body.getPreferredSize().height));
-
-            int contador = 1;
-            for (PedidoNuevoDTO ped : comanda.getListaPedidos()) {
-
-                JLabel lblPedido = new JLabel(
-                    "<html>" + ped.toString() + "</html>"
-                );
-
-                lblPedido.setFont(new Font("Arial", Font.PLAIN, 13));
-                lblPedido.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
-
-                body.add(lblPedido);
-                contador++;
-            }
-
-            // ===== BOTONES =====
-            JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-            body.setBackground(Color.decode("#D9D9D9"));
-
-            JButton btnAgregar = new JButton("Agregar pedido");
-            btnAgregar.setBackground(Color.decode("#FFAD72"));
-            btnAgregar.setBorder(BorderFactory.createLineBorder(Color.decode("#C86911"), 1));
-            btnAgregar.setPreferredSize(new Dimension(140, 35));
-            btnAgregar.setContentAreaFilled(true);
-            btnAgregar.setOpaque(true);
-            btnAgregar.setFocusPainted(false);
-
-            JButton btnCancelar = new JButton("Cancelar comanda");
-            btnCancelar.setBackground(Color.decode("#FF9C9C"));
-            btnCancelar.setBorder(BorderFactory.createLineBorder(Color.decode("#FF6262"), 1));
-            btnCancelar.setPreferredSize(new Dimension(160, 35));
-            btnCancelar.setContentAreaFilled(true);
-            btnCancelar.setOpaque(true);
-            btnCancelar.setFocusPainted(false);
-            body.setOpaque(true);
-            footer.setOpaque(true);
-
-            footer.add(btnAgregar);
-            footer.add(btnCancelar);
-
-            // ===== ENSAMBLE =====
-            add(header, BorderLayout.NORTH);
-            add(body, BorderLayout.CENTER);
-            add(footer, BorderLayout.SOUTH);
+        for (PedidoNuevoDTO ped : comanda.getListaPedidos()) {
+            String detalle = ped.toString();
+            agrupador.put(detalle, agrupador.getOrDefault(detalle, 0) + 1);
         }
+
+        for (java.util.Map.Entry<String, Integer> entry : agrupador.entrySet()) {
+            sb.append(entry.getValue()).append(" x ").append(entry.getKey()).append("\n");
+        }
+
+        JTextArea txtPedidos = new JTextArea(sb.toString());
+        txtPedidos.setEditable(false);
+        txtPedidos.setOpaque(false);
+        txtPedidos.setFont(new Font("Monospaced", Font.PLAIN, 12));
+        txtPedidos.setLineWrap(true);
+        txtPedidos.setWrapStyleWord(true);
+        
+        txtPedidos.setRows(Math.max(comanda.getListaPedidos().size(), 4)); 
+
+        JPanel body = new JPanel(new BorderLayout());
+        body.setBackground(Color.decode("#D9D9D9"));
+        body.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        body.add(txtPedidos, BorderLayout.CENTER);
+
+        JPanel footer = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+        footer.setBackground(Color.WHITE);
+
+        JButton btnAgregar = new JButton("Agregar pedido");
+        btnAgregar.setBackground(Color.decode("#FFAD72"));
+        btnAgregar.setPreferredSize(new Dimension(140, 35));
+        btnAgregar.setFocusPainted(false);
+
+        JButton btnCancelar = new JButton("Cancelar comanda");
+        btnCancelar.setBackground(Color.decode("#FF9C9C"));
+        btnCancelar.setPreferredSize(new Dimension(160, 35));
+        btnCancelar.setFocusPainted(false);
+
+        footer.add(btnAgregar);
+        footer.add(btnCancelar);
+
+        add(header, BorderLayout.NORTH);
+        add(body, BorderLayout.CENTER);
+        add(footer, BorderLayout.SOUTH);
+
+        this.setPreferredSize(new Dimension(400, 250));
+        this.setMinimumSize(new Dimension(350, 200));
+        this.setMaximumSize(new Dimension(Short.MAX_VALUE, 300)); // Permite que estire a lo ancho pero no tanto a lo alto
+    }
     }
 
 }

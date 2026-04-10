@@ -66,7 +66,7 @@ public class PedidoNuevoDTO {
         String detalles = (especificaciones != null && !especificaciones.isEmpty())
                 ? " (" + especificaciones + ")"
                 : "";
-        return cantidad + " x " + nombreProducto + detalles;
+        return  nombreProducto + detalles;
     }
 
 }
