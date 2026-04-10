@@ -26,6 +26,10 @@ public class CoordinadorInterfaces {
     private FrmPantallaComandas frmComandas;
     private FrmCliente frmCliente;
     private FrmProductos frmProductos;
+    
+    public void setFrmProductos(FrmProductos frmProductos) {
+        this.frmProductos = frmProductos;
+    }
 
     private List<PedidoNuevoDTO> comandaTemporal = new ArrayList<>();
 
@@ -67,7 +71,7 @@ public class CoordinadorInterfaces {
     }
 
     public void abrirResumenComanda(FrmProductos frm, int mesa, String nombreCliente) {
-        DlgResumenComanda dlg = new DlgResumenComanda(frm, comandaTemporal, mesa, nombreCliente);
+        DlgResumenComanda dlg = new DlgResumenComanda(this, frm, comandaTemporal, mesa, nombreCliente);
         dlg.setMesaAndCliente(mesa, nombreCliente);
         dlg.setVisible(true);
 
@@ -86,12 +90,13 @@ public class CoordinadorInterfaces {
         }
 
         this.frmComandas.añadirNuevaComanda(nuevaComanda);
-
+        this.frmComandas.quitarLabels();
+        this.frmComandas.botonesVisibles();
         this.frmComandas.setVisible(true);
-        this.frmComandas.toFront();
-
-        frmProductos.dispose();
-
+        if (this.frmProductos != null) {
+            this.frmProductos.dispose();
+            this.frmProductos = null;
+        }
     }
 
 }

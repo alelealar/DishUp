@@ -7,6 +7,7 @@ import dto.ComandaDTO;
 import java.time.LocalDate;
 import java.util.List;
 import javax.swing.BoxLayout;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,14 +18,15 @@ public class DlgResumenComanda extends javax.swing.JDialog {
     private Integer numMesa;
     private String nombreCliente;
     private List<PedidoNuevoDTO> productos;
+    private CoordinadorInterfaces coordinador;
 
-    CoordinadorInterfaces coordinador = new CoordinadorInterfaces();
 
     /**
      * Creates new form DlgResumenComanda
      */
-    public DlgResumenComanda(java.awt.Frame parent, List<PedidoNuevoDTO> productos, Integer numMesa, String nombreCliente) {
+    public DlgResumenComanda(CoordinadorInterfaces coordinador, java.awt.Frame parent, List<PedidoNuevoDTO> productos, Integer numMesa, String nombreCliente) {
         super(parent, true);
+        this.coordinador = coordinador;
         initComponents();
         this.productos = productos;
         this.numMesa = numMesa;
@@ -144,60 +146,22 @@ public class DlgResumenComanda extends javax.swing.JDialog {
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
 
-        coordinador.enviarComandaAFinal(nombreCliente, numMesa, productos);
-        this.dispose();
+        
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnConfirmarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnConfirmarMouseClicked
-
+        if (productos == null || productos.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                "Debes agregar al menos un producto para crear la comanda",
+                "Validación",
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        
+        coordinador.enviarComandaAFinal(nombreCliente, numMesa, productos);
+        this.dispose();
     }//GEN-LAST:event_btnConfirmarMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DlgResumenComanda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DlgResumenComanda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DlgResumenComanda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DlgResumenComanda.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                java.util.List<dto.PedidoNuevoDTO> listaPrueba = new java.util.ArrayList<>();
-                Integer mesaPrueba = 1;
-                String clientePrueba = "Prueba";
-
-                DlgResumenComanda dialog = new DlgResumenComanda(new javax.swing.JFrame(), listaPrueba, mesaPrueba, clientePrueba);
-
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirmar;

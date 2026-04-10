@@ -55,6 +55,9 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         cargarMesas();
         panComandas.revalidate();
         panComandas.repaint();
+        
+        btnEnviarComandas.setVisible(false);
+        btnPagoGeneral.setVisible(false);
     }
 
     /**
@@ -75,10 +78,14 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         panMesas = new javax.swing.JPanel();
-        lblSeleccioneMesa = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         panTituloMesas = new javax.swing.JPanel();
         lblMesas1 = new javax.swing.JLabel();
+        panComandasLlenas = new javax.swing.JPanel();
+        lblEspacio = new javax.swing.JLabel();
+        lblSeleccioneMesa = new javax.swing.JLabel();
+        btnEnviarComandas = new javax.swing.JButton();
+        btnPagoGeneral = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -131,7 +138,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
                 .addComponent(imgLogo)
                 .addGap(18, 18, 18)
                 .addComponent(lblEmpleado)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 438, Short.MAX_VALUE)
                 .addComponent(btnLevantarComanda, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(26, 26, 26)
                 .addComponent(jButton2)
@@ -162,11 +169,6 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         panMesas.setLayout(new javax.swing.BoxLayout(panMesas, javax.swing.BoxLayout.LINE_AXIS));
         jScrollPane1.setViewportView(panMesas);
 
-        lblSeleccioneMesa.setFont(new java.awt.Font("Segoe UI", 1, 60)); // NOI18N
-        lblSeleccioneMesa.setForeground(new java.awt.Color(204, 204, 204));
-        lblSeleccioneMesa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblSeleccioneMesa.setText("Seleccione una mesa");
-
         lblMesas1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         lblMesas1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblMesas1.setText("MESAS");
@@ -188,6 +190,40 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
+        panComandasLlenas.setBackground(new java.awt.Color(255, 255, 255));
+        panComandasLlenas.setLayout(new javax.swing.BoxLayout(panComandasLlenas, javax.swing.BoxLayout.Y_AXIS));
+
+        lblEspacio.setFont(new java.awt.Font("Segoe UI", 0, 150)); // NOI18N
+        lblEspacio.setForeground(new java.awt.Color(255, 255, 255));
+        lblEspacio.setText("0");
+        panComandasLlenas.add(lblEspacio);
+
+        lblSeleccioneMesa.setFont(new java.awt.Font("Segoe UI", 1, 60)); // NOI18N
+        lblSeleccioneMesa.setForeground(new java.awt.Color(204, 204, 204));
+        lblSeleccioneMesa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSeleccioneMesa.setText("         Seleccione una mesa");
+        panComandasLlenas.add(lblSeleccioneMesa);
+
+        btnEnviarComandas.setBackground(new java.awt.Color(211, 255, 172));
+        btnEnviarComandas.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
+        btnEnviarComandas.setText("Enviar comandas");
+        btnEnviarComandas.setBorder(null);
+        btnEnviarComandas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEnviarComandasActionPerformed(evt);
+            }
+        });
+
+        btnPagoGeneral.setBackground(new java.awt.Color(132, 194, 118));
+        btnPagoGeneral.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
+        btnPagoGeneral.setText("Pago");
+        btnPagoGeneral.setBorder(null);
+        btnPagoGeneral.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPagoGeneralActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panComandasLayout = new javax.swing.GroupLayout(panComandas);
         panComandas.setLayout(panComandasLayout);
         panComandasLayout.setHorizontalGroup(
@@ -196,13 +232,17 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             .addGroup(panComandasLayout.createSequentialGroup()
                 .addGroup(panComandasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panComandasLayout.createSequentialGroup()
-                        .addContainerGap(160, Short.MAX_VALUE)
-                        .addComponent(lblSeleccioneMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 641, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(46, 46, 46))
-                    .addGroup(panComandasLayout.createSequentialGroup()
-                        .addGap(289, 289, 289)
+                        .addGap(38, 38, 38)
+                        .addComponent(panComandasLlenas, javax.swing.GroupLayout.PREFERRED_SIZE, 843, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 46, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panComandasLayout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnEnviarComandas, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnPagoGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38)))
                 .addGroup(panComandasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1)
                     .addComponent(panTituloMesas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
@@ -212,16 +252,23 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             .addGroup(panComandasLayout.createSequentialGroup()
                 .addComponent(panHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(panComandasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panComandasLayout.createSequentialGroup()
-                        .addGap(98, 98, 98)
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(63, 63, 63)
-                        .addComponent(lblSeleccioneMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panComandasLayout.createSequentialGroup()
                         .addComponent(panTituloMesas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 593, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 593, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panComandasLayout.createSequentialGroup()
+                        .addGroup(panComandasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panComandasLayout.createSequentialGroup()
+                                .addGap(98, 98, 98)
+                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panComandasLayout.createSequentialGroup()
+                                .addGap(26, 26, 26)
+                                .addComponent(panComandasLlenas, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(panComandasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnEnviarComandas, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnPagoGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap())))
         );
 
         jScrollPane2.setViewportView(panComandas);
@@ -230,11 +277,11 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1102, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 722, Short.MAX_VALUE)
         );
 
         pack();
@@ -269,53 +316,38 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_btnLevantarComandaMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmPantallaComandas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmPantallaComandas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmPantallaComandas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmPantallaComandas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
+    private void btnEnviarComandasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarComandasActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnEnviarComandasActionPerformed
 
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                coordinador.CoordinadorInterfaces coordinador = new coordinador.CoordinadorInterfaces();
-                new FrmPantallaComandas(coordinador).setVisible(true);
-            }
-        });
+    private void btnPagoGeneralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagoGeneralActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPagoGeneralActionPerformed
+
+    public void quitarLabels(){
+        lblSeleccioneMesa.setVisible(false);
+        lblEspacio.setVisible(false);
+    }
+    public void botonesVisibles(){
+        btnPagoGeneral.setVisible(true);
+        btnEnviarComandas.setVisible(true);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnEnviarComandas;
     private javax.swing.JButton btnLevantarComanda;
+    private javax.swing.JButton btnPagoGeneral;
     private javax.swing.JLabel imgLogo;
     private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel lblEmpleado;
+    private javax.swing.JLabel lblEspacio;
     private javax.swing.JLabel lblMesas1;
     private javax.swing.JLabel lblSeleccioneMesa;
     private javax.swing.JPanel panComandas;
+    private javax.swing.JPanel panComandasLlenas;
     private javax.swing.JPanel panHeader;
     private javax.swing.JPanel panMesas;
     private javax.swing.JPanel panTituloMesas;
@@ -339,7 +371,8 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
             btn.addActionListener(e -> {
 
-                panComandas.remove(lblSeleccioneMesa);
+                panComandasLlenas.remove(lblSeleccioneMesa);
+                panComandasLlenas.remove(lblEspacio);
                 btnLevantarComanda.setVisible(true);
                 panComandas.revalidate();
                 panComandas.repaint();
@@ -376,52 +409,92 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
     public void añadirNuevaComanda(ComandaDTO comanda) {
         ComandaCard card = new ComandaCard(comanda);
-        this.panComandas.add(card);
+        this.panComandasLlenas.add(card);
+        this.panComandasLlenas.add(Box.createVerticalStrut(10));
 
-        this.panComandas.revalidate();
-        this.panComandas.repaint();
+        this.panComandasLlenas.revalidate();
+        this.panComandasLlenas.repaint();
     }
 
     public class ComandaCard extends JPanel {
 
         public ComandaCard(ComandaDTO comanda) {
             setLayout(new BorderLayout());
-            setBorder(new javax.swing.border.LineBorder(Color.ORANGE, 2, true));
-            setBackground(new Color(255, 235, 205));
+            setBorder(BorderFactory.createLineBorder(Color.ORANGE, 2, true));
+            setMaximumSize(new Dimension(Integer.MAX_VALUE, Integer.MAX_VALUE));
+            setBackground(Color.WHITE);
+            setAlignmentX(Component.LEFT_ALIGNMENT);
 
-            JLabel lblTitulo = new JLabel(comanda.getNombreCliente().toUpperCase() + ": PENDIENTE");
+            // ===== HEADER =====
+            JPanel header = new JPanel(new BorderLayout());
+            header.setBackground(Color.decode("#FFDA92")); // beige
+            header.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+
+            JLabel lblTitulo = new JLabel(comanda.getNombreCliente() + ": PENDIENTE");
             lblTitulo.setFont(new Font("Arial", Font.BOLD, 14));
-            lblTitulo.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
-            add(lblTitulo, BorderLayout.NORTH);
 
-            StringBuilder sb = new StringBuilder();
+            JButton btnPago = new JButton("Pago");
+            btnPago.setBackground(Color.decode("#FFB21D"));
+            btnPago.setBorder(BorderFactory.createLineBorder(Color.decode("#90743E"), 1));
+            btnPago.setPreferredSize(new Dimension(80, 30));
+            btnPago.setContentAreaFilled(true);
+            btnPago.setOpaque(true);
+            btnPago.setFocusPainted(false);
+
+            header.add(lblTitulo, BorderLayout.WEST);
+            header.add(btnPago, BorderLayout.EAST);
+
+            // ===== PEDIDOS =====
+            JPanel body = new JPanel();
+            body.setLayout(new BoxLayout(body, BoxLayout.Y_AXIS));
+            body.setBackground(Color.decode("#D9D9D9")); // gris
+            body.setBorder(BorderFactory.createEmptyBorder(8, 10, 8, 10));
+            body.setPreferredSize(new Dimension(0, body.getPreferredSize().height));
+            body.setMaximumSize(new Dimension(Integer.MAX_VALUE, body.getPreferredSize().height));
+
             int contador = 1;
             for (PedidoNuevoDTO ped : comanda.getListaPedidos()) {
-                sb.append("Pedido ").append(contador).append(": ")
-                        .append(ped.toString())
-                        .append("\n");
+
+                JLabel lblPedido = new JLabel(
+                    "<html><b>Pedido " + contador + ":</b> " + ped.toString() + "</html>"
+                );
+
+                lblPedido.setFont(new Font("Arial", Font.PLAIN, 13));
+                lblPedido.setBorder(BorderFactory.createEmptyBorder(2, 0, 2, 0));
+
+                body.add(lblPedido);
                 contador++;
             }
 
-            JTextArea txtPedidos = new JTextArea(sb.toString());
-            txtPedidos.setEditable(false);
-            txtPedidos.setOpaque(false);
-            txtPedidos.setFont(new Font("Monospaced", Font.PLAIN, 12));
-            txtPedidos.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
-            add(txtPedidos, BorderLayout.CENTER);
+            // ===== BOTONES =====
+            JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+            body.setBackground(Color.decode("#D9D9D9"));
 
-            JPanel pnlBotones = new JPanel();
-            pnlBotones.setOpaque(false);
-            pnlBotones.setLayout(new FlowLayout(FlowLayout.RIGHT));
-            JButton btnAgregar = new JButton("Agregar");
-            JButton btnCancelar = new JButton("Cancelar");
+            JButton btnAgregar = new JButton("Agregar pedido");
+            btnAgregar.setBackground(Color.decode("#FFAD72"));
+            btnAgregar.setBorder(BorderFactory.createLineBorder(Color.decode("#C86911"), 1));
+            btnAgregar.setPreferredSize(new Dimension(140, 35));
+            btnAgregar.setContentAreaFilled(true);
+            btnAgregar.setOpaque(true);
+            btnAgregar.setFocusPainted(false);
 
-            btnCancelar.setBackground(new Color(255, 153, 153));
-            btnAgregar.setBackground(new Color(255, 204, 102));
+            JButton btnCancelar = new JButton("Cancelar comanda");
+            btnCancelar.setBackground(Color.decode("#FF9C9C"));
+            btnCancelar.setBorder(BorderFactory.createLineBorder(Color.decode("#FF6262"), 1));
+            btnCancelar.setPreferredSize(new Dimension(160, 35));
+            btnCancelar.setContentAreaFilled(true);
+            btnCancelar.setOpaque(true);
+            btnCancelar.setFocusPainted(false);
+            body.setOpaque(true);
+            footer.setOpaque(true);
 
-            pnlBotones.add(btnAgregar);
-            pnlBotones.add(btnCancelar);
-            add(pnlBotones, BorderLayout.SOUTH);
+            footer.add(btnAgregar);
+            footer.add(btnCancelar);
+
+            // ===== ENSAMBLE =====
+            add(header, BorderLayout.NORTH);
+            add(body, BorderLayout.CENTER);
+            add(footer, BorderLayout.SOUTH);
         }
     }
 
