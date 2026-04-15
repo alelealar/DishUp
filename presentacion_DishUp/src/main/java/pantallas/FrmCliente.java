@@ -163,8 +163,19 @@ public class FrmCliente extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAtrasMouseClicked
 
     private void btnOkMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnOkMouseClicked
-        coordinador.frmClienteAFrmProductos(numMesa, txtNombreCliente.getText());
+        String nombre = txtNombreCliente.getText().trim();
+        if (nombre.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(
+                this,                              
+                "La comanda debe de estar a nombre de un cliente", 
+                "El nombre no puede estar en blanco",                 
+                javax.swing.JOptionPane.WARNING_MESSAGE 
+                
+        );
+        }else{
+        coordinador.frmClienteAFrmProductos(numMesa, nombre);
         this.dispose();
+        }
     }//GEN-LAST:event_btnOkMouseClicked
 
     public void setNumeroMesa(Integer num){
