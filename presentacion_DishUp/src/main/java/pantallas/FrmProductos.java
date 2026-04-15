@@ -4,12 +4,12 @@
  */
 package pantallas;
 
+import control.ProductoControl;
 import coordinador.CoordinadorInterfaces;
 import dto.IngredienteDTO;
 import dto.PedidoNuevoDTO;
 import dto.ProductoDTO;
 import enums.TipoProducto;
-import fachada.ProductoFachada;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -42,8 +42,8 @@ import javax.swing.border.Border;
 public final class FrmProductos extends javax.swing.JFrame {
 
     private CoordinadorInterfaces coordinador;
-
-    ProductoFachada fachada = new ProductoFachada();
+    
+    ProductoControl control = new ProductoControl();
 
     private Integer numMesa;
     private String nombreCliente;
@@ -58,7 +58,6 @@ public final class FrmProductos extends javax.swing.JFrame {
         initComponents();
 
         this.setLocationRelativeTo(null);
-        
 
         // CONFIGURACIÓN pnlPedidos
         pnlPedidos.setLayout(new BoxLayout(pnlPedidos, BoxLayout.Y_AXIS));
@@ -613,7 +612,7 @@ public final class FrmProductos extends javax.swing.JFrame {
     public void cargarProductosPorTipo(TipoProducto tipo) {
         panProductos.removeAll();
 
-        List<ProductoDTO> productos = fachada.obtenerProductosPorTipo(tipo);
+        List<ProductoDTO> productos = control.obtenerProductosPorTipo(tipo);
 
         for (ProductoDTO producto : productos) {
             JPanel card = crearCardProducto(producto);
@@ -629,7 +628,7 @@ public final class FrmProductos extends javax.swing.JFrame {
         int productosEncontrados = 0;
 
         TipoProducto tipoActual = (TipoProducto) cbxTipoProducto.getSelectedItem();
-        List<ProductoDTO> productos = fachada.obtenerProductosPorTipo(tipoActual);
+        List<ProductoDTO> productos = control.obtenerProductosPorTipo(tipoActual);
 
         for (ProductoDTO producto : productos) {
             if (producto.getNombre().toLowerCase().contains(filtro)) {
@@ -656,7 +655,7 @@ public final class FrmProductos extends javax.swing.JFrame {
     }
 
     private void productoSeleccionado(ProductoDTO producto) {
-        List<IngredienteDTO> removibles = fachada.obtenerIngredientesRemovibles(producto.getId());
+        List<IngredienteDTO> removibles = control.obtenerIngredientesRemovibles(producto.getId());
 
         coordinador.abrirPersonalizacionProducto(this, producto, removibles);
     }

@@ -2,7 +2,6 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-
 package BO;
 
 import Interface.IIngredienteBO;
@@ -16,19 +15,18 @@ import java.awt.color.ICC_ColorSpace;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
  *
  * @author DishUp
  */
+public class ProductoBO implements IProductoBO {
 
-public class ProductoBO implements IProductoBO{
-    
     private static ProductoBO instancia;
-    
-    private final IIngredienteBO inventario = IngredienteFachada.getInstancia();
 
-    private ProductoBO() { }
+    private final IIngredienteBO ingredienteBO = IngredienteBO.getInstancia();
+
+    private ProductoBO() {
+    }
 
     public static ProductoBO getInstancia() {
         if (instancia == null) {
@@ -36,9 +34,7 @@ public class ProductoBO implements IProductoBO{
         }
         return instancia;
     }
-    
-    
-    
+
     /**
      * Obtiene los productos de un tipo específico.
      *
@@ -46,9 +42,9 @@ public class ProductoBO implements IProductoBO{
      * @return Lista de productos que coinciden con el tipo.
      */
     @Override
-    public List<ProductoDTO> obtenerProductosPorTipo(TipoProducto tipo){
+    public List<ProductoDTO> obtenerProductosPorTipo(TipoProducto tipo) {
         List<ProductoDTO> productos = new ArrayList<>();
-        
+
         //bebidas
         productos.add(new ProductoDTO(1, "Bloody Mary", 120.0, true, 600, TipoProducto.BEBIDA, "/img/producto_Bebida_blodyMary.png"));
         productos.add(new ProductoDTO(2, "Cóctel Rosa", 110.0, true, 450, TipoProducto.BEBIDA, "/img/producto_Bebida_coctelRosa.png"));
@@ -74,7 +70,7 @@ public class ProductoBO implements IProductoBO{
         productos.add(new ProductoDTO(20, "Papas", 70.0, true, 800, TipoProducto.BOTANA, "/img/producto_Botana_papas.png"));
         productos.add(new ProductoDTO(21, "Aceitunas", 65.0, true, 300, TipoProducto.BOTANA, "/img/producto_Botana_aceitunas.png"));
         productos.add(new ProductoDTO(22, "Nuggets", 95.0, true, 900, TipoProducto.BOTANA, "/img/producto_Botana_nuggets.png"));
-        
+
         //comidas
         productos.add(new ProductoDTO(23, "Quesadilla", 90.0, true, 800, TipoProducto.COMIDA, "/img/producto_Comida_quesadilla.png"));
         productos.add(new ProductoDTO(24, "Hamburguesa de carne", 130.0, true, 1200, TipoProducto.COMIDA, "/img/producto_Comida_hamburguesa.png"));
@@ -82,7 +78,7 @@ public class ProductoBO implements IProductoBO{
         productos.add(new ProductoDTO(26, "Tacos", 100.0, true, 900, TipoProducto.COMIDA, "/img/producto_Comida_tacos.png"));
         productos.add(new ProductoDTO(27, "Ensalada César", 110.0, true, 700, TipoProducto.COMIDA, "/img/producto_Comida_ensaladaCesar.png"));
         productos.add(new ProductoDTO(28, "Filete de carne", 180.0, true, 1600, TipoProducto.COMIDA, "/img/producto_Comida_fileteDeCarne.png"));
-        
+
         List<ProductoDTO> filtrados = new ArrayList<>();
         for (ProductoDTO p : productos) {
             if (p.getTipo() == tipo) {
@@ -91,7 +87,7 @@ public class ProductoBO implements IProductoBO{
         }
         return filtrados;
     }
-    
+
     @Override
     public List<ProductoIngredienteDTO> obtenerProductoIngredientes() {
         List<ProductoIngredienteDTO> relaciones = new ArrayList<>();
@@ -153,7 +149,7 @@ public class ProductoBO implements IProductoBO{
         // 11 - Whiskey
         relaciones.add(new ProductoIngredienteDTO(35, 11, 16, 1, false)); // Whiskey
         relaciones.add(new ProductoIngredienteDTO(36, 11, 3, 1, true));   // Hielo
-        
+
         // 12 - Aros de cebolla
         relaciones.add(new ProductoIngredienteDTO(37, 12, 30, 1, false)); // Aros de cebolla
         relaciones.add(new ProductoIngredienteDTO(38, 12, 20, 1, false)); // Aceite
@@ -198,7 +194,7 @@ public class ProductoBO implements IProductoBO{
         // 22 - Nuggets
         relaciones.add(new ProductoIngredienteDTO(58, 22, 29, 1, false)); // Pollo empanizado
         relaciones.add(new ProductoIngredienteDTO(59, 22, 31, 1, true));  // ketchup
-        
+
         // 23 - Quesadilla
         relaciones.add(new ProductoIngredienteDTO(60, 23, 32, 1, false)); // Tortilla
         relaciones.add(new ProductoIngredienteDTO(61, 23, 18, 1, false)); // Queso
@@ -234,7 +230,7 @@ public class ProductoBO implements IProductoBO{
 
         return relaciones;
     }
-    
+
     /**
      *
      * @param idProducto
@@ -245,7 +241,7 @@ public class ProductoBO implements IProductoBO{
         List<IngredienteDTO> removibles = new ArrayList<>();
 
         List<ProductoIngredienteDTO> relaciones = obtenerProductoIngredientes();
-        List<IngredienteDTO> ingredientes = inventario.obtenerIngredientes();
+        List<IngredienteDTO> ingredientes = ingredienteBO.obtenerIngredientes();
 
         for (ProductoIngredienteDTO relacion : relaciones) {
             if (relacion.getIdProducto() == idProducto && relacion.isRemovible()) {
@@ -260,7 +256,7 @@ public class ProductoBO implements IProductoBO{
 
         return removibles;
     }
-    
+
     @Override
     public List<String> obtenerModificadoresRemoviblesPorProducto(int idProducto) {
         List<String> modificadores = new ArrayList<>();

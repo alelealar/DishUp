@@ -4,11 +4,11 @@
  */
 package pantallas;
 
+import control.MesaControl;
 import coordinador.CoordinadorInterfaces;
 import dto.ComandaDTO;
 import dto.MesaDTO;
 import dto.PedidoNuevoDTO;
-import fachada.MesaFachada;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -40,7 +40,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
     private coordinador.CoordinadorInterfaces coordinador;
     int idMesero = 1;
 
-    MesaFachada fachada = new MesaFachada();
+    MesaControl control = new MesaControl();
 
     /**
      * Creates new form FrmPantallaComandas
@@ -49,6 +49,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
      */
     public FrmPantallaComandas(CoordinadorInterfaces coordinador) {
         this.coordinador = coordinador;
+        this.coordinador.setFrmComandas(this);
         initComponents();
         this.setLocationRelativeTo(null);
         panMesas.setLayout(new BoxLayout(panMesas, BoxLayout.Y_AXIS));
@@ -313,7 +314,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             System.out.println("Selecciona una mesa primero");
         }
 
-        this.dispose();
+        this.setVisible(false);
     }//GEN-LAST:event_btnLevantarComandaMouseClicked
 
     private void btnEnviarComandasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarComandasActionPerformed
@@ -361,7 +362,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         panMesas.removeAll();
         btnLevantarComanda.setVisible(false);
 
-        List<MesaDTO> mesas = fachada.obtenerMesasPorMesero(idMesero);
+        List<MesaDTO> mesas = control.obtenerMesasPorMesero(idMesero);
 
         for (MesaDTO mesa : mesas) {
             JButton btn = new JButton("Mesa " + mesa.getNumeroMesa());
@@ -393,6 +394,8 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
                 btnSeleccionado = btn;
                 mesaSeleccionada = mesa;
 
+                List<ComandaDTO> comandas = coordinador.getComandasDeMesa(mesa.getNumeroMesa());
+                mostrarComandasDeMesa(mesa.getNumeroMesa(), comandas);
                 System.out.println("Seleccionaste Mesa " + mesa);
             });
 
@@ -409,89 +412,117 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
     }
     private JPanel contenedorComandas;
 
-    public void añadirNuevaComanda(ComandaDTO comanda) {
-        ComandaCard card = new ComandaCard(comanda);
-        this.panComandasLlenas.add(card);
-        this.panComandasLlenas.add(Box.createVerticalStrut(10));
+//    public void añadirNuevaComanda(ComandaDTO comanda) {
+//        ComandaCard card = new ComandaCard(comanda);
+//        this.panComandasLlenas.add(card);
+//        this.panComandasLlenas.add(Box.createVerticalStrut(10));
+//
+//        this.panComandasLlenas.revalidate();
+//        this.panComandasLlenas.repaint();
+//
+//    }
+    public void mostrarComandasDeMesa(int numeroMesa, List<ComandaDTO> comandas) {
+        panComandasLlenas.removeAll();
 
-        this.panComandasLlenas.revalidate();
-        this.panComandasLlenas.repaint();
+        if (comandas == null || comandas.isEmpty()) {
+            lblSeleccioneMesa.setVisible(true);
+            lblEspacio.setVisible(true);
+            btnEnviarComandas.setVisible(false);
+            btnPagoGeneral.setVisible(false);
+        } else {
+            lblSeleccioneMesa.setVisible(false);
+            lblEspacio.setVisible(false);
+            for (ComandaDTO c : comandas) {
+                panComandasLlenas.add(new ComandaCard(c));
+                panComandasLlenas.add(Box.createVerticalStrut(10));
+            }
+            btnEnviarComandas.setVisible(true);
+            btnPagoGeneral.setVisible(true);
+        }
 
+        panComandasLlenas.revalidate();
+        panComandasLlenas.repaint();
     }
 
     public class ComandaCard extends JPanel {
 
-       public ComandaCard(ComandaDTO comanda) {
-        setLayout(new BorderLayout());
-        setBorder(BorderFactory.createLineBorder(Color.ORANGE, 2, true));
-        setBackground(Color.WHITE);
-        setAlignmentX(Component.LEFT_ALIGNMENT);
-        
-        JPanel header = new JPanel(new BorderLayout());
-        header.setBackground(Color.decode("#FFDA92"));
-        header.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
+        public ComandaCard(ComandaDTO comanda) {
+            setLayout(new BorderLayout());
+            setBorder(BorderFactory.createLineBorder(Color.ORANGE, 2, true));
+            setBackground(Color.WHITE);
+            setAlignmentX(Component.LEFT_ALIGNMENT);
 
-        JLabel lblTitulo = new JLabel(comanda.getNombreCliente().toUpperCase() + ": PENDIENTE");
-        lblTitulo.setFont(new Font("Arial", Font.BOLD, 14));
+            JPanel header = new JPanel(new BorderLayout());
+            header.setBackground(Color.decode("#FFDA92"));
+            header.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
-        JButton btnPago = new JButton("Pago");
-        btnPago.setBackground(Color.decode("#FFB21D"));
-        btnPago.setPreferredSize(new Dimension(80, 30));
-        btnPago.setFocusPainted(false);
+            JLabel lblTitulo = new JLabel(comanda.getNombreCliente().toUpperCase() + ": PENDIENTE");
+            lblTitulo.setFont(new Font("Arial", Font.BOLD, 14));
 
-        header.add(lblTitulo, BorderLayout.WEST);
-        header.add(btnPago, BorderLayout.EAST);
+            JButton btnPago = new JButton("Pago");
+            btnPago.setBackground(Color.decode("#FFB21D"));
+            btnPago.setPreferredSize(new Dimension(80, 30));
+            btnPago.setFocusPainted(false);
 
-        StringBuilder sb = new StringBuilder();
-        java.util.Map<String, Integer> agrupador = new java.util.LinkedHashMap<>();
+            header.add(lblTitulo, BorderLayout.WEST);
+            header.add(btnPago, BorderLayout.EAST);
 
-        for (PedidoNuevoDTO ped : comanda.getListaPedidos()) {
-            String detalle = ped.toString();
-            agrupador.put(detalle, agrupador.getOrDefault(detalle, 0) + 1);
+            StringBuilder sb = new StringBuilder();
+            java.util.Map<String, Integer> agrupador = new java.util.LinkedHashMap<>();
+
+            for (PedidoNuevoDTO ped : comanda.getListaPedidos()) {
+                String detalle = ped.toString();
+                agrupador.put(detalle, agrupador.getOrDefault(detalle, 0) + 1);
+            }
+
+            for (java.util.Map.Entry<String, Integer> entry : agrupador.entrySet()) {
+                sb.append(entry.getValue()).append(" x ").append(entry.getKey()).append("\n");
+            }
+
+            JTextArea txtPedidos = new JTextArea(sb.toString());
+            txtPedidos.setEditable(false);
+            txtPedidos.setOpaque(false);
+            txtPedidos.setFont(new Font("Monospaced", Font.PLAIN, 12));
+            txtPedidos.setLineWrap(true);
+            txtPedidos.setWrapStyleWord(true);
+
+            txtPedidos.setRows(Math.max(comanda.getListaPedidos().size(), 4));
+
+            JPanel body = new JPanel(new BorderLayout());
+            body.setBackground(Color.decode("#D9D9D9"));
+            body.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+            body.add(txtPedidos, BorderLayout.CENTER);
+
+            JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
+            footer.setBackground(Color.WHITE);
+
+            JButton btnAgregar = new JButton("Agregar pedido");
+            btnAgregar.setBackground(Color.decode("#FFAD72"));
+            btnAgregar.setPreferredSize(new Dimension(140, 35));
+            btnAgregar.setFocusPainted(false);
+
+            JButton btnCancelar = new JButton("Cancelar comanda");
+            btnCancelar.setBackground(Color.decode("#FF9C9C"));
+            btnCancelar.setPreferredSize(new Dimension(160, 35));
+            btnCancelar.setFocusPainted(false);
+
+            footer.add(btnAgregar);
+            footer.add(btnCancelar);
+
+            add(header, BorderLayout.NORTH);
+            add(body, BorderLayout.CENTER);
+            add(footer, BorderLayout.SOUTH);
+
+            this.setPreferredSize(new Dimension(400, 250));
+            this.setMinimumSize(new Dimension(350, 200));
+            this.setMaximumSize(new Dimension(Short.MAX_VALUE, 300)); // Permite que estire a lo ancho pero no tanto a lo alto
         }
+    }
 
-        for (java.util.Map.Entry<String, Integer> entry : agrupador.entrySet()) {
-            sb.append(entry.getValue()).append(" x ").append(entry.getKey()).append("\n");
+    public void refrescarMesaActual() {
+        if (mesaSeleccionada != null) {
+            List<ComandaDTO> comandas = coordinador.getComandasDeMesa(mesaSeleccionada.getNumeroMesa());
+            mostrarComandasDeMesa(mesaSeleccionada.getNumeroMesa(), comandas);
         }
-
-        JTextArea txtPedidos = new JTextArea(sb.toString());
-        txtPedidos.setEditable(false);
-        txtPedidos.setOpaque(false);
-        txtPedidos.setFont(new Font("Monospaced", Font.PLAIN, 12));
-        txtPedidos.setLineWrap(true);
-        txtPedidos.setWrapStyleWord(true);
-        
-        txtPedidos.setRows(Math.max(comanda.getListaPedidos().size(), 4)); 
-
-        JPanel body = new JPanel(new BorderLayout());
-        body.setBackground(Color.decode("#D9D9D9"));
-        body.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        body.add(txtPedidos, BorderLayout.CENTER);
-
-        JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
-        footer.setBackground(Color.WHITE);
-
-        JButton btnAgregar = new JButton("Agregar pedido");
-        btnAgregar.setBackground(Color.decode("#FFAD72"));
-        btnAgregar.setPreferredSize(new Dimension(140, 35));
-        btnAgregar.setFocusPainted(false);
-
-        JButton btnCancelar = new JButton("Cancelar comanda");
-        btnCancelar.setBackground(Color.decode("#FF9C9C"));
-        btnCancelar.setPreferredSize(new Dimension(160, 35));
-        btnCancelar.setFocusPainted(false);
-
-        footer.add(btnAgregar);
-        footer.add(btnCancelar);
-
-        add(header, BorderLayout.NORTH);
-        add(body, BorderLayout.CENTER);
-        add(footer, BorderLayout.SOUTH);
-
-        this.setPreferredSize(new Dimension(400, 250));
-        this.setMinimumSize(new Dimension(350, 200));
-        this.setMaximumSize(new Dimension(Short.MAX_VALUE, 300)); // Permite que estire a lo ancho pero no tanto a lo alto
     }
-    }
-
 }
