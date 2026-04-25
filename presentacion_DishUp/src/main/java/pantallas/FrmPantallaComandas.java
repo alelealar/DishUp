@@ -82,11 +82,12 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         jSeparator2 = new javax.swing.JSeparator();
         panTituloMesas = new javax.swing.JPanel();
         lblMesas1 = new javax.swing.JLabel();
+        btnEnviarComandas = new javax.swing.JButton();
+        btnPagoGeneral = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
         panComandasLlenas = new javax.swing.JPanel();
         lblEspacio = new javax.swing.JLabel();
         lblSeleccioneMesa = new javax.swing.JLabel();
-        btnEnviarComandas = new javax.swing.JButton();
-        btnPagoGeneral = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -191,20 +192,6 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
                 .addContainerGap(19, Short.MAX_VALUE))
         );
 
-        panComandasLlenas.setBackground(new java.awt.Color(255, 255, 255));
-        panComandasLlenas.setLayout(new javax.swing.BoxLayout(panComandasLlenas, javax.swing.BoxLayout.Y_AXIS));
-
-        lblEspacio.setFont(new java.awt.Font("Segoe UI", 0, 150)); // NOI18N
-        lblEspacio.setForeground(new java.awt.Color(255, 255, 255));
-        lblEspacio.setText("0");
-        panComandasLlenas.add(lblEspacio);
-
-        lblSeleccioneMesa.setFont(new java.awt.Font("Segoe UI", 1, 60)); // NOI18N
-        lblSeleccioneMesa.setForeground(new java.awt.Color(204, 204, 204));
-        lblSeleccioneMesa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblSeleccioneMesa.setText("         Seleccione una mesa");
-        panComandasLlenas.add(lblSeleccioneMesa);
-
         btnEnviarComandas.setBackground(new java.awt.Color(211, 255, 172));
         btnEnviarComandas.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
         btnEnviarComandas.setText("Enviar comandas");
@@ -225,6 +212,26 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             }
         });
 
+        jScrollPane3.setBorder(null);
+        jScrollPane3.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane3.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        panComandasLlenas.setBackground(new java.awt.Color(255, 255, 255));
+        panComandasLlenas.setLayout(new javax.swing.BoxLayout(panComandasLlenas, javax.swing.BoxLayout.Y_AXIS));
+
+        lblEspacio.setFont(new java.awt.Font("Segoe UI", 0, 150)); // NOI18N
+        lblEspacio.setForeground(new java.awt.Color(255, 255, 255));
+        lblEspacio.setText("0");
+        panComandasLlenas.add(lblEspacio);
+
+        lblSeleccioneMesa.setFont(new java.awt.Font("Segoe UI", 1, 60)); // NOI18N
+        lblSeleccioneMesa.setForeground(new java.awt.Color(204, 204, 204));
+        lblSeleccioneMesa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblSeleccioneMesa.setText("         Seleccione una mesa");
+        panComandasLlenas.add(lblSeleccioneMesa);
+
+        jScrollPane3.setViewportView(panComandasLlenas);
+
         javax.swing.GroupLayout panComandasLayout = new javax.swing.GroupLayout(panComandas);
         panComandas.setLayout(panComandasLayout);
         panComandasLayout.setHorizontalGroup(
@@ -234,12 +241,12 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
                 .addGroup(panComandasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(panComandasLayout.createSequentialGroup()
                         .addGap(38, 38, 38)
-                        .addComponent(panComandasLlenas, javax.swing.GroupLayout.PREFERRED_SIZE, 843, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 835, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, 46, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panComandasLayout.createSequentialGroup()
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap(609, Short.MAX_VALUE)
                         .addComponent(btnEnviarComandas, javax.swing.GroupLayout.PREFERRED_SIZE, 175, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnPagoGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -252,24 +259,22 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             panComandasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panComandasLayout.createSequentialGroup()
                 .addComponent(panHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(panTituloMesas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addGroup(panComandasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panComandasLayout.createSequentialGroup()
-                        .addComponent(panTituloMesas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 593, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panComandasLayout.createSequentialGroup()
                         .addGroup(panComandasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panComandasLayout.createSequentialGroup()
-                                .addGap(98, 98, 98)
+                                .addGap(40, 40, 40)
                                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(panComandasLayout.createSequentialGroup()
-                                .addGap(26, 26, 26)
-                                .addComponent(panComandasLlenas, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 498, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(panComandasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnEnviarComandas, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnPagoGeneral, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap())))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 593, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         jScrollPane2.setViewportView(panComandas);
@@ -344,6 +349,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JLabel lblEmpleado;
     private javax.swing.JLabel lblEspacio;
