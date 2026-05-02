@@ -12,6 +12,7 @@
         <module>negocios_gestionProductos</module>
         <module>negocios_gestionInventario</module>
         <module>negocios_gestionMesas</module>
+        <module>persistencia</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
