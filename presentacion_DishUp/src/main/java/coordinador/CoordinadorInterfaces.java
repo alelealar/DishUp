@@ -6,6 +6,7 @@ package coordinador;
 
 import dto.ComandaDTO;
 import dto.IngredienteDTO;
+import dto.IngredienteEnProductoDTO;
 import dto.MesaDTO;
 import dto.PedidoNuevoDTO;
 import dto.ProductoDTO;
@@ -68,7 +69,7 @@ public class CoordinadorInterfaces {
         frmCliente.setVisible(true);
     }
 
-    public void abrirPersonalizacionProducto(FrmProductos frm, ProductoDTO producto, List<IngredienteDTO> removibles) {
+    public void abrirPersonalizacionProducto(FrmProductos frm, ProductoDTO producto, List<IngredienteEnProductoDTO> removibles) {
 
         DlgModificarProducto dlg = new DlgModificarProducto(frm, producto, removibles);
         dlg.setVisible(true);

@@ -7,10 +7,15 @@ package BO;
 import Interface.IIngredienteBO;
 import Interface.IProductoBO;
 import dto.IngredienteDTO;
+import dto.IngredienteEnProductoDTO;
 import dto.ProductoDTO;
 import dto.ProductoIngredienteDTO;
+import entidades.Producto;
+import entidades.ProductoIngrediente;
 import enums.TipoProducto;
 import fachada.IngredienteFachada;
+import interfaces.IIngredienteDAO;
+import interfaces.IProductoDAO;
 import java.awt.color.ICC_ColorSpace;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,18 +26,15 @@ import java.util.List;
  */
 public class ProductoBO implements IProductoBO {
 
-    private static ProductoBO instancia;
+     private final IProductoDAO productoDAO;
+    private final IIngredienteDAO ingredienteDAO;
+    private final IIngredienteBO ingredienteBO;
 
-    private final IIngredienteBO ingredienteBO = IngredienteBO.getInstancia();
+    public ProductoBO(IProductoDAO productoDAO, IIngredienteDAO ingredienteDAO) {
+        this.productoDAO = productoDAO;
+        this.ingredienteDAO = ingredienteDAO;
 
-    private ProductoBO() {
-    }
-
-    public static ProductoBO getInstancia() {
-        if (instancia == null) {
-            instancia = new ProductoBO();
-        }
-        return instancia;
+        this.ingredienteBO = new IngredienteBO(ingredienteDAO);
     }
 
     /**
@@ -41,10 +43,81 @@ public class ProductoBO implements IProductoBO {
      * @param tipo Tipo de producto a filtrar.
      * @return Lista de productos que coinciden con el tipo.
      */
+    
     @Override
     public List<ProductoDTO> obtenerProductosPorTipo(TipoProducto tipo) {
-        List<ProductoDTO> productos = new ArrayList<>();
+        List<Producto> productos = productoDAO.obtenerProductosPorTipo(tipo);
+        List<ProductoDTO> productosDTO = new ArrayList<>();
 
+        for (Producto p : productos) {
+
+            ProductoDTO dto = new ProductoDTO();
+
+            dto.setId(p.getId());
+            dto.setNombre(p.getNombre());
+            dto.setPrecio(p.getPrecio());
+            dto.setDisponible(p.isDisponible());
+            dto.setTiempoPreparacion(p.getTiempoPreparacion());
+            dto.setTipo(p.getTipo());
+            dto.setUrlImagen(p.getUrlImagen());
+
+            productosDTO.add(dto);
+        }
+
+        return productosDTO;
+        
+    }
+    
+
+    /**
+     *
+     * @param idProducto
+     * @return
+     */
+    
+    @Override
+    public List<IngredienteEnProductoDTO> obtenerIngredientesRemoviblesPorProducto(String idProducto) {
+        Producto producto = productoDAO.obtenerProductoPorId(idProducto);
+
+        List<IngredienteEnProductoDTO> removibles = new ArrayList<>();
+        
+        if (producto == null || producto.getIngredientes() == null) {
+            return removibles;
+        }
+
+        for (ProductoIngrediente pi : producto.getIngredientes()) {
+
+            if (pi.isRemovible()) {
+
+                IngredienteEnProductoDTO dto = new IngredienteEnProductoDTO();
+                dto.setNombre(pi.getNombre());
+                dto.setCantidad(pi.getCantidad());
+
+                removibles.add(dto);
+            }
+        }
+
+        return removibles;
+    }
+
+    @Override
+    public List<String> obtenerModificadoresRemoviblesPorProducto(String idProducto) {
+        List<String> modificadores = new ArrayList<>();
+
+        List<IngredienteEnProductoDTO> ingredientes = obtenerIngredientesRemoviblesPorProducto(idProducto);
+
+        for (IngredienteEnProductoDTO ingrediente : ingredientes) {
+            modificadores.add("Sin " + ingrediente.getNombre().toLowerCase());
+        }
+
+        return modificadores;
+    }
+    
+}   
+    
+    /*
+    List<ProductoDTO> productos = new ArrayList<>();
+        
         //bebidas
         productos.add(new ProductoDTO(1, "Bloody Mary", 120.0, true, 600, TipoProducto.BEBIDA, "/img/producto_Bebida_blodyMary.png"));
         productos.add(new ProductoDTO(2, "Cóctel Rosa", 110.0, true, 450, TipoProducto.BEBIDA, "/img/producto_Bebida_coctelRosa.png"));
@@ -86,10 +159,7 @@ public class ProductoBO implements IProductoBO {
             }
         }
         return filtrados;
-    }
-
-    @Override
-    public List<ProductoIngredienteDTO> obtenerProductoIngredientes() {
+    
         List<ProductoIngredienteDTO> relaciones = new ArrayList<>();
 
         // 1 - Bloody Mary
@@ -229,44 +299,5 @@ public class ProductoBO implements IProductoBO {
         relaciones.add(new ProductoIngredienteDTO(80, 28, 20, 1, false)); // Aceite
 
         return relaciones;
-    }
+    */
 
-    /**
-     *
-     * @param idProducto
-     * @return
-     */
-    @Override
-    public List<IngredienteDTO> obtenerIngredientesRemoviblesPorProducto(int idProducto) {
-        List<IngredienteDTO> removibles = new ArrayList<>();
-
-        List<ProductoIngredienteDTO> relaciones = obtenerProductoIngredientes();
-        List<IngredienteDTO> ingredientes = ingredienteBO.obtenerIngredientes();
-
-        for (ProductoIngredienteDTO relacion : relaciones) {
-            if (relacion.getIdProducto() == idProducto && relacion.isRemovible()) {
-                for (IngredienteDTO ingrediente : ingredientes) {
-                    if (ingrediente.getId() == relacion.getIdIngrediente()) {
-                        removibles.add(ingrediente);
-                        break;
-                    }
-                }
-            }
-        }
-
-        return removibles;
-    }
-
-    @Override
-    public List<String> obtenerModificadoresRemoviblesPorProducto(int idProducto) {
-        List<String> modificadores = new ArrayList<>();
-
-        List<IngredienteDTO> ingredientes = obtenerIngredientesRemoviblesPorProducto(idProducto);
-
-        for (IngredienteDTO ingrediente : ingredientes) {
-            modificadores.add("Sin " + ingrediente.getNombre().toLowerCase());
-        }
-
-        return modificadores;
-    }
-}

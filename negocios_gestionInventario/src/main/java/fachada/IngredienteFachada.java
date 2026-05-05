@@ -11,10 +11,10 @@ import java.util.List;
  */
 public class IngredienteFachada {
 
-    private IIngredienteBO ingredienteBO;
+    private final IIngredienteBO ingredienteBO;
 
-    public IngredienteFachada() {
-        this.ingredienteBO = IngredienteBO.getInstancia();
+    public IngredienteFachada(IIngredienteBO ingredienteBO) {
+        this.ingredienteBO = ingredienteBO;
     }
 
     public List<IngredienteDTO> obtenerIngredientes() {

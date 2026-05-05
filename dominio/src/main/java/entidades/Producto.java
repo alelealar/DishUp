@@ -7,7 +7,6 @@ package entidades;
 
 import enums.TipoProducto;
 import java.util.List;
-import org.bson.codecs.pojo.annotations.BsonProperty;
 
 
 /**
@@ -22,7 +21,6 @@ public class Producto {
     private boolean disponible;
     private int tiempoPreparacion;
     
-    @BsonProperty("tipo_producto")
     private TipoProducto tipo;
     
     private String urlImagen;

@@ -14,19 +14,22 @@ public class ProductoIngrediente {
     private String id;
     private String nombre;
     private Integer cantidad;
+    private boolean removible;
 
     public ProductoIngrediente() {
     }
 
-    public ProductoIngrediente(String id, String nombre, Integer cantidad) {
+    public ProductoIngrediente(String id, String nombre, Integer cantidad, boolean removible) {
         this.id = id;
         this.nombre = nombre;
         this.cantidad = cantidad;
+        this.removible = removible;
     }
 
-    public ProductoIngrediente(String nombre, Integer cantidad) {
+    public ProductoIngrediente(String nombre, Integer cantidad, boolean removible) {
         this.nombre = nombre;
         this.cantidad = cantidad;
+        this.removible = removible;
     }
 
     public String getId() {
@@ -52,6 +55,12 @@ public class ProductoIngrediente {
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
     }
-    
-    
+
+    public boolean isRemovible() {
+        return removible;
+    }
+
+    public void setRemovible(boolean removible) {
+        this.removible = removible;
+    }
 }

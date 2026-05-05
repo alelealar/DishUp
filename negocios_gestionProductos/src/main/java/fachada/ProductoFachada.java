@@ -3,6 +3,7 @@
     import BO.ProductoBO;
     import Interface.IProductoBO;
     import dto.IngredienteDTO;
+import dto.IngredienteEnProductoDTO;
     import dto.ProductoDTO;
     import enums.TipoProducto;
     import java.util.List;
@@ -13,10 +14,10 @@
      */
     public class ProductoFachada {
 
-        private IProductoBO productoBO;
+        private final IProductoBO productoBO;
 
-        public ProductoFachada() {
-            this.productoBO = ProductoBO.getInstancia();
+        public ProductoFachada(IProductoBO productoBO) {
+            this.productoBO = productoBO;
         }
 
         /**
@@ -28,7 +29,7 @@
             return productoBO.obtenerProductosPorTipo(tipo);
         }
 
-        public List<IngredienteDTO> obtenerIngredientesRemovibles(int idProducto) {
+        public List<IngredienteEnProductoDTO> obtenerIngredientesRemovibles(String idProducto) {
             return productoBO.obtenerIngredientesRemoviblesPorProducto(idProducto);
         }
     }

@@ -5,6 +5,7 @@
 package pantallas;
 
 import dto.IngredienteDTO;
+import dto.IngredienteEnProductoDTO;
 import dto.PedidoNuevoDTO;
 import dto.ProductoDTO;
 import java.util.ArrayList;
@@ -17,11 +18,11 @@ import javax.swing.JCheckBox;
  * @author valeria
  */
 public class DlgModificarProducto extends javax.swing.JDialog {
-    private int idProductoActual;
+    private String idProductoActual;
     private PedidoNuevoDTO resultado;
     private List<JCheckBox> checksIngredientes = new ArrayList<>();
 
-    public DlgModificarProducto(java.awt.Frame parent, ProductoDTO producto, List<IngredienteDTO> ingredientesRemovibles) {
+    public DlgModificarProducto(java.awt.Frame parent, ProductoDTO producto, List<IngredienteEnProductoDTO> ingredientesRemovibles) {
         super(parent, true);
         initComponents();
         this.idProductoActual = producto.getId();
@@ -31,13 +32,13 @@ public class DlgModificarProducto extends javax.swing.JDialog {
     }
 
    
-    private void configurarPanelIngredientes(List<IngredienteDTO> ingredientes) {
+    private void configurarPanelIngredientes(List<IngredienteEnProductoDTO> ingredientes) {
         pnlListaIngredientes.setLayout(new BoxLayout(pnlListaIngredientes, BoxLayout.Y_AXIS));
         pnlListaIngredientes.removeAll(); 
         jScrollPane1.setBorder(null); 
         jScrollPane1.getViewport().setBackground(new java.awt.Color(255, 248, 235));
 
-        for (IngredienteDTO ing : ingredientes) {
+        for (IngredienteEnProductoDTO ing : ingredientes) {
             
             JCheckBox check = new JCheckBox("Sin " + ing.getNombre());
             check.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
@@ -258,8 +259,6 @@ public class DlgModificarProducto extends javax.swing.JDialog {
             especificaciones.setLength(especificaciones.length() - 2);
         }
 
-
-        
         resultado = new PedidoNuevoDTO();
         resultado.setIdProducto(idProductoActual);
         resultado.setNombreProducto(lblNombreProducto.getText());
@@ -273,47 +272,6 @@ public class DlgModificarProducto extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_lblSalirMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(DlgModificarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(DlgModificarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(DlgModificarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(DlgModificarProducto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                DlgModificarProducto dialog = new DlgModificarProducto(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnListo;

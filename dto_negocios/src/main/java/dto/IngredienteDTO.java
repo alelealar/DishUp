@@ -9,7 +9,7 @@ package dto;
  * @author valeria
  */
 public class IngredienteDTO {
-    private int id;
+    private String id;
     private String nombre;
     private int stockActual;
     private int stockMinimo;
@@ -17,18 +17,18 @@ public class IngredienteDTO {
     public IngredienteDTO() {
     }
 
-    public IngredienteDTO(int id, String nombre, int stockActual, int stockMinimo) {
+    public IngredienteDTO(String id, String nombre, int stockActual, int stockMinimo) {
         this.id = id;
         this.nombre = nombre;
         this.stockActual = stockActual;
         this.stockMinimo = stockMinimo;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

@@ -10,12 +10,12 @@ import java.util.List;
  */
 public class IngredienteControl {
 
-    private IngredienteFachada fachada;
+    private final IngredienteFachada fachada;
 
-    public IngredienteControl() {
-        this.fachada = new IngredienteFachada();
+    public IngredienteControl(IngredienteFachada fachada) {
+        this.fachada = fachada;
     }
-
+    
     public List<IngredienteDTO> obtenerIngredientes() {
         return fachada.obtenerIngredientes();
     }

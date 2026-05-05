@@ -21,15 +21,15 @@ import java.util.List;
  */
 
 public class ProductoDTO {
-    private Integer id;
+    private String id;
     private String nombre;
-    private Double precio;
+    private float precio;
     private boolean disponible;
     private Integer tiempoPreparacion;
     private TipoProducto tipo;
     private String urlImagen;
 
-    public ProductoDTO(Integer id, String nombre, Double precio, boolean disponible, Integer tiempoPreparacion, TipoProducto tipo, String urlImagen) {
+    public ProductoDTO(String id, String nombre, float precio, boolean disponible, Integer tiempoPreparacion, TipoProducto tipo, String urlImagen) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
@@ -42,11 +42,11 @@ public class ProductoDTO {
     public ProductoDTO() {
     }
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -58,11 +58,11 @@ public class ProductoDTO {
         this.nombre = nombre;
     }
 
-    public Double getPrecio() {
+    public float getPrecio() {
         return precio;
     }
 
-    public void setPrecio(Double precio) {
+    public void setPrecio(float precio) {
         this.precio = precio;
     }
 

@@ -15,12 +15,12 @@ package dto;
  */
 public class PedidoNuevoDTO {
 
-    private Integer idProducto;
+    private String idProducto;
     private Integer cantidad;
     private String especificaciones;
     private String nombreProducto;
 
-    public PedidoNuevoDTO(Integer idProducto, Integer cantidad, String especificaciones) {
+    public PedidoNuevoDTO(String idProducto, Integer cantidad, String especificaciones) {
         this.idProducto = idProducto;
         this.cantidad = cantidad;
         this.especificaciones = especificaciones;
@@ -29,11 +29,11 @@ public class PedidoNuevoDTO {
     public PedidoNuevoDTO() {
     }
 
-    public Integer getIdProducto() {
+    public String getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(Integer idProducto) {
+    public void setIdProducto(String idProducto) {
         this.idProducto = idProducto;
     }
 

@@ -7,6 +7,8 @@ package BO;
 import Interface.IIngredienteBO;
 import dto.IngredienteDTO;
 import dto.ProductoIngredienteDTO;
+import entidades.Ingrediente;
+import interfaces.IIngredienteDAO;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,24 +17,36 @@ import java.util.List;
  * @author DishUp
  */
 public class IngredienteBO implements IIngredienteBO{
-    
-    private static IngredienteBO instancia;
-    
+    private final IIngredienteDAO ingredienteDAO;
 
-    public IngredienteBO() {
+    public IngredienteBO(IIngredienteDAO ingredienteDAO) {
+        this.ingredienteDAO = ingredienteDAO;
     }
-    
-    public static IngredienteBO getInstancia(){
-        if (instancia == null) {
-            instancia = new IngredienteBO();
-        }
-        return instancia;
-    }
-    
-    @Override                                                               
+
+    @Override
     public List<IngredienteDTO> obtenerIngredientes() {
-        List<IngredienteDTO> ingredientes = new ArrayList<>();
 
+        List<Ingrediente> ingredientes = ingredienteDAO.obtenerIngredientes();
+
+        List<IngredienteDTO> dtos = new ArrayList<>();
+
+        for (Ingrediente i : ingredientes) {
+
+            IngredienteDTO dto = new IngredienteDTO();
+            dto.setId(i.getId());
+            dto.setNombre(i.getNombre());
+            dto.setStockActual(i.getStockActual());
+            dto.setStockMinimo(i.getStockMinimo());
+
+            dtos.add(dto);
+        }
+
+        return dtos;
+    }
+}
+    /*
+    List<IngredienteDTO> ingredientes = new ArrayList<>();
+        
         //bebidas
         ingredientes.add(new IngredienteDTO(1, "Jugo de tomate", 30, 5));
         ingredientes.add(new IngredienteDTO(2, "Vodka", 20, 5));
@@ -79,6 +93,5 @@ public class IngredienteBO implements IIngredienteBO{
         ingredientes.add(new IngredienteDTO(38, "Aderezo César", 50, 10));
 
         return ingredientes;
-    }
+    */
     
-}
