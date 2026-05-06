@@ -1,9 +1,8 @@
-package infraestructura;
+package inventario;
 
 import dto.ProductoDTO;
 import dto.IngredienteEnProductoDTO;
 import dto.PedidoNuevoDTO;
-import enums.TipoProducto;
 import enums.TipoProductoDTO;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

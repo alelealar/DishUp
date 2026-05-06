@@ -13,7 +13,7 @@ import dto.MesaDTO;
 import dto.PedidoNuevoDTO;
 import dto.ProductoDTO;
 import fabricas.FabricaProductos;
-import infraestructura.InventarioAPI;
+import inventario.InventarioAPI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

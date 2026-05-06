@@ -10,7 +10,7 @@ import fachada.IngredienteFachada;
 import interfaces.IIngredienteDAO;
 import interfaces.IProductoDAO;
 import java.awt.color.ICC_ColorSpace;
-import infraestructura.InventarioAPI;
+import inventario.InventarioAPI;
 import java.util.ArrayList;
 import java.util.List;
 
