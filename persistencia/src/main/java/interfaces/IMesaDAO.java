@@ -3,17 +3,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
 
-package Interface;
+package interfaces;
 
-import dto.MesaDTO;
-import excepciones.NegocioException;
+import entidades.Mesa;
+import excepciones.PersistenciaException;
 import java.util.List;
 
 /**
  *
  * @author DishUp
  */
-public interface IMesaBO {
+public interface IMesaDAO {
+
+    public List<Mesa> obtenerMesasPorMesero(String idMesero);
     
-    public List<MesaDTO> obtenerMesasPorMesero(String idMesero) throws NegocioException;
+    public Mesa insertarMesa(Mesa mesa) throws PersistenciaException;
 }

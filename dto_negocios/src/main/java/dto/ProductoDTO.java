@@ -5,7 +5,7 @@
 
 package dto;
 
-import enums.TipoProducto;
+import enums.TipoProductoDTO;
 import java.util.List;
 
 
@@ -26,10 +26,10 @@ public class ProductoDTO {
     private float precio;
     private boolean disponible;
     private Integer tiempoPreparacion;
-    private TipoProducto tipo;
+    private TipoProductoDTO tipo;
     private String urlImagen;
 
-    public ProductoDTO(String id, String nombre, float precio, boolean disponible, Integer tiempoPreparacion, TipoProducto tipo, String urlImagen) {
+    public ProductoDTO(String id, String nombre, float precio, boolean disponible, Integer tiempoPreparacion, TipoProductoDTO tipo, String urlImagen) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
@@ -90,11 +90,11 @@ public class ProductoDTO {
         this.urlImagen = urlImagen;
     }
 
-    public TipoProducto getTipo() {
+    public TipoProductoDTO getTipo() {
         return tipo;
     }
 
-    public void setTipo(TipoProducto tipo) {
+    public void setTipo(TipoProductoDTO tipo) {
         this.tipo = tipo;
     } 
 }

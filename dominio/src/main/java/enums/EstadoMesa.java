@@ -10,6 +10,6 @@ package enums;
  * @author DishUp
  */
 public enum EstadoMesa {
-    LIBRE,
-    OCUPADA
+    OCUPADA,
+    LIBRE
 }

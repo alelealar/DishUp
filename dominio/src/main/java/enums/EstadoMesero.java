@@ -9,8 +9,7 @@ package enums;
  *
  * @author DishUp
  */
-public enum TipoProducto {
-    BEBIDA,
-    COMIDA,
-    BOTANA
+public enum EstadoMesero {
+    ACTIVO,
+    INACTIVO
 }

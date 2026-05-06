@@ -2,6 +2,7 @@ package control;
 
 import fachada.MesaFachada;
 import dto.MesaDTO;
+import excepciones.NegocioException;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ public class MesaControl {
         this.fachada = new MesaFachada();
     }
 
-    public List<MesaDTO> obtenerMesasPorMesero(int idMesero) {
+    public List<MesaDTO> obtenerMesasPorMesero(String idMesero) throws NegocioException {
         return fachada.obtenerMesasPorMesero(idMesero);
     }
 }

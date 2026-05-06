@@ -6,8 +6,13 @@
 package BO;
 
 import Interface.IMesaBO;
+import adaptadores.MesaAdapter;
+import daos.MesaDAO;
 import dto.MesaDTO;
-import enums.EstadoMesa;
+import entidades.Mesa;
+import enums.EstadoMesaDTO;
+import excepciones.NegocioException;
+import interfaces.IMesaDAO;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,32 +24,30 @@ import java.util.List;
 
 public class MesaBO implements IMesaBO {
     
-    private static MesaBO instancia;
-    
-    private MesaBO(){
-       
-    }
-    
-    public static MesaBO getInstancia(){
-        if (instancia == null) {
-            instancia = new MesaBO();
-        }
-        return instancia;
+    private IMesaDAO mesaDAO;
+
+    public MesaBO() {
+        this.mesaDAO = new MesaDAO();
     }
     
     @Override
-    public List<MesaDTO> obtenerMesasPorMesero(int idMesero) {
-
-        List<MesaDTO> mesas = new ArrayList<>();
-
-        mesas.add(new MesaDTO(1, 1, EstadoMesa.LIBRE, 1));
-        mesas.add(new MesaDTO(2, 2, EstadoMesa.LIBRE, 1));
-        mesas.add(new MesaDTO(3, 4, EstadoMesa.LIBRE, 1));
-        mesas.add(new MesaDTO(4, 6, EstadoMesa.LIBRE, 1));
-        mesas.add(new MesaDTO(5, 7, EstadoMesa.LIBRE, 1));
-        mesas.add(new MesaDTO(6, 9, EstadoMesa.LIBRE, 1));
-
-        return mesas;
+    public List<MesaDTO> obtenerMesasPorMesero(String idMesero) throws NegocioException {
+        if(idMesero == null || idMesero.isBlank()){
+            throw new NegocioException("El id es invalido");
+        }
+        List<Mesa> mesas = mesaDAO.obtenerMesasPorMesero(idMesero);
+        
+        return MesaAdapter.listEntityToDTO(mesas);
     }
     
 }
+
+
+/*
+        mesas.add(new MesaDTO(1, 1, EstadoMesaDTO.LIBRE, 1));
+        mesas.add(new MesaDTO(2, 2, EstadoMesaDTO.LIBRE, 1));
+        mesas.add(new MesaDTO(3, 4, EstadoMesaDTO.LIBRE, 1));
+        mesas.add(new MesaDTO(4, 6, EstadoMesaDTO.LIBRE, 1));
+        mesas.add(new MesaDTO(5, 7, EstadoMesaDTO.LIBRE, 1));
+        mesas.add(new MesaDTO(6, 9, EstadoMesaDTO.LIBRE, 1));
+*/

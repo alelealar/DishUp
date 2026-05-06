@@ -5,7 +5,7 @@
 
 package dto;
 
-import enums.EstadoPedido;
+import enums.EstadoPedidoDTO;
 
 
 /**
@@ -23,10 +23,10 @@ public class PedidoDTO {
     private Integer id;
     private String nombreProducto;
     private Integer cantidad;
-    private EstadoPedido estado;
+    private EstadoPedidoDTO estado;
     private Integer tiempoPreparacion;
 
-    public PedidoDTO(Integer id, String nombreProducto, Integer cantidad, EstadoPedido estado, Integer tiempoPreparacion) {
+    public PedidoDTO(Integer id, String nombreProducto, Integer cantidad, EstadoPedidoDTO estado, Integer tiempoPreparacion) {
         this.id = id;
         this.nombreProducto = nombreProducto;
         this.cantidad = cantidad;
@@ -61,11 +61,11 @@ public class PedidoDTO {
         this.cantidad = cantidad;
     }
 
-    public EstadoPedido getEstado() {
+    public EstadoPedidoDTO getEstado() {
         return estado;
     }
 
-    public void setEstado(EstadoPedido estado) {
+    public void setEstado(EstadoPedidoDTO estado) {
         this.estado = estado;
     }
 

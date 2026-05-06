@@ -13,7 +13,7 @@ package enums;
  * los estados son: EN ESPERA, PREPARANDO, LISTO, ENTREGADO
  * @author DishUp
  */
-public enum EstadoPedido {
+public enum EstadoPedidoDTO {
     EN_ESPERA,
     PREPARANDO,
     LISTO, 

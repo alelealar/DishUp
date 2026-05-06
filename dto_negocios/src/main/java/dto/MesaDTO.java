@@ -5,7 +5,7 @@
 
 package dto;
 
-import enums.EstadoMesa;
+import enums.EstadoMesaDTO;
 
 
 /**
@@ -14,12 +14,12 @@ import enums.EstadoMesa;
  */
 
 public class MesaDTO {
-    private int idMesa;
+    private String idMesa;
     private int numeroMesa;
-    private EstadoMesa estado;
-    private int idMesero;
+    private EstadoMesaDTO estado;
+    private String idMesero;
 
-    public MesaDTO(int idMesa, int numeroMesa, EstadoMesa estado, int idMesero) {
+    public MesaDTO(String idMesa, int numeroMesa, EstadoMesaDTO estado, String idMesero) {
         this.idMesa = idMesa;
         this.numeroMesa = numeroMesa;
         this.estado = estado;
@@ -30,11 +30,11 @@ public class MesaDTO {
     }
 
         
-    public int getIdMesa() {
+    public String getIdMesa() {
         return idMesa;
     }
 
-    public void setIdMesa(int idMesa) {
+    public void setIdMesa(String idMesa) {
         this.idMesa = idMesa;
     }
 
@@ -46,19 +46,19 @@ public class MesaDTO {
         this.numeroMesa = numeroMesa;
     }
 
-    public EstadoMesa getEstado() {
+    public EstadoMesaDTO getEstado() {
         return estado;
     }
 
-    public void setEstado(EstadoMesa estado) {
+    public void setEstado(EstadoMesaDTO estado) {
         this.estado = estado;
     }
 
-    public int getIdMesero() {
+    public String getIdMesero() {
         return idMesero;
     }
 
-    public void setIdMesero(int idMesero) {
+    public void setIdMesero(String idMesero) {
         this.idMesero = idMesero;
     }
     
