@@ -12,17 +12,27 @@ package dto;
  */
 
 public class IngredienteEnProductoDTO {
+    private String id;
     private String nombre;
     private int cantidad;
     private boolean removible;
 
-    public IngredienteEnProductoDTO(String nombre, int cantidad, boolean removible) {
+    public IngredienteEnProductoDTO(String id, String nombre, int cantidad, boolean removible) {
+        this.id = id;
         this.nombre = nombre;
         this.cantidad = cantidad;
         this.removible = removible;
     }
 
     public IngredienteEnProductoDTO() {
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getNombre() {

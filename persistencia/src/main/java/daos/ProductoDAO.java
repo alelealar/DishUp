@@ -25,10 +25,11 @@ public class ProductoDAO implements IProductoDAO{
     
     private final MongoCollection<Producto> coleccion;
 
-    public ProductoDAO(MongoCollection<Producto> coleccion) {
+    public ProductoDAO(MongoCollection<Producto> coleccion) { // Se esta pasando la coleccion como parametro pero no lo estamos usando para inicializar la conexión
         this.coleccion = conexion.ConexionMongo.obtenerBaseDatosCodec().getCollection("Productos", Producto.class);
     }
     
+    @Override
     public List<Producto> buscar(String nombre, TipoProducto tipo, Boolean disponible){
         List<Bson> filtros = new ArrayList<>();
         
@@ -43,6 +44,7 @@ public class ProductoDAO implements IProductoDAO{
         return coleccion.find(and(filtros)).into(new ArrayList<>());
     }
     
+    @Override
     public List<Producto> obtenerProductosPorTipo(TipoProducto tipo){
         return coleccion.find(eq("tipo", tipo)).into(new ArrayList<>());
     }

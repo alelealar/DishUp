@@ -4,6 +4,7 @@
  */
 package coordinador;
 
+import control.ProductoControl;
 import dto.ComandaDTO;
 import dto.IngredienteDTO;
 import dto.IngredienteEnProductoDTO;
@@ -31,7 +32,16 @@ public class CoordinadorInterfaces {
     private FrmProductos frmProductos;
 
     private Map<Integer, List<ComandaDTO>> comandasPorMesa = new HashMap<>();
+    private ProductoControl productoControl; // Se pone el control aquí para que las pantallas (FrmProductos) no tengan que crearlo ellas mismas, 
+                                             // manteniendo la UI 100% libre de lógica de negocio o de base de datos
 
+    public CoordinadorInterfaces() {
+        // El Coordinador es el mediador, conoce el ProductoControl para poder 
+        // inyectarlo en las ventanas que lo necesiten
+        this.productoControl = productoControl;
+    }
+
+    
     public void setFrmProductos(FrmProductos frmProductos) {
         this.frmProductos = frmProductos;
     }
@@ -57,7 +67,7 @@ public class CoordinadorInterfaces {
     }
 
     public void frmClienteAFrmProductos(Integer mesa, String nombreCliente) {
-        frmProductos = new FrmProductos(this);
+        frmProductos = new FrmProductos(this, this.productoControl); // Aqui se agrega el ProductoControl
         frmProductos.setMesaAndCliente(mesa, nombreCliente);
         frmProductos.setVisible(true);
     }
