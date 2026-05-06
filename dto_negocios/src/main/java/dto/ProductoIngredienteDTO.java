@@ -11,14 +11,15 @@ package dto;
 public class ProductoIngredienteDTO {
     private String id;
     private int idProducto;
-    private int idIngrediente;
+    private String idIngrediente;
     private int cantidadRequerida; // Cantidad de unidades
     private boolean removible;
 
     public ProductoIngredienteDTO() {
     }
 
-    public ProductoIngredienteDTO(String id, int idProducto, int idIngrediente, int cantidadRequerida, boolean removible) {
+
+    public ProductoIngredienteDTO(String id, int idProducto, String idIngrediente, int cantidadRequerida, boolean removible) {
         this.id = id;
         this.idProducto = idProducto;
         this.idIngrediente = idIngrediente;
@@ -42,11 +43,11 @@ public class ProductoIngredienteDTO {
         this.idProducto = idProducto;
     }
 
-    public int getIdIngrediente() {
+    public String getIdIngrediente() {
         return idIngrediente;
     }
 
-    public void setIdIngrediente(int idIngrediente) {
+    public void setIdIngrediente(String idIngrediente) {
         this.idIngrediente = idIngrediente;
     }
 

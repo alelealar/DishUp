@@ -1,30 +1,19 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package BO;
 
-import Interface.IIngredienteBO;
 import Interface.IProductoBO;
-import dto.IngredienteDTO;
 import dto.IngredienteEnProductoDTO;
 import dto.ProductoDTO;
 import dto.ProductoIngredienteDTO;
-import entidades.Producto;
-import entidades.ProductoIngrediente;
 import enums.TipoProducto;
 import enums.TipoProductoDTO;
 import fachada.IngredienteFachada;
 import interfaces.IIngredienteDAO;
 import interfaces.IProductoDAO;
 import java.awt.color.ICC_ColorSpace;
+import infraestructura.InventarioAPI;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author DishUp
- */
 public class ProductoBO implements IProductoBO {
 
     private final InventarioAPI inventarioAPI;
@@ -45,18 +34,15 @@ public class ProductoBO implements IProductoBO {
         List<ProductoDTO> filtrados = new ArrayList<>();
 
         for (ProductoDTO p : todos) {
-            if (p.getTipo() == tipo) {
+            if (p.getTipo().name().equals(tipo.name())) {
                 filtrados.add(p);
             }
         }
         return filtrados;
     }
 
-    /**
-     *
-     * @param idProducto
-     * @return
-     */
+
+
     @Override
     public List<IngredienteEnProductoDTO> obtenerIngredientesRemoviblesPorProducto(String idProducto) {
         ProductoDTO producto = inventarioAPI.obtenerProductoPorId(idProducto);
@@ -66,6 +52,7 @@ public class ProductoBO implements IProductoBO {
         if (producto == null || producto.getIngredientes() == null) {
             return removibles;
         }
+
         for (IngredienteEnProductoDTO ing : producto.getIngredientes()) {
             if (ing.isRemovible()) {
                 removibles.add(ing);
@@ -77,8 +64,8 @@ public class ProductoBO implements IProductoBO {
     @Override
     public List<String> obtenerModificadoresRemoviblesPorProducto(String idProducto) {
         List<String> lista = new ArrayList<>();
-        List<IngredienteEnProductoDTO> ingredientes
-                = obtenerIngredientesRemoviblesPorProducto(idProducto);
+        List<IngredienteEnProductoDTO> ingredientes = obtenerIngredientesRemoviblesPorProducto(idProducto);
+
         for (IngredienteEnProductoDTO ing : ingredientes) {
             lista.add("Sin " + ing.getNombre().toLowerCase());
         }
@@ -111,7 +98,6 @@ public class ProductoBO implements IProductoBO {
         return inventarioAPI.obtenerProductos();
     }
 }
-
 
 /*
     List<ProductoDTO> productos = new ArrayList<>();

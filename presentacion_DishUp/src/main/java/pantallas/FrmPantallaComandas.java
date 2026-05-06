@@ -9,6 +9,7 @@ import coordinador.CoordinadorInterfaces;
 import dto.ComandaDTO;
 import dto.MesaDTO;
 import dto.PedidoNuevoDTO;
+import excepciones.NegocioException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -18,6 +19,7 @@ import java.awt.Font;
 import java.awt.FontFormatException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -367,8 +369,13 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
     public void cargarMesas() {
         panMesas.removeAll();
         btnLevantarComanda.setVisible(false);
+        List<MesaDTO> mesas = new ArrayList<>();
 
-        List<MesaDTO> mesas = control.obtenerMesasPorMesero(idMesero);
+        try {
+            mesas = control.obtenerMesasPorMesero(String.valueOf(idMesero));
+        } catch (NegocioException ex) {
+            System.out.println("Error al obtener mesas: " + ex.getMessage());
+        }
 
         for (MesaDTO mesa : mesas) {
             JButton btn = new JButton("Mesa " + mesa.getNumeroMesa());

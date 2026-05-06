@@ -1,26 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 package dto;
 
 import enums.TipoProductoDTO;
 import java.util.List;
 
-
-/**
- * ProductoDTO.
- * Representa la informacion de un producto disponible en el sistema.
- *
- * Este DTO contiene los datos basicos del producto como su identificador, nombre,
- * descripcion, precio y disponibilidad, los cuales se utilizan para generar pedidos
- * y mostrar el catalogo al cliente.
- *
- * @author DishUp
- */
-
 public class ProductoDTO {
+
     private String id;
     private String nombre;
     private float precio;
@@ -28,10 +12,10 @@ public class ProductoDTO {
     private Integer tiempoPreparacion;
     private TipoProductoDTO tipo;
     private String urlImagen;
-    
-     private List<IngredienteEnProductoDTO> ingredientes;
 
-    public ProductoDTO(String id, String nombre, float precio, boolean disponible, Integer tiempoPreparacion, TipoProductoDTO tipo, String urlImagen, List<IngredienteEnProductoDTO> ingredientes) {
+    private List<IngredienteEnProductoDTO> ingredientes;
+
+    public ProductoDTO(String id, String nombre, float precio, boolean disponible, Integer tiempoPreparacion, TipoProductoDTO tipo, String urlImagen) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
@@ -69,7 +53,7 @@ public class ProductoDTO {
         this.precio = precio;
     }
 
-    public boolean estaDisponible() {
+    public boolean isDisponible() {
         return disponible;
     }
 
@@ -85,6 +69,14 @@ public class ProductoDTO {
         this.tiempoPreparacion = tiempoPreparacion;
     }
 
+    public TipoProductoDTO getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(TipoProductoDTO tipo) {
+        this.tipo = tipo;
+    }
+
     public String getUrlImagen() {
         return urlImagen;
     }
@@ -93,14 +85,6 @@ public class ProductoDTO {
         this.urlImagen = urlImagen;
     }
 
-    public TipoProductoDTO getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(TipoProductoDTO tipo) {
-        this.tipo = tipo;
-    } 
-
     public List<IngredienteEnProductoDTO> getIngredientes() {
         return ingredientes;
     }
@@ -108,5 +92,18 @@ public class ProductoDTO {
     public void setIngredientes(List<IngredienteEnProductoDTO> ingredientes) {
         this.ingredientes = ingredientes;
     }
-    
+
+    @Override
+    public String toString() {
+        return "ProductoDTO{"
+                + "id=" + id
+                + ", nombre=" + nombre
+                + ", precio=" + precio
+                + ", disponible=" + disponible
+                + ", tiempoPreparacion=" + tiempoPreparacion
+                + ", tipo=" + tipo
+                + ", urlImagen=" + urlImagen
+                + ", ingredientes=" + ingredientes
+                + '}';
+    }
 }

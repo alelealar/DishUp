@@ -17,6 +17,8 @@ import java.util.List;
  */
 public interface IProductoBO {
 
+    public List<ProductoDTO> obtenerProductos();
+
     /**
      * Obtiene una lista de productos filtrados por tipo.
      *
@@ -30,6 +32,4 @@ public interface IProductoBO {
     public List<String> obtenerModificadoresRemoviblesPorProducto(String idProducto);
 
     public List<ProductoIngredienteDTO> obtenerIngredientesDeProducto(String idProducto);
-
-    public List<ProductoDTO> obtenerProductos();
 }

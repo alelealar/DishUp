@@ -43,7 +43,7 @@ import javax.swing.border.Border;
 public final class FrmProductos extends javax.swing.JFrame {
 
     private CoordinadorInterfaces coordinador;
-    
+
     private ProductoControl control;
 
     private Integer numMesa;
@@ -459,7 +459,6 @@ public final class FrmProductos extends javax.swing.JFrame {
         coordinador.abrirResumenComanda(this, numMesa, nombreCliente);
     }//GEN-LAST:event_btnEnviarAComandaActionPerformed
 
-
     private JPanel crearCardProducto(ProductoDTO producto) {
 
         JPanel card = new JPanel();
@@ -474,14 +473,14 @@ public final class FrmProductos extends javax.swing.JFrame {
         card.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent e) {
-                if (producto.estaDisponible()) {
+                if (producto.isDisponible()) {
                     card.setBackground(Color.decode("#DCB15E"));
                 }
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent e) {
-                if (producto.estaDisponible()) {
+                if (producto.isDisponible()) {
                     card.setBackground(Color.decode("#FFE3AC"));
                 }
             }
@@ -490,7 +489,7 @@ public final class FrmProductos extends javax.swing.JFrame {
             public void mousePressed(java.awt.event.MouseEvent e) {
                 txtBuscador.transferFocus();
 
-                if (producto.estaDisponible()) {
+                if (producto.isDisponible()) {
                     productoSeleccionado(producto);
                 }
             }
@@ -502,7 +501,7 @@ public final class FrmProductos extends javax.swing.JFrame {
             public void paint(Graphics g) {
                 super.paint(g);
 
-                if (!producto.estaDisponible()) {
+                if (!producto.isDisponible()) {
                     Graphics2D g2 = (Graphics2D) g;
 
                     g2.setColor(new Color(0, 0, 0, 120));
@@ -514,10 +513,24 @@ public final class FrmProductos extends javax.swing.JFrame {
                 }
             }
         };
-        ImageIcon icon = new ImageIcon(getClass().getResource(producto.getUrlImagen()));
 
-        Image img = icon.getImage().getScaledInstance(120, 100, Image.SCALE_SMOOTH);
-        lblImagen.setIcon(new ImageIcon(img));
+        if (producto.getUrlImagen() != null) {
+            java.net.URL url = getClass().getResource(producto.getUrlImagen());
+            if (url != null) {
+                ImageIcon icon = new ImageIcon(url);
+                Image img = icon.getImage().getScaledInstance(120, 100, Image.SCALE_SMOOTH);
+                lblImagen.setIcon(new ImageIcon(img));
+            }
+        } else {
+            // Imagen por defecto
+            java.net.URL urlDefault = getClass().getResource("/img/default.png");
+            if (urlDefault != null) {
+                ImageIcon icon = new ImageIcon(urlDefault);
+                Image img = icon.getImage().getScaledInstance(120, 100, Image.SCALE_SMOOTH);
+                lblImagen.setIcon(new ImageIcon(img));
+            }
+        }
+        
         lblImagen.setHorizontalAlignment(JLabel.CENTER);
 
         JLabel lblNombre = new JLabel(producto.getNombre());
@@ -572,11 +585,16 @@ public final class FrmProductos extends javax.swing.JFrame {
     public void cargarProductosPorTipo(TipoProducto tipo) {
         panProductos.removeAll();
 
-        List<ProductoDTO> productos = control.obtenerProductosPorTipo(tipo);
+        // List<ProductoDTO> productos = control.obtenerProductosPorTipo(tipo);
+        List<ProductoDTO> productos = coordinador.obtenerProductosParaUI();
 
         for (ProductoDTO producto : productos) {
-            JPanel card = crearCardProducto(producto);
-            panProductos.add(card);
+            System.out.println(producto.getNombre() + " - " + producto.getTipo());
+
+            if (producto.getTipo().name().equals(tipo.name())) {
+                JPanel card = crearCardProducto(producto);
+                panProductos.add(card);
+            }
         }
 
         panProductos.revalidate();
@@ -588,10 +606,12 @@ public final class FrmProductos extends javax.swing.JFrame {
         int productosEncontrados = 0;
 
         TipoProducto tipoActual = (TipoProducto) cbxTipoProducto.getSelectedItem();
-        List<ProductoDTO> productos = control.obtenerProductosPorTipo(tipoActual);
+        List<ProductoDTO> productos = coordinador.obtenerProductosParaUI(); // ✅
 
         for (ProductoDTO producto : productos) {
-            if (producto.getNombre().toLowerCase().contains(filtro)) {
+            if (producto.getTipo().equals(tipoActual)
+                    && producto.getNombre().toLowerCase().contains(filtro)) {
+
                 JPanel card = crearCardProducto(producto);
                 panProductos.add(card);
                 productosEncontrados++;
@@ -600,8 +620,6 @@ public final class FrmProductos extends javax.swing.JFrame {
 
         if (productosEncontrados == 0) {
             JLabel lblVacio = new JLabel("No se encontraron coincidencias para: " + filtro);
-            lblVacio.setFont(new Font("Arial", Font.ITALIC, 16));
-            lblVacio.setForeground(Color.GRAY);
             panProductos.add(lblVacio);
         }
 
