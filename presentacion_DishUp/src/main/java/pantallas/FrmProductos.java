@@ -515,22 +515,25 @@ public final class FrmProductos extends javax.swing.JFrame {
         };
 
         if (producto.getUrlImagen() != null) {
-            java.net.URL url = getClass().getResource(producto.getUrlImagen());
-            if (url != null) {
-                ImageIcon icon = new ImageIcon(url);
+            try {
+                ImageIcon icon;
+
+                if (producto.getUrlImagen().startsWith("http")) {
+                    // Imagen desde internet
+                    icon = new ImageIcon(new java.net.URL(producto.getUrlImagen()));
+                } else {
+                    // Imagen local
+                    icon = new ImageIcon(getClass().getResource(producto.getUrlImagen()));
+                }
+
                 Image img = icon.getImage().getScaledInstance(120, 100, Image.SCALE_SMOOTH);
                 lblImagen.setIcon(new ImageIcon(img));
-            }
-        } else {
-            // Imagen por defecto
-            java.net.URL urlDefault = getClass().getResource("/img/default.png");
-            if (urlDefault != null) {
-                ImageIcon icon = new ImageIcon(urlDefault);
-                Image img = icon.getImage().getScaledInstance(120, 100, Image.SCALE_SMOOTH);
-                lblImagen.setIcon(new ImageIcon(img));
+
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-        
+
         lblImagen.setHorizontalAlignment(JLabel.CENTER);
 
         JLabel lblNombre = new JLabel(producto.getNombre());
@@ -589,7 +592,7 @@ public final class FrmProductos extends javax.swing.JFrame {
         List<ProductoDTO> productos = coordinador.obtenerProductosParaUI();
 
         for (ProductoDTO producto : productos) {
-            System.out.println(producto.getNombre() + " - " + producto.getTipo());
+            // System.out.println(producto.getNombre() + " - " + producto.getTipo());
 
             if (producto.getTipo().name().equals(tipo.name())) {
                 JPanel card = crearCardProducto(producto);

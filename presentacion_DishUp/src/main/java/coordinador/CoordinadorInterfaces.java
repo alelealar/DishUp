@@ -146,11 +146,11 @@ public class CoordinadorInterfaces {
 
     public List<ProductoDTO> obtenerProductosParaUI() {
         List<ProductoDTO> productosAPI = productoControl.obtenerProductos();
-        System.out.println("Productos API: " + productosAPI.size());
+        // System.out.println("Productos API: " + productosAPI.size());
 
-        for (ProductoDTO p : productosAPI) {
-            System.out.println(p.toString());
-        }
+//        for (ProductoDTO p : productosAPI) {
+//            System.out.println(p.toString());
+//        }
 
         return productosAPI;
     }

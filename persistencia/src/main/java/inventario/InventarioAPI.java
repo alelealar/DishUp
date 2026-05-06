@@ -49,9 +49,9 @@ public class InventarioAPI {
                 dto.setNombre(obj.getString("nombre"));
                 dto.setTipo(TipoProductoDTO.valueOf(obj.getString("tipo")));
                 dto.setDisponible(obj.getBoolean("disponible"));
-                dto.setPrecio((float) 0.0);
-                dto.setTiempoPreparacion(0);
-                dto.setUrlImagen(null);
+                dto.setPrecio((float) obj.optDouble("precio", 0.0));
+                dto.setTiempoPreparacion(obj.optInt("tiempoPreparacion", 0));
+                dto.setUrlImagen(BASE_URL + obj.optString("imagen", ""));
 
                 // Ingredientes
                 if (obj.has("ingredientes")) {
