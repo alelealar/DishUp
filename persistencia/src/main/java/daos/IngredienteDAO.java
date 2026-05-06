@@ -24,7 +24,7 @@ public class IngredienteDAO implements IIngredienteDAO{
     private final MongoCollection<Ingrediente> coleccion;
 
     public IngredienteDAO(MongoCollection<Ingrediente> coleccion) {
-        this.coleccion = conexion.ConexionMongo.obtenerBaseDatosCodec().getCollection("Ingredientes", Ingrediente.class);
+        this.coleccion = conexion.ConexionMongo.obtenerBaseDatos().getCollection("Ingredientes", Ingrediente.class);
     }
 
     @Override

@@ -5,10 +5,13 @@
 
 package conexion;
 
+import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
+import org.bson.codecs.configuration.CodecProvider;
+import org.bson.codecs.configuration.CodecRegistries;
 import static org.bson.codecs.configuration.CodecRegistries.*;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
@@ -19,7 +22,8 @@ import org.bson.codecs.pojo.PojoCodecProvider;
  */
 
 public class ConexionMongo {
-    private static final String url = "mongodb+srv://dishup_user:DishUp2026@dishupcluster.b37ha6e.mongodb.net/dishup_db?appName=DishUpCluster";
+    //private static final String url = "mongodb+srv://dishup_user:DishUp2026@dishupcluster.b37ha6e.mongodb.net/dishup_db?appName=DishUpCluster";
+    private static final String url = "mongodb://localhost:27017";
     private static final String BASE_DATOS = "dishup_db";
     
     //cliente (acceso a la bd solo 1 vez)
@@ -29,19 +33,27 @@ public class ConexionMongo {
     }
     
     public static MongoClient obtenerCliente(){
-        if(cliente == null){
-            cliente = MongoClients.create(url);
+        if (cliente == null) {
+            // proveedor de pojos
+            CodecProvider proveedorPojo = PojoCodecProvider.builder()
+                    .automatic(true)
+                    .build();
+            // almacen de codecs
+            CodecRegistry registroCodecs = CodecRegistries.fromRegistries(
+                    MongoClientSettings.getDefaultCodecRegistry(),
+                    CodecRegistries.fromProviders(proveedorPojo)
+            );
+
+            MongoClientSettings configuracionMongo = MongoClientSettings.builder()
+                    .applyConnectionString(new ConnectionString(url))
+                    .codecRegistry(registroCodecs)
+                    .build();
+            cliente = MongoClients.create(configuracionMongo);
         }
-        
         return cliente;
     }
     
     public static MongoDatabase obtenerBaseDatos(){
         return obtenerCliente().getDatabase(BASE_DATOS);
-    }
-    
-    public static MongoDatabase obtenerBaseDatosCodec(){
-        CodecRegistry pojoCodecRegistry = fromRegistries( MongoClientSettings.getDefaultCodecRegistry(), fromProviders(PojoCodecProvider.builder().automatic(true).build()) );
-        return obtenerCliente().getDatabase(BASE_DATOS).withCodecRegistry(pojoCodecRegistry);
     }
 }

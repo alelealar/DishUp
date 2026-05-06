@@ -26,7 +26,7 @@ public class ProductoDAO implements IProductoDAO{
     private final MongoCollection<Producto> coleccion;
 
     public ProductoDAO(MongoCollection<Producto> coleccion) { // Se esta pasando la coleccion como parametro pero no lo estamos usando para inicializar la conexión
-        this.coleccion = conexion.ConexionMongo.obtenerBaseDatosCodec().getCollection("Productos", Producto.class);
+        this.coleccion = conexion.ConexionMongo.obtenerBaseDatos().getCollection("Productos", Producto.class);
     }
     
     @Override
