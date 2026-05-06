@@ -1,9 +1,17 @@
-/presentacion_DishUp/target/
-/dto_negocios/target/
-/negocios_gestionProductos/target/
-/negocios_gestionComandas/target/
-/negocios_gestionMesas/target/
-/negocios_gestionInventario/target/
-/persistencia/target/
-/dominio/target/
-/configuracion/target/
+# Maven
+**/target/
+
+# NetBeans
+nbproject/private/
+build/
+dist/
+
+# Java
+*.class
+
+# Logs
+*.log
+
+# OS
+Thumbs.db
+.DS_Store

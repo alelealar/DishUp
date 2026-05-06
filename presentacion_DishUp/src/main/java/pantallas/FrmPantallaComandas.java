@@ -40,7 +40,7 @@ import javax.swing.border.LineBorder;
 public class FrmPantallaComandas extends javax.swing.JFrame {
 
     private coordinador.CoordinadorInterfaces coordinador;
-    int idMesero = 1;
+    String idMesero = "69fb88ac204465eb9da3e0f1";
 
     MesaControl control = new MesaControl();
 
@@ -425,15 +425,6 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
     }
     private JPanel contenedorComandas;
 
-//    public void añadirNuevaComanda(ComandaDTO comanda) {
-//        ComandaCard card = new ComandaCard(comanda);
-//        this.panComandasLlenas.add(card);
-//        this.panComandasLlenas.add(Box.createVerticalStrut(10));
-//
-//        this.panComandasLlenas.revalidate();
-//        this.panComandasLlenas.repaint();
-//
-//    }
     public void mostrarComandasDeMesa(int numeroMesa, List<ComandaDTO> comandas) {
         panComandasLlenas.removeAll();
 

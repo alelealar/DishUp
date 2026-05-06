@@ -20,8 +20,8 @@ public class MesaControl {
     }
 
     public List<MesaDTO> obtenerMesasPorMesero(String idMesero) throws NegocioException {
-        // fachada.obtenerMesasPorMesero(idMesero);}
-
+        return fachada.obtenerMesasPorMesero(idMesero);
+        /*
         List<MesaDTO> mesas = new ArrayList<>();
 
         mesas.add(new MesaDTO("M1", 1, EstadoMesaDTO.LIBRE, idMesero));
@@ -32,6 +32,6 @@ public class MesaControl {
         mesas.add(new MesaDTO("M6", 6, EstadoMesaDTO.LIBRE, idMesero));
 
         return mesas;
-
+        */
     }
 }
