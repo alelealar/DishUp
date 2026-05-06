@@ -40,7 +40,7 @@ import javax.swing.border.LineBorder;
 public class FrmPantallaComandas extends javax.swing.JFrame {
 
     private coordinador.CoordinadorInterfaces coordinador;
-    String idMesero = "69fb88ac204465eb9da3e0f1";
+    String idMesero = "69fba6f65115a2539444152e";
 
     MesaControl control = new MesaControl();
 
