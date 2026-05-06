@@ -9,7 +9,7 @@ package dto;
  * @author valeria
  */
 public class ProductoIngredienteDTO {
-    private int id;
+    private String id;
     private int idProducto;
     private int idIngrediente;
     private int cantidadRequerida; // Cantidad de unidades
@@ -18,7 +18,7 @@ public class ProductoIngredienteDTO {
     public ProductoIngredienteDTO() {
     }
 
-    public ProductoIngredienteDTO(int id, int idProducto, int idIngrediente, int cantidadRequerida, boolean removible) {
+    public ProductoIngredienteDTO(String id, int idProducto, int idIngrediente, int cantidadRequerida, boolean removible) {
         this.id = id;
         this.idProducto = idProducto;
         this.idIngrediente = idIngrediente;
@@ -26,11 +26,11 @@ public class ProductoIngredienteDTO {
         this.removible = removible;
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 

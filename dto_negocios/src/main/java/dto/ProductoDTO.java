@@ -28,8 +28,10 @@ public class ProductoDTO {
     private Integer tiempoPreparacion;
     private TipoProductoDTO tipo;
     private String urlImagen;
+    
+     private List<IngredienteEnProductoDTO> ingredientes;
 
-    public ProductoDTO(String id, String nombre, float precio, boolean disponible, Integer tiempoPreparacion, TipoProductoDTO tipo, String urlImagen) {
+    public ProductoDTO(String id, String nombre, float precio, boolean disponible, Integer tiempoPreparacion, TipoProductoDTO tipo, String urlImagen, List<IngredienteEnProductoDTO> ingredientes) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
@@ -37,6 +39,7 @@ public class ProductoDTO {
         this.tiempoPreparacion = tiempoPreparacion;
         this.tipo = tipo;
         this.urlImagen = urlImagen;
+        this.ingredientes = ingredientes;
     }
 
     public ProductoDTO() {
@@ -97,4 +100,13 @@ public class ProductoDTO {
     public void setTipo(TipoProductoDTO tipo) {
         this.tipo = tipo;
     } 
+
+    public List<IngredienteEnProductoDTO> getIngredientes() {
+        return ingredientes;
+    }
+
+    public void setIngredientes(List<IngredienteEnProductoDTO> ingredientes) {
+        this.ingredientes = ingredientes;
+    }
+    
 }
