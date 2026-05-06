@@ -9,7 +9,7 @@ import control.ProductoControl;
 import daos.IngredienteDAO;
 import daos.ProductoDAO;
 import fachada.ProductoFachada;
-import infraestructura.InventarioAPI;
+import inventario.InventarioAPI;
 import interfaces.IIngredienteDAO;
 import interfaces.IProductoDAO;
 

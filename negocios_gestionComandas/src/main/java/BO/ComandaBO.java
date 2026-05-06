@@ -3,7 +3,7 @@ package BO;
 import dto.PedidoNuevoDTO;
 import dto.ProductoIngredienteDTO;
 import fachada.ProductoFachada;
-import infraestructura.InventarioAPI;
+import inventario.InventarioAPI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
