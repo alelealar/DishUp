@@ -15,3 +15,4 @@ dist/
 # OS
 Thumbs.db
 .DS_Store
+configuracion/target/configuracion-1.0-SNAPSHOT.jar
