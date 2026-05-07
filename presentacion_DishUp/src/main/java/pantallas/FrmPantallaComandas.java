@@ -8,6 +8,7 @@ import control.MesaControl;
 import coordinador.CoordinadorInterfaces;
 import dto.ComandaDTO;
 import dto.MesaDTO;
+import dto.PedidoDTO;
 import dto.PedidoNuevoDTO;
 import excepciones.NegocioException;
 import java.awt.BorderLayout;
@@ -472,15 +473,21 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             header.add(btnPago, BorderLayout.EAST);
 
             StringBuilder sb = new StringBuilder();
-            java.util.Map<String, Integer> agrupador = new java.util.LinkedHashMap<>();
 
-            for (PedidoNuevoDTO ped : comanda.getListaPedidos()) {
-                String detalle = ped.toString();
-                agrupador.put(detalle, agrupador.getOrDefault(detalle, 0) + 1);
-            }
+            for (PedidoDTO ped : comanda.getListaPedidos()) {
 
-            for (java.util.Map.Entry<String, Integer> entry : agrupador.entrySet()) {
-                sb.append(entry.getValue()).append(" x ").append(entry.getKey()).append("\n");
+                sb.append("• ")
+                        .append(ped.getNombreProducto());
+
+                if (ped.getDescripcion() != null
+                        && !ped.getDescripcion().trim().isEmpty()) {
+
+                    sb.append(" (")
+                            .append(ped.getDescripcion())
+                            .append(")");
+                }
+
+                sb.append("\n");
             }
 
             JTextArea txtPedidos = new JTextArea(sb.toString());

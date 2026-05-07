@@ -7,13 +7,14 @@ package entidades;
 import enums.EstadoComanda;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.bson.types.ObjectId;
 
 /**
  *
  * @author valeria
  */
 public class Comanda {
-    private String id;
+    private ObjectId id;
     private String nombreCliente;
     private LocalDateTime fecha;
     private Double total;
@@ -26,7 +27,7 @@ public class Comanda {
     public Comanda() {
     }
 
-    public Comanda(String id, String nombreCliente, LocalDateTime fecha, Double total, EstadoComanda estado, Mesa mesa, List<Pedido> pedidos, List<Pago> pagos) {
+    public Comanda(ObjectId id, String nombreCliente, LocalDateTime fecha, Double total, EstadoComanda estado, Mesa mesa, List<Pedido> pedidos, List<Pago> pagos) {
         this.id = id;
         this.nombreCliente = nombreCliente;
         this.fecha = fecha;
@@ -37,11 +38,11 @@ public class Comanda {
         this.pagos = pagos;
     }
 
-    public String getId() {
+    public ObjectId getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(ObjectId id) {
         this.id = id;
     }
 

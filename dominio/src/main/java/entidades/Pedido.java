@@ -5,27 +5,38 @@
 package entidades;
 
 import enums.EstadoPedido;
+import java.time.LocalDateTime;
+import org.bson.types.ObjectId;
 
 /**
  *
  * @author valeria
  */
 public class Pedido {
+
     private String id;
+    private String idProducto;
+    private String nombreProducto;
     private Integer cantidad;
     private EstadoPedido estado;
     private int tiempoPreparacion;
     private String descripcion;
+    private Double precioProducto;
+    private LocalDateTime fechaPedido;
 
     public Pedido() {
     }
 
-    public Pedido(String id, Integer cantidad, EstadoPedido estado, int tiempoPreparacion, String descripcion) {
+    public Pedido(String id, String idProducto, String nombreProducto, Integer cantidad, EstadoPedido estado, int tiempoPreparacion, String descripcion, Double precioProducto, LocalDateTime fechaPedido) {
         this.id = id;
+        this.idProducto = idProducto;
+        this.nombreProducto = nombreProducto;
         this.cantidad = cantidad;
         this.estado = estado;
         this.tiempoPreparacion = tiempoPreparacion;
         this.descripcion = descripcion;
+        this.precioProducto = precioProducto;
+        this.fechaPedido = fechaPedido;
     }
 
     public String getId() {
@@ -34,6 +45,22 @@ public class Pedido {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(String idProducto) {
+        this.idProducto = idProducto;
+    }
+
+    public String getNombreProducto() {
+        return nombreProducto;
+    }
+
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
     }
 
     public Integer getCantidad() {
@@ -67,4 +94,21 @@ public class Pedido {
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
     }
+
+    public Double getPrecioProducto() {
+        return precioProducto;
+    }
+
+    public void setPrecioProducto(Double precioProducto) {
+        this.precioProducto = precioProducto;
+    }
+
+    public LocalDateTime getFechaPedido() {
+        return fechaPedido;
+    }
+
+    public void setFechaPedido(LocalDateTime fechaPedido) {
+        this.fechaPedido = fechaPedido;
+    }
+
 }

@@ -10,12 +10,11 @@ package enums;
  * Representa el estado en el que se encuentra el pedido durante su proceso de 
  * inicio a fin.
  * 
- * los estados son: EN ESPERA, PREPARANDO, LISTO, ENTREGADO
  * @author DishUp
  */
 public enum EstadoPedidoDTO {
-    EN_ESPERA,
-    PREPARANDO,
+    PENDIENTE,
+    EN_PREPARACION,
     LISTO, 
     ENTREGADO
 }

@@ -11,12 +11,17 @@
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
+            <artifactId>negocios_gestionProductos</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
             <artifactId>persistencia</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>negocios_gestionProductos</artifactId>
+            <artifactId>negocios_gestionComandas</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

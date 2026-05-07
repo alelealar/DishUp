@@ -4,6 +4,8 @@
  */
 package dto;
 
+import java.time.LocalDateTime;
+
 /**
  * PedidoNuevoDTO. Representa la información necesaria para registrar un pedido
  * de un producto dentro de una comanda en construcción.
@@ -16,14 +18,21 @@ package dto;
 public class PedidoNuevoDTO {
 
     private String idProducto;
-    private Integer cantidad;
-    private String especificaciones;
     private String nombreProducto;
+    private String especificaciones;
+    private Integer tiempoPreparacion;
+    private Integer cantidad;
+    private Double precioProducto;
+    private LocalDateTime fechaPedido;
 
-    public PedidoNuevoDTO(String idProducto, Integer cantidad, String especificaciones) {
+    public PedidoNuevoDTO(String idProducto, String nombreProducto, String especificaciones, Integer tiempoPreparacion, Integer cantidad, Double precioProducto, LocalDateTime fechaPedido) {
         this.idProducto = idProducto;
-        this.cantidad = cantidad;
+        this.nombreProducto = nombreProducto;
         this.especificaciones = especificaciones;
+        this.tiempoPreparacion = tiempoPreparacion;
+        this.cantidad = cantidad;
+        this.precioProducto = precioProducto;
+        this.fechaPedido = fechaPedido;
     }
 
     public PedidoNuevoDTO() {
@@ -37,12 +46,12 @@ public class PedidoNuevoDTO {
         this.idProducto = idProducto;
     }
 
-    public Integer getCantidad() {
-        return cantidad;
+    public String getNombreProducto() {
+        return nombreProducto;
     }
 
-    public void setCantidad(Integer cantidad) {
-        this.cantidad = cantidad;
+    public void setNombreProducto(String nombreProducto) {
+        this.nombreProducto = nombreProducto;
     }
 
     public String getEspecificaciones() {
@@ -53,20 +62,46 @@ public class PedidoNuevoDTO {
         this.especificaciones = especificaciones;
     }
 
-    public String getNombreProducto() {
-        return nombreProducto;
+    public Integer getTiempoPreparacion() {
+        return tiempoPreparacion;
     }
 
-    public void setNombreProducto(String nombreProducto) {
-        this.nombreProducto = nombreProducto;
+    public void setTiempoPreparacion(Integer tiempoPreparacion) {
+        this.tiempoPreparacion = tiempoPreparacion;
     }
+
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public Double getPrecioProducto() {
+        return precioProducto;
+    }
+
+    public void setPrecioProducto(Double precioProducto) {
+        this.precioProducto = precioProducto;
+    }
+
+    public LocalDateTime getFechaPedido() {
+        return fechaPedido;
+    }
+
+    public void setFechaPedido(LocalDateTime fechaPedido) {
+        this.fechaPedido = fechaPedido;
+    }
+    
+    
 
     @Override
     public String toString() {
         String detalles = (especificaciones != null && !especificaciones.isEmpty())
                 ? " (" + especificaciones + ")"
                 : "";
-        return  nombreProducto + detalles;
+        return nombreProducto + detalles;
     }
 
 }

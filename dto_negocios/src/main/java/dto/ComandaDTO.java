@@ -21,21 +21,24 @@ import java.util.List;
  */
 
 public class ComandaDTO {
-    private Integer id;
+    private String id;
     private String nombreCliente;
     private LocalDate fecha;
     private Double total;
-    private List<PedidoNuevoDTO> listaPedidos;
+    private List<PedidoDTO> listaPedidos;
     private Integer idMesa;
 
-    public ComandaDTO( String nombreCliente, LocalDate fecha, List<PedidoNuevoDTO> listaPedidos, Integer idMesa) {
+    public ComandaDTO( String nombreCliente, LocalDate fecha, List<PedidoDTO> listaPedidos, Integer idMesa) {
        
         this.nombreCliente = nombreCliente;
         this.fecha = fecha;
         this.listaPedidos = listaPedidos;
         this.idMesa = idMesa;
     }
-      
+
+    public ComandaDTO() {
+    }
+    
     public void calcularTotal(){
         int cantidadProductos = listaPedidos.size();
         double resultado = cantidadProductos*100;
@@ -44,11 +47,11 @@ public class ComandaDTO {
     
    
 
-    public Integer getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -76,11 +79,11 @@ public class ComandaDTO {
         this.total = total;
     }
 
-    public List<PedidoNuevoDTO> getListaPedidos() {
+    public List<PedidoDTO> getListaPedidos() {
         return listaPedidos;
     }
 
-    public void setListaPedidos(List<PedidoNuevoDTO> listaPedidos) {
+    public void setListaPedidos(List<PedidoDTO> listaPedidos) {
         this.listaPedidos = listaPedidos;
     }
 

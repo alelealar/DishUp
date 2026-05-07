@@ -7,12 +7,23 @@ package interfaces;
 import entidades.Comanda;
 import entidades.Pedido;
 import excepciones.PersistenciaException;
+import java.util.List;
 
 /**
  *
  * @author valeria
  */
 public interface IComandaDAO {
+
     boolean agregarPedido(String idComanda, Pedido nuevoPedido) throws PersistenciaException;
+
     Comanda insertarComanda(Comanda comanda) throws PersistenciaException;
+
+    List<Comanda> obtenerTodas() throws PersistenciaException;
+
+    List<Comanda> obtenerComandasPorMesa(int numeroMesa) throws PersistenciaException;
+
+    Comanda obtenerPorId(String id) throws PersistenciaException;
+
+    boolean actualizarEstado(String idComanda, String nuevoEstado) throws PersistenciaException;
 }

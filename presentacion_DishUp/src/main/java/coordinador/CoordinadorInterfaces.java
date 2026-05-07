@@ -5,6 +5,7 @@
 package coordinador;
 
 import BO.ComandaBO;
+import control.ComandaControl;
 import control.ProductoControl;
 import dto.ComandaDTO;
 import dto.IngredienteDTO;
@@ -12,6 +13,7 @@ import dto.IngredienteEnProductoDTO;
 import dto.MesaDTO;
 import dto.PedidoNuevoDTO;
 import dto.ProductoDTO;
+import fabricas.FabricaComandas;
 import fabricas.FabricaProductos;
 import inventario.InventarioAPI;
 import java.util.ArrayList;
@@ -34,14 +36,15 @@ public class CoordinadorInterfaces {
     private FrmCliente frmCliente;
     private FrmProductos frmProductos;
 
-    private Map<Integer, List<ComandaDTO>> comandasPorMesa = new HashMap<>();
     private ProductoControl productoControl; // Se pone el control aquí para que las pantallas (FrmProductos) no tengan que crearlo ellas mismas, 
+    private ComandaControl comandaControl; // Se pone el control aquí para que las pantallas (FrmProductos) no tengan que crearlo ellas mismas, 
 
     public CoordinadorInterfaces() {
         // El Coordinador es el mediador, conoce el ProductoControl para poder 
         // inyectarlo en las ventanas que lo necesiten
 
         this.productoControl = FabricaProductos.crear();
+        this.comandaControl = FabricaComandas.crear(productoControl);
         //this.inventarioAPI = new InventarioAPI();
 
     }
@@ -104,30 +107,17 @@ public class CoordinadorInterfaces {
     }
 
     public void enviarComandaAFinal(String nombreCliente, int numeroMesa, List<PedidoNuevoDTO> pedidos) {
-        // 1. Crear instancia de ComandaBO
-        ComandaBO comandaBO = new ComandaBO(productoControl.getProductoFachada());
 
         try {
-            // 2. Validar y descontar stock en el sistema de inventario (Flask)
-            comandaBO.procesarComanda(pedidos);
-
+            comandaControl.crearComanda(nombreCliente, numeroMesa, pedidos);
         } catch (Exception e) {
-            // 3. Si falla (por ejemplo, no hay stock suficiente)
             System.out.println("Error: " + e.getMessage());
-            return; // Importante: no continúa
+            return;
         }
-
-        // 4. Si todo salió bien, ahora sí se crea la comanda
-        ComandaDTO nuevaComanda = new ComandaDTO(
-                nombreCliente,
-                java.time.LocalDate.now(),
-                new ArrayList<>(pedidos),
-                numeroMesa
-        );
-
-        comandasPorMesa
-                .computeIfAbsent(numeroMesa, k -> new ArrayList<>())
-                .add(nuevaComanda);
+//
+//        comandasPorMesa
+//                .computeIfAbsent(numeroMesa, k -> new ArrayList<>())
+//                .add(nuevaComanda);
 
         this.frmComandas.setVisible(true);
         this.frmComandas.refrescarMesaActual();
@@ -141,7 +131,7 @@ public class CoordinadorInterfaces {
     }
 
     public List<ComandaDTO> getComandasDeMesa(int numeroMesa) {
-        return comandasPorMesa.getOrDefault(numeroMesa, new ArrayList<>());
+        return comandaControl.obtenerComandasPorMesa(numeroMesa);
     }
 
     public List<ProductoDTO> obtenerProductosParaUI() {
@@ -151,7 +141,6 @@ public class CoordinadorInterfaces {
 //        for (ProductoDTO p : productosAPI) {
 //            System.out.println(p.toString());
 //        }
-
         return productosAPI;
     }
 

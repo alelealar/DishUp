@@ -4,10 +4,17 @@
  */
 package Interface;
 
+import dto.ComandaDTO;
+import dto.PedidoNuevoDTO;
+import java.util.List;
+
 /**
  *
  * @author DishUp
  */
-public class IComandaBO {
+public interface IComandaBO {
     
+        public void crearComanda(String nombreCliente, int numeroMesa, List<PedidoNuevoDTO> pedidosDTO);
+        
+        public List<ComandaDTO> obtenerComandasPorMesa(int numeroMesa);
 }
