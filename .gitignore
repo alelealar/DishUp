@@ -16,3 +16,5 @@ dist/
 Thumbs.db
 .DS_Store
 configuracion/target/configuracion-1.0-SNAPSHOT.jar
+configuracion/target/configuracion-1.0-SNAPSHOT.jar
+configuracion/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst

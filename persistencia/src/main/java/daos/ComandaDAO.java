@@ -55,9 +55,7 @@ public class ComandaDAO implements IComandaDAO {
             if (resultado.getInsertedId() == null) {
                 throw new PersistenciaException("Error al guardar la comanda");
             }
-            ObjectId idGenerado = resultado.getInsertedId()
-                    .asObjectId()
-                    .getValue();
+            String idGenerado = resultado.getInsertedId().asObjectId().getValue().toHexString();
 
             comanda.setId(idGenerado);
 

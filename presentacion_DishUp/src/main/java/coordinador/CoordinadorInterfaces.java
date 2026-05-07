@@ -5,14 +5,17 @@
 package coordinador;
 
 import BO.ComandaBO;
+import BO.EmpleadoBO;
 import control.ComandaControl;
 import control.ProductoControl;
 import dto.ComandaDTO;
+import dto.EmpleadoDTO;
 import dto.IngredienteDTO;
 import dto.IngredienteEnProductoDTO;
 import dto.MesaDTO;
 import dto.PedidoNuevoDTO;
 import dto.ProductoDTO;
+import excepciones.NegocioException;
 import fabricas.FabricaComandas;
 import fabricas.FabricaProductos;
 import inventario.InventarioAPI;
@@ -142,6 +145,18 @@ public class CoordinadorInterfaces {
 //            System.out.println(p.toString());
 //        }
         return productosAPI;
+    }
+    
+    public EmpleadoDTO validarExistenciaUsuario(EmpleadoDTO e) throws NegocioException{
+        EmpleadoBO BO = new EmpleadoBO();
+        return BO.login(e);
+    }
+    
+    public void abrirFrmComandasMesero(String id, String nombre){
+        FrmPantallaComandas frm = new FrmPantallaComandas(this);
+        frm.setMesero(id, nombre);
+        frm.cargarMesas();
+        frm.setVisible(true);
     }
 
 }

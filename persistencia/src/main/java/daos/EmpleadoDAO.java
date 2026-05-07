@@ -7,10 +7,16 @@ package daos;
 
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
+import static com.mongodb.client.model.Filters.*;
 import com.mongodb.client.result.InsertOneResult;
 import entidades.Empleado;
+import enums.RolEmpleado;
 import excepciones.PersistenciaException;
 import interfaces.IEmpleadoDAO;
+import java.util.ArrayList;
+import java.util.List;
+import org.bson.conversions.Bson;
+import org.bson.types.ObjectId;
 
 
 /**
@@ -43,6 +49,28 @@ public class EmpleadoDAO implements IEmpleadoDAO{
         } catch (MongoException me) {
             throw new PersistenciaException(me.getMessage());
         }  
+    }
+
+    @Override
+    public Empleado obtenerEmpleado(Empleado empleado) throws PersistenciaException {
+        if(empleado == null){
+            throw new PersistenciaException("El empleado es nulo");
+        }
+        
+        if (empleado.getId() == null || empleado.getId().isBlank()) {
+            throw new PersistenciaException("El ID del empleado es inválido");
+        }
+
+        return this.coleccion.find(eq("_id", new ObjectId(empleado.getId()))).first();
+    }
+    
+    @Override
+    public Empleado obtenerEmpleadoPorUser(String user) throws PersistenciaException {
+        if(user == null){
+            throw new PersistenciaException("El usuario es nulo");
+        }
+
+        return coleccion.find(eq("user", user)).first();
     }
     
 }

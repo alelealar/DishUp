@@ -1,7 +1,7 @@
 package inicio;
 
 import coordinador.CoordinadorInterfaces;
-import pantallas.FrmPantallaComandas;
+import pantallas.FrmInicioSesión;
 
 /**
  *
@@ -14,7 +14,7 @@ public class Inicio {
      */
     public static void main(String[] args) {    
         coordinador.CoordinadorInterfaces coordinador = new CoordinadorInterfaces();
-        FrmPantallaComandas frm = new FrmPantallaComandas(coordinador);
+        FrmInicioSesión frm = new FrmInicioSesión();
         frm.setVisible(true);
     }
 

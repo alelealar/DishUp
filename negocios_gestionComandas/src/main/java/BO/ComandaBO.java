@@ -143,7 +143,7 @@ public class ComandaBO implements IComandaBO {
 
                 ComandaDTO dto = new ComandaDTO();
 
-                dto.setId(c.getId().toHexString());
+                dto.setId(c.getId());
                 dto.setNombreCliente(c.getNombreCliente());
                 dto.setFecha(c.getFecha().toLocalDate());
                 dto.setIdMesa(c.getMesa().getNumero());

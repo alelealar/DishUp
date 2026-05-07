@@ -41,7 +41,7 @@ import javax.swing.border.LineBorder;
 public class FrmPantallaComandas extends javax.swing.JFrame {
 
     private coordinador.CoordinadorInterfaces coordinador;
-    String idMesero = "69fba6f65115a2539444152e";
+    String idMesero;
 
     MesaControl control = new MesaControl();
 
@@ -56,7 +56,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         panMesas.setLayout(new BoxLayout(panMesas, BoxLayout.Y_AXIS));
-        cargarMesas();
+        
         panComandas.revalidate();
         panComandas.repaint();
 
@@ -535,5 +535,11 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             List<ComandaDTO> comandas = coordinador.getComandasDeMesa(mesaSeleccionada.getNumeroMesa());
             mostrarComandasDeMesa(mesaSeleccionada.getNumeroMesa(), comandas);
         }
+    }
+    
+    public void setMesero(String id, String empleado){
+        idMesero = id;
+        lblEmpleado.setText(empleado);
+        
     }
 }

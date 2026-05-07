@@ -9,7 +9,7 @@ package enums;
  *
  * @author DishUp
  */
-public enum EstadoMesero {
+public enum EstadoEmpleado {
     ACTIVO,
     INACTIVO
 }

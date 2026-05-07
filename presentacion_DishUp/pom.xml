@@ -18,6 +18,12 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>negocios_gestionComandas</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.262719</groupId>
+                    <artifactId>persistencia</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -43,15 +49,42 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>negocios_gestionMesas</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.262719</groupId>
+                    <artifactId>persistencia</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>configuracion</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.262719</groupId>
+                    <artifactId>persistencia</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>negocios_gestionProductos</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.262719</groupId>
+                    <artifactId>persistencia</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.262719</groupId>
+                    <artifactId>dominio</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>negocios_gestionEmpleados</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

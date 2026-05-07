@@ -3,56 +3,47 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 
-package entidades;
-
-import enums.EstadoEmpleado;
-import enums.RolEmpleado;
-import org.bson.BsonType;
-import org.bson.codecs.pojo.annotations.BsonId;
-import org.bson.codecs.pojo.annotations.BsonProperty;
-import org.bson.codecs.pojo.annotations.BsonRepresentation;
+package dto;
 
 
 /**
  *
- * @author Alejandra Leal Armenta, 262719
+ * @author DishUp
  */
 
-public class Empleado {
-    @BsonId
-    @BsonRepresentation(BsonType.OBJECT_ID)
+public class EmpleadoDTO {
     private String id;
-    
     private String nombres;
     private String apellidoPaterno;
     private String apellidoMaterno;
-    private EstadoEmpleado estado;
-    private String user;
-    private RolEmpleado rol;
 
-    public Empleado(String id, String nombres, String apellidoPaterno, String apellidoMaterno, EstadoEmpleado estado, String user, RolEmpleado rol) {
+    private String user;
+    private String rol;
+    private String estado;
+
+    public EmpleadoDTO(String id, String nombres, String apellidoPaterno, String apellidoMaterno, String user, String rol, String estado) {
         this.id = id;
         this.nombres = nombres;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
-        this.estado = estado;
         this.user = user;
         this.rol = rol;
+        this.estado = estado;
     }
 
-    public Empleado(String nombres, String apellidoPaterno, String apellidoMaterno, EstadoEmpleado estado, String user, RolEmpleado rol) {
+    public EmpleadoDTO(String nombres, String apellidoPaterno, String apellidoMaterno, String user, String rol, String estado) {
         this.nombres = nombres;
         this.apellidoPaterno = apellidoPaterno;
         this.apellidoMaterno = apellidoMaterno;
-        this.estado = estado;
         this.user = user;
         this.rol = rol;
-    }
-    
-    
-    public Empleado() {
+        this.estado = estado;
     }
 
+    public EmpleadoDTO() {
+    }
+    
+    
     public String getId() {
         return id;
     }
@@ -85,14 +76,6 @@ public class Empleado {
         this.apellidoMaterno = apellidoMaterno;
     }
 
-    public EstadoEmpleado getEstado() {
-        return estado;
-    }
-
-    public void setEstado(EstadoEmpleado estado) {
-        this.estado = estado;
-    }
-
     public String getUser() {
         return user;
     }
@@ -101,17 +84,20 @@ public class Empleado {
         this.user = user;
     }
 
-    public RolEmpleado getRol() {
+    public String getRol() {
         return rol;
     }
 
-    public void setRol(RolEmpleado rol) {
+    public void setRol(String rol) {
         this.rol = rol;
     }
 
-    @Override
-    public String toString() {
-        return "Empleado{" + "id=" + id + ", nombres=" + nombres + ", apellidoPaterno=" + apellidoPaterno + ", apellidoMaterno=" + apellidoMaterno + ", estado=" + estado + ", user=" + user + ", rol=" + rol + '}';
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
     
     
