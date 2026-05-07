@@ -16,4 +16,8 @@ import excepciones.NegocioException;
 public interface IEmpleadoBO {
 
     public EmpleadoDTO obtenerEmpleado(EmpleadoDTO empleado) throws NegocioException;
+    
+    public EmpleadoDTO login(EmpleadoDTO empleado) throws NegocioException;
+    
+    public void activarEmpleado(EmpleadoDTO empleado) throws NegocioException;
 }

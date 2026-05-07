@@ -61,4 +61,16 @@ public class EmpleadoDAONGTest {
         assertNotNull(consultado.getId());
     }
  */
+    
+    @Test
+    public void testActualizarEstadoEmpleado_correcto() throws PersistenciaException{
+        EmpleadoDAO emDAO = new EmpleadoDAO();
+        Empleado empleado = new Empleado("Paulina", "Leal", "Armenta", EstadoEmpleado.INACTIVO, "ME-002", RolEmpleado.COCINERO);
+        Empleado emGuardado = emDAO.insertarEmpleado(empleado);
+        
+        emDAO.actualizarEstadoEmpleado(emGuardado.getId(), EstadoEmpleado.ACTIVO);
+        
+        Empleado actualizado = emDAO.obtenerEmpleado(emGuardado);
+        assertEquals(actualizado.getEstado(), EstadoEmpleado.ACTIVO);
+    }
 }

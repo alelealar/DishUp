@@ -4,9 +4,9 @@
  */
 package coordinador;
 
-import BO.ComandaBO;
-import BO.EmpleadoBO;
+
 import control.ComandaControl;
+import control.EmpleadoControl;
 import control.ProductoControl;
 import dto.ComandaDTO;
 import dto.EmpleadoDTO;
@@ -17,6 +17,7 @@ import dto.PedidoNuevoDTO;
 import dto.ProductoDTO;
 import excepciones.NegocioException;
 import fabricas.FabricaComandas;
+import fabricas.FabricaEmpleados;
 import fabricas.FabricaProductos;
 import inventario.InventarioAPI;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class CoordinadorInterfaces {
 
     private ProductoControl productoControl; // Se pone el control aquí para que las pantallas (FrmProductos) no tengan que crearlo ellas mismas, 
     private ComandaControl comandaControl; // Se pone el control aquí para que las pantallas (FrmProductos) no tengan que crearlo ellas mismas, 
+    private EmpleadoControl empleadoControl;
 
     public CoordinadorInterfaces() {
         // El Coordinador es el mediador, conoce el ProductoControl para poder 
@@ -48,6 +50,8 @@ public class CoordinadorInterfaces {
 
         this.productoControl = FabricaProductos.crear();
         this.comandaControl = FabricaComandas.crear(productoControl);
+        this.empleadoControl = FabricaEmpleados.crear();
+        
         //this.inventarioAPI = new InventarioAPI();
 
     }
@@ -148,8 +152,7 @@ public class CoordinadorInterfaces {
     }
     
     public EmpleadoDTO validarExistenciaUsuario(EmpleadoDTO e) throws NegocioException{
-        EmpleadoBO BO = new EmpleadoBO();
-        return BO.login(e);
+        return empleadoControl.login(e);
     }
     
     public void abrirFrmComandasMesero(String id, String nombre){
@@ -157,6 +160,10 @@ public class CoordinadorInterfaces {
         frm.setMesero(id, nombre);
         frm.cargarMesas();
         frm.setVisible(true);
+    }
+    
+    public void activarEmpleado(EmpleadoDTO e) throws NegocioException{
+        empleadoControl.activarEmpleado(e);
     }
 
 }

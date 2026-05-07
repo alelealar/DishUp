@@ -10,6 +10,7 @@ import adaptadores.EmpleadoAdapter;
 import daos.EmpleadoDAO;
 import dto.EmpleadoDTO;
 import entidades.Empleado;
+import enums.EstadoEmpleado;
 import enums.RolEmpleado;
 import excepciones.NegocioException;
 import excepciones.PersistenciaException;
@@ -67,6 +68,7 @@ public class EmpleadoBO implements IEmpleadoBO{
         }
     }
     
+    @Override
     public EmpleadoDTO login(EmpleadoDTO empleado) throws NegocioException {
 
         if (empleado == null) {
@@ -90,6 +92,35 @@ public class EmpleadoBO implements IEmpleadoBO{
 
         } catch (PersistenciaException ex) {
             throw new NegocioException("Error al iniciar sesión: " + ex.getMessage());
+        }
+    }
+
+    @Override
+    public void activarEmpleado(EmpleadoDTO empleado) throws NegocioException{
+        if (empleado == null) {
+            throw new NegocioException("Empleado nulo");
+        }
+        
+        if (empleado.getId() == null) {
+            throw new NegocioException("id nulo");
+        }
+
+        if (empleado.getUser() == null || empleado.getUser().isBlank()) {
+            throw new NegocioException("Usuario obligatorio");
+        }
+        
+        String user = empleado.getUser();
+        
+        try{
+            Empleado consultado = emDAO.obtenerEmpleadoPorUser(user);
+            
+            if (consultado == null) {
+                throw new NegocioException("Usuario incorrecto");
+            }
+            
+            emDAO.actualizarEstadoEmpleado(consultado.getId(), EstadoEmpleado.ACTIVO);
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error al activar al empleado: " + ex.getMessage());
         }
     }
 }

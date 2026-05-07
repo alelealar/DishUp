@@ -8,8 +8,10 @@ package daos;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Updates.set;
 import com.mongodb.client.result.InsertOneResult;
 import entidades.Empleado;
+import enums.EstadoEmpleado;
 import enums.RolEmpleado;
 import excepciones.PersistenciaException;
 import interfaces.IEmpleadoDAO;
@@ -71,6 +73,19 @@ public class EmpleadoDAO implements IEmpleadoDAO{
         }
 
         return coleccion.find(eq("user", user)).first();
+    }
+
+    @Override
+    public void actualizarEstadoEmpleado(String id, EstadoEmpleado estado) throws PersistenciaException{
+        if (id == null || id.isBlank()) {
+            throw new PersistenciaException("ID inválido");
+        }
+
+        if (estado == null) {
+            throw new PersistenciaException("Estado inválido");
+        }
+        
+        coleccion.updateOne(eq("_id", new ObjectId(id)), set("estado", estado));
     }
     
 }

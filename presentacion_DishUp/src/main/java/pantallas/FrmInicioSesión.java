@@ -151,7 +151,7 @@ public class FrmInicioSesión extends javax.swing.JFrame {
     private void btnIngresarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnIngresarMouseClicked
         String usuario = txtUserEmpleado.getText();
         
-        if(usuario.isEmpty()){
+        if(usuario == null || usuario.isBlank()){
             JOptionPane.showMessageDialog(this, "El usuario no existe", "usuario inexistente", JOptionPane.WARNING_MESSAGE);
         }
         
@@ -160,6 +160,8 @@ public class FrmInicioSesión extends javax.swing.JFrame {
         
         try {
             EmpleadoDTO resultado = coordinador.validarExistenciaUsuario(empleado);
+            
+            coordinador.activarEmpleado(resultado);
             
             switch (resultado.getRol()) {
                 case "MESERO":

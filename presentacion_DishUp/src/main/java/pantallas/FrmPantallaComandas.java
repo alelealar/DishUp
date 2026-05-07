@@ -29,6 +29,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.border.Border;
@@ -199,6 +200,11 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         btnEnviarComandas.setFont(new java.awt.Font("Verdana", 0, 18)); // NOI18N
         btnEnviarComandas.setText("Enviar comandas");
         btnEnviarComandas.setBorder(null);
+        btnEnviarComandas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnEnviarComandasMouseClicked(evt);
+            }
+        });
         btnEnviarComandas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEnviarComandasActionPerformed(evt);
@@ -332,6 +338,10 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
     private void btnPagoGeneralActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagoGeneralActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_btnPagoGeneralActionPerformed
+
+    private void btnEnviarComandasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnEnviarComandasMouseClicked
+        JOptionPane.showMessageDialog(this, "Comandas enviadas a cocina", "Confirmacion", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_btnEnviarComandasMouseClicked
 
     public void quitarLabels() {
         lblSeleccioneMesa.setVisible(false);

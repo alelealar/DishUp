@@ -6,6 +6,7 @@
 package interfaces;
 
 import entidades.Empleado;
+import enums.EstadoEmpleado;
 import enums.RolEmpleado;
 import excepciones.PersistenciaException;
 
@@ -20,4 +21,6 @@ public interface IEmpleadoDAO {
     public Empleado obtenerEmpleado(Empleado empleado) throws PersistenciaException;
     
     public Empleado obtenerEmpleadoPorUser(String user) throws PersistenciaException;
+    
+    public void actualizarEstadoEmpleado(String id, EstadoEmpleado estado) throws PersistenciaException;
 }
