@@ -6,7 +6,7 @@
 package Interface;
 
 import dto.MesaDTO;
-import excepciones.NegocioException;
+import excepcion.NegocioException;
 import java.util.List;
 
 /**

@@ -4,7 +4,7 @@
  */
 package fachada;
 
-import BO.ComandaBO;
+import objetosNegocio.ComandaBO;
 import dto.ComandaDTO;
 import dto.PedidoNuevoDTO;
 import java.util.List;

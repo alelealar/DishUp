@@ -10,7 +10,7 @@ import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.set;
 import com.mongodb.client.result.InsertOneResult;
-import entidades.Empleado;
+import entidadesMongo.Empleado;
 import enums.EstadoEmpleado;
 import enums.RolEmpleado;
 import excepciones.PersistenciaException;

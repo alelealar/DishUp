@@ -5,7 +5,7 @@
 
 package interfaces;
 
-import entidades.Mesa;
+import entidadesMongo.Mesa;
 import excepciones.PersistenciaException;
 import java.util.List;
 

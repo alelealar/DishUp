@@ -6,7 +6,7 @@
 package control;
 
 import dto.EmpleadoDTO;
-import excepciones.NegocioException;
+import excepcion.NegocioException;
 import fachada.EmpleadoFachada;
 
 

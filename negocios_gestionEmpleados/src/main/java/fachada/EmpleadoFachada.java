@@ -7,7 +7,7 @@ package fachada;
 
 import Interface.IEmpleadoBO;
 import dto.EmpleadoDTO;
-import excepciones.NegocioException;
+import excepcion.NegocioException;
 
 
 /**

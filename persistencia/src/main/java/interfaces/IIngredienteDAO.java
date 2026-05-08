@@ -5,7 +5,7 @@
 
 package interfaces;
 
-import entidades.Ingrediente;
+import entidadesMongo.Ingrediente;
 import java.util.List;
 
 /**

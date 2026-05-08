@@ -5,7 +5,7 @@
 
 package interfaces;
 
-import entidades.Producto;
+import entidadesMongo.Producto;
 import enums.TipoProducto;
 import java.util.List;
 

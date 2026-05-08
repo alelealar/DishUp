@@ -1,10 +1,11 @@
 # Maven
-**/target/
+target/
 
 # NetBeans
 nbproject/private/
 build/
 dist/
+nbbuild/
 
 # Java
 *.class
@@ -12,12 +13,11 @@ dist/
 # Logs
 *.log
 
+# Eclipse
+.settings/
+.project
+.classpath
+
 # OS
 Thumbs.db
 .DS_Store
-configuracion/target/configuracion-1.0-SNAPSHOT.jar
-configuracion/target/configuracion-1.0-SNAPSHOT.jar
-configuracion/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst
-/configuracion/target
-/configuracion/target/maven-status/maven-compiler-plugin/compile/default-compile
-/configuracion/target/maven-status/maven-compiler-plugin/compile/default-compile

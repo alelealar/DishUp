@@ -1,6 +1,6 @@
 package pantallas;
 
-import BO.ComandaBO;
+
 import coordinador.CoordinadorInterfaces;
 import dto.PedidoNuevoDTO;
 import dto.ComandaDTO;

@@ -1,10 +1,9 @@
 
 package fachada;
 
-import BO.MesaBO;
 import Interface.IMesaBO;
 import dto.MesaDTO;
-import excepciones.NegocioException;
+import excepcion.NegocioException;
 import java.util.List;
 
 /**
@@ -13,10 +12,10 @@ import java.util.List;
  */
 public class MesaFachada {
 
-    private IMesaBO mesaBO;
+    private final IMesaBO mesaBO;
 
-    public MesaFachada() {
-        this.mesaBO = new MesaBO();
+    public MesaFachada(IMesaBO mesaBO) {
+        this.mesaBO = mesaBO;
     }
 
     public List<MesaDTO> obtenerMesasPorMesero(String idMesero) throws NegocioException {

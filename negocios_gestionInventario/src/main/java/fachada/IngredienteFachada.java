@@ -1,6 +1,6 @@
 package fachada;
 
-import BO.IngredienteBO;
+import objetosNegocio.IngredienteBO;
 import Interface.IIngredienteBO;
 import dto.IngredienteDTO;
 import java.util.List;

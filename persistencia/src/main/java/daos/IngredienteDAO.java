@@ -7,7 +7,7 @@ package daos;
 
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.eq;
-import entidades.Ingrediente;
+import entidadesMongo.Ingrediente;
 import interfaces.IIngredienteDAO;
 import java.util.ArrayList;
 import java.util.List;

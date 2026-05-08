@@ -4,8 +4,8 @@
  */
 package interfaces;
 
-import entidades.Comanda;
-import entidades.Pedido;
+import entidadesMongo.Comanda;
+import entidadesMongo.Pedido;
 import excepciones.PersistenciaException;
 import java.util.List;
 

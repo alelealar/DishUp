@@ -4,7 +4,7 @@
  */
 package daos;
 
-import entidades.Empleado;
+import entidadesMongo.Empleado;
 import enums.EstadoEmpleado;
 import enums.RolEmpleado;
 import excepciones.PersistenciaException;

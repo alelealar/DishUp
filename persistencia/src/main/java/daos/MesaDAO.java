@@ -9,7 +9,7 @@ import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.*;
 import com.mongodb.client.result.InsertOneResult;
-import entidades.Mesa;
+import entidadesMongo.Mesa;
 import excepciones.PersistenciaException;
 import interfaces.IMesaDAO;
 import java.util.ArrayList;

@@ -86,6 +86,16 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>negocios_gestionEmpleados</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.262719</groupId>
+                    <artifactId>persistencia</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.262719</groupId>
+                    <artifactId>dominio</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
     <properties>

@@ -14,8 +14,9 @@
         <module>negocios_gestionMesas</module>
         <module>persistencia</module>
         <module>dominio</module>
-        <module>configuracion</module>
         <module>negocios_gestionEmpleados</module>
+        <module>negocios_objetosNegocio</module>
+        <module>fabricas</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

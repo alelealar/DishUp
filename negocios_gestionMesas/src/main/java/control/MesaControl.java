@@ -2,9 +2,7 @@ package control;
 
 import fachada.MesaFachada;
 import dto.MesaDTO;
-import enums.EstadoMesaDTO;
-import excepciones.NegocioException;
-import java.util.ArrayList;
+import excepcion.NegocioException;
 import java.util.List;
 
 /**
@@ -13,10 +11,10 @@ import java.util.List;
  */
 public class MesaControl {
 
-    private MesaFachada fachada;
+    private final MesaFachada fachada;
 
-    public MesaControl() {
-        this.fachada = new MesaFachada();
+    public MesaControl(MesaFachada fachada) {
+        this.fachada = fachada;
     }
 
     public List<MesaDTO> obtenerMesasPorMesero(String idMesero) throws NegocioException {

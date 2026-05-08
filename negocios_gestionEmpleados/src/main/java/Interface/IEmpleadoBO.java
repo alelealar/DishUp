@@ -6,8 +6,7 @@
 package Interface;
 
 import dto.EmpleadoDTO;
-import entidades.Empleado;
-import excepciones.NegocioException;
+import excepcion.NegocioException;
 
 /**
  *

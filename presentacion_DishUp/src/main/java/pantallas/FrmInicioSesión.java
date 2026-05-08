@@ -6,9 +6,6 @@ package pantallas;
 
 import coordinador.CoordinadorInterfaces;
 import dto.EmpleadoDTO;
-import excepciones.NegocioException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**
