@@ -2,10 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
  */
-
 package interfaces;
 
-import entidadesMongo.Mesa;
+import entidades.Mesa;
 import excepciones.PersistenciaException;
 import java.util.List;
 
@@ -15,7 +14,7 @@ import java.util.List;
  */
 public interface IMesaDAO {
 
-    public List<Mesa> obtenerMesasPorMesero(String idMesero);
-    
+    public List<Mesa> obtenerMesasPorMesero(String idMesero) throws PersistenciaException;
+
     public Mesa insertarMesa(Mesa mesa) throws PersistenciaException;
 }

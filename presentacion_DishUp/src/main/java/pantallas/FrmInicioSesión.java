@@ -5,7 +5,8 @@
 package pantallas;
 
 import coordinador.CoordinadorInterfaces;
-import dto.EmpleadoDTO;
+import dtos.EmpleadoDTO;
+import excepcion.NegocioException;
 import javax.swing.JOptionPane;
 
 /**

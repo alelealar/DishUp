@@ -1,44 +1,38 @@
 package fachada;
 
-import Interface.IProductoBO;
-import dto.IngredienteDTO;
-import dto.IngredienteEnProductoDTO;
-import dto.ProductoDTO;
-import dto.ProductoIngredienteDTO;
+import control.ProductoControl;
+import dtos.IngredienteEnProductoDTO;
+import dtos.ProductoDTO;
+import dtos.ProductoIngredienteDTO;
 import enums.TipoProducto;
+import excepcion.NegocioException;
 import java.util.List;
 
-/**
- *
- * @author DishUp
- */
 public class ProductoFachada {
 
-    private final IProductoBO productoBO;
+    private final ProductoControl productoControl;
 
-    public ProductoFachada(IProductoBO productoBO) {
-        this.productoBO = productoBO;
-    }
-    
-    public List<ProductoDTO> obtenerProductos() {
-        return productoBO.obtenerProductos();
+    public ProductoFachada() {
+        this.productoControl = new ProductoControl();
     }
 
-    /**
-     * Obtiene productos filtrados por tipo desde la capa de negocio.
-     *
-     * @param tipo tipo de producto
-     * @return lista de productos filtrados
-     */
-    public List<ProductoDTO> obtenerProductosPorTipo(TipoProducto tipo) {
-        return productoBO.obtenerProductosPorTipo(tipo);
+    public List<ProductoDTO> obtenerProductos() throws NegocioException {
+        return productoControl.obtenerProductos();
     }
 
-    public List<IngredienteEnProductoDTO> obtenerIngredientesRemovibles(String idProducto) {
-        return productoBO.obtenerIngredientesRemoviblesPorProducto(idProducto);
+    public List<ProductoDTO> obtenerProductosPorTipo(TipoProducto tipo) throws NegocioException {
+        return productoControl.obtenerProductosPorTipo(tipo);
     }
 
-    public List<ProductoIngredienteDTO> obtenerIngredientesDeProducto(String idProducto) {
-        return productoBO.obtenerIngredientesDeProducto(idProducto);
+    public List<IngredienteEnProductoDTO> obtenerIngredientesRemovibles(String idProducto) throws NegocioException {
+        return productoControl.obtenerIngredientesRemovibles(idProducto);
+    }
+
+    public List<ProductoIngredienteDTO> obtenerIngredientesDeProducto(String idProducto) throws NegocioException {
+        return productoControl.obtenerIngredientesDeProducto(idProducto);
+    }
+
+    public List<ProductoDTO> obtenerTodos() throws NegocioException {
+        return productoControl.obtenerTodos();
     }
 }

@@ -1,82 +1,96 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
 package daos;
 
+import adaptadores.EmpleadoPersistenciaAdapter;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
-import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.set;
 import com.mongodb.client.result.InsertOneResult;
-import entidadesMongo.Empleado;
+import conexion.ConexionMongo;
+import entidades.Empleado;
+import entidadesMongo.EmpleadoEntidadMongo;
 import enums.EstadoEmpleado;
-import enums.RolEmpleado;
 import excepciones.PersistenciaException;
 import interfaces.IEmpleadoDAO;
-import java.util.ArrayList;
-import java.util.List;
-import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
+public class EmpleadoDAO implements IEmpleadoDAO {
 
-/**
- *
- * @author DishUp
- */
-
-public class EmpleadoDAO implements IEmpleadoDAO{
-    
-    private final MongoCollection<Empleado> coleccion;
+    private final MongoCollection<EmpleadoEntidadMongo> coleccion;
+    private final EmpleadoPersistenciaAdapter empleadoAdapter;
 
     public EmpleadoDAO() {
-        this.coleccion = conexion.ConexionMongo.obtenerBaseDatos().getCollection("empleados", Empleado.class);
+        this.coleccion = ConexionMongo.obtenerBaseDatos().getCollection("empleados", EmpleadoEntidadMongo.class);
+        this.empleadoAdapter = new EmpleadoPersistenciaAdapter();
     }
-    
+
     @Override
-    public Empleado insertarEmpleado(Empleado empleado) throws PersistenciaException{
-        if(empleado == null){
+    public Empleado insertarEmpleado(Empleado empleado) throws PersistenciaException {
+        if (empleado == null) {
             throw new PersistenciaException("El empleado es nulo");
         }
-        
-        try{
-            InsertOneResult resultado = this.coleccion.insertOne(empleado);
+
+        try {
+            EmpleadoEntidadMongo empleadoMongo = empleadoAdapter.aMongo(empleado);
+
+            InsertOneResult resultado = this.coleccion.insertOne(empleadoMongo);
+
             if (resultado.getInsertedId() == null) {
                 throw new PersistenciaException("Error al guardar");
             }
+
             String idGenerado = resultado.getInsertedId().asObjectId().getValue().toHexString();
-            empleado.setId(idGenerado);
-            return empleado; 
-        } catch (MongoException me) {
-            throw new PersistenciaException(me.getMessage());
-        }  
+
+            empleadoMongo.setId(idGenerado);
+
+            return empleadoAdapter.aDominio(empleadoMongo);
+
+        } catch (MongoException ex) {
+            throw new PersistenciaException("No fue posible insertar el empleado.", ex);
+        }
     }
 
     @Override
     public Empleado obtenerEmpleado(Empleado empleado) throws PersistenciaException {
-        if(empleado == null){
+        if (empleado == null) {
             throw new PersistenciaException("El empleado es nulo");
         }
-        
+
         if (empleado.getId() == null || empleado.getId().isBlank()) {
             throw new PersistenciaException("El ID del empleado es inválido");
         }
 
-        return this.coleccion.find(eq("_id", new ObjectId(empleado.getId()))).first();
+        try {
+            EmpleadoEntidadMongo empleadoMongo = this.coleccion.find(
+                    eq("_id", new ObjectId(empleado.getId()))
+            ).first();
+
+            return empleadoAdapter.aDominio(empleadoMongo);
+
+        } catch (MongoException ex) {
+            throw new PersistenciaException("No fue posible obtener el empleado.", ex);
+        }
     }
-    
+
     @Override
     public Empleado obtenerEmpleadoPorUser(String user) throws PersistenciaException {
-        if(user == null){
-            throw new PersistenciaException("El usuario es nulo");
+        if (user == null || user.isBlank()) {
+            throw new PersistenciaException("El usuario es inválido");
         }
 
-        return coleccion.find(eq("user", user)).first();
+        try {
+            EmpleadoEntidadMongo empleadoMongo = coleccion.find(eq("user", user)).first();
+
+            return empleadoAdapter.aDominio(empleadoMongo);
+
+        } catch (MongoException ex) {
+            throw new PersistenciaException("No fue posible obtener el empleado.", ex);
+        }
     }
 
     @Override
-    public void actualizarEstadoEmpleado(String id, EstadoEmpleado estado) throws PersistenciaException{
+    public void actualizarEstadoEmpleado(String id, EstadoEmpleado estado) throws PersistenciaException {
         if (id == null || id.isBlank()) {
             throw new PersistenciaException("ID inválido");
         }
@@ -84,8 +98,16 @@ public class EmpleadoDAO implements IEmpleadoDAO{
         if (estado == null) {
             throw new PersistenciaException("Estado inválido");
         }
-        
-        coleccion.updateOne(eq("_id", new ObjectId(id)), set("estado", estado));
+
+        try {
+            coleccion.updateOne(
+                    eq("_id", new ObjectId(id)),
+                    set("estado", estado)
+            );
+
+        } catch (MongoException ex) {
+            throw new PersistenciaException("No fue posible actualizar el estado del empleado.", ex);
+        }
     }
-    
+
 }

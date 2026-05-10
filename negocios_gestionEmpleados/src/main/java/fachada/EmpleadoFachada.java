@@ -1,37 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 package fachada;
 
-import Interface.IEmpleadoBO;
-import dto.EmpleadoDTO;
+import control.EmpleadoControl;
+import dtos.EmpleadoDTO;
 import excepcion.NegocioException;
 
-
-/**
- *
- * @author DishUp
- */
-
 public class EmpleadoFachada {
-    
-    private final IEmpleadoBO empleadoBO;
 
-    public EmpleadoFachada(IEmpleadoBO empleadoBO) {
-        this.empleadoBO = empleadoBO;
+    private final EmpleadoControl empleadoControl;
+
+    public EmpleadoFachada() {
+        this.empleadoControl = new EmpleadoControl();
     }
-    
-    public EmpleadoDTO obtenerEmpleado(EmpleadoDTO empleado) throws NegocioException{
-        return empleadoBO.obtenerEmpleado(empleado);
+
+    public EmpleadoDTO obtenerEmpleado(EmpleadoDTO empleado) throws NegocioException {
+       return empleadoControl.obtenerEmpleado(empleado);
     }
-    
-    public EmpleadoDTO login(EmpleadoDTO empleado) throws NegocioException{
-        return empleadoBO.login(empleado);
+
+    public EmpleadoDTO login(EmpleadoDTO empleado) throws NegocioException {
+        return empleadoControl.login(empleado);
     }
-    
-    public void activarEmpleado(EmpleadoDTO empleado) throws NegocioException{
-        empleadoBO.activarEmpleado(empleado);
+
+    public void activarEmpleado(EmpleadoDTO empleado) throws NegocioException {
+        empleadoControl.activarEmpleado(empleado);
     }
 }

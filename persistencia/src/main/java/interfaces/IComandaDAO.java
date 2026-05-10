@@ -1,21 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Interface.java to edit this template
- */
 package interfaces;
 
-import entidadesMongo.Comanda;
-import entidadesMongo.Pedido;
+import entidades.Comanda;
 import excepciones.PersistenciaException;
 import java.util.List;
 
-/**
- *
- * @author valeria
- */
 public interface IComandaDAO {
-
-    boolean agregarPedido(String idComanda, Pedido nuevoPedido) throws PersistenciaException;
 
     Comanda insertarComanda(Comanda comanda) throws PersistenciaException;
 
@@ -26,4 +15,6 @@ public interface IComandaDAO {
     Comanda obtenerPorId(String id) throws PersistenciaException;
 
     boolean actualizarEstado(String idComanda, String nuevoEstado) throws PersistenciaException;
+
+    boolean agregarPedido(String idComanda, entidades.Pedido nuevoPedido) throws PersistenciaException;
 }

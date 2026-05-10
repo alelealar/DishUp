@@ -1,0 +1,140 @@
+package adaptadores;
+
+import dtos_infraestructura.IngredienteDTOInfraestructura;
+import dtos_infraestructura.ProductoDTOInfraestructura;
+import entidades.IngredienteEnProducto;
+import entidades.Producto;
+import enums.TipoProducto;
+import enums.TipoProductoDTO;
+import java.util.ArrayList;
+import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+public class ProductoInfraestructuraAdapter {
+
+    public ProductoInfraestructuraAdapter() {
+    }
+
+    public Producto desdeJSON(JSONObject obj, String baseURL) {
+
+        if (obj == null) {
+            return null;
+        }
+
+        ProductoDTOInfraestructura dto = convertirJSONADTO(obj, baseURL);
+
+        return aDominio(dto);
+    }
+
+    public ProductoDTOInfraestructura convertirJSONADTO(JSONObject obj, String baseURL) {
+
+        if (obj == null) {
+            return null;
+        }
+
+        ProductoDTOInfraestructura dto = new ProductoDTOInfraestructura();
+
+        dto.setId(String.valueOf(obj.getInt("id")));
+        dto.setNombre(obj.getString("nombre"));
+
+        dto.setTipo(
+                TipoProductoDTO.valueOf(
+                        obj.getString("tipo")
+                )
+        );
+
+        dto.setDisponible(
+                obj.getBoolean("disponible")
+        );
+
+        dto.setPrecio(
+                (float) obj.optDouble("precio", 0.0)
+        );
+
+        dto.setTiempoPreparacion(
+                obj.optInt("tiempoPreparacion", 0)
+        );
+
+        dto.setUrlImagen(
+                baseURL + obj.optString("imagen", "")
+        );
+
+        List<IngredienteDTOInfraestructura> ingredientes = new ArrayList<>();
+
+        if (obj.has("ingredientes")) {
+
+            JSONArray ingredientesJSON
+                    = obj.getJSONArray("ingredientes");
+
+            for (int i = 0; i < ingredientesJSON.length(); i++) {
+
+                JSONObject ing
+                        = ingredientesJSON.getJSONObject(i);
+
+                IngredienteDTOInfraestructura dtoIng = new IngredienteDTOInfraestructura();
+
+                dtoIng.setNombre(
+                        ing.getString("nombre")
+                );
+
+                dtoIng.setCantidad(
+                        ing.getInt("cantidad")
+                );
+
+                dtoIng.setRemovible(
+                        ing.optBoolean("removible", true)
+                );
+
+                ingredientes.add(dtoIng);
+            }
+        }
+
+        dto.setIngredientes(ingredientes);
+
+        return dto;
+    }
+
+    public Producto aDominio(ProductoDTOInfraestructura dto) {
+
+        if (dto == null) {
+            return null;
+        }
+
+        Producto producto = new Producto();
+
+        producto.setId(dto.getId());
+        producto.setNombre(dto.getNombre());
+        producto.setPrecio(dto.getPrecio());
+        producto.setDisponible(dto.isDisponible());
+        producto.setTiempoPreparacion(
+                dto.getTiempoPreparacion()
+        );
+
+        producto.setTipo(TipoProducto.valueOf(dto.getTipo().name()));
+
+        producto.setUrlImagen(dto.getUrlImagen());
+
+        List<IngredienteEnProducto> ingredientes = new ArrayList<>();
+
+        if (dto.getIngredientes() != null) {
+
+            for (IngredienteDTOInfraestructura ing : dto.getIngredientes()) {
+
+                IngredienteEnProducto ingrediente = new IngredienteEnProducto();
+                
+                ingrediente.setNombre(ing.getNombre());
+                
+                ingrediente.setCantidad(ing.getCantidad());
+
+                ingrediente.setRemovible(ing.isRemovible());
+
+                ingredientes.add(ingrediente);
+            }
+        }
+
+        producto.setIngredientes(ingredientes);
+
+        return producto;
+    }
+}

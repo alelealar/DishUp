@@ -10,13 +10,13 @@
         <module>dto_negocios</module>
         <module>negocios_gestionComandas</module>
         <module>negocios_gestionProductos</module>
-        <module>negocios_gestionInventario</module>
         <module>negocios_gestionMesas</module>
         <module>persistencia</module>
         <module>dominio</module>
         <module>negocios_gestionEmpleados</module>
         <module>negocios_objetosNegocio</module>
-        <module>fabricas</module>
+        <module>infraestructura_inventario</module>
+        <module>dtos_infraestructura</module>
     </modules>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>

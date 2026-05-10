@@ -6,10 +6,10 @@ package pantallas;
 
 import control.MesaControl;
 import coordinador.CoordinadorInterfaces;
-import dto.ComandaDTO;
-import dto.MesaDTO;
-import dto.PedidoDTO;
-import excepciones.NegocioException;
+import dtos.ComandaDTO;
+import dtos.MesaDTO;
+import dtos.PedidoDTO;
+import excepcion.NegocioException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -476,7 +476,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
             StringBuilder sb = new StringBuilder();
 
-            for (PedidoDTO ped : comanda.getListaPedidos()) {
+            for (PedidoDTO ped : comanda.getPedidos()) {
 
                 sb.append("• ")
                         .append(ped.getNombreProducto());
@@ -499,7 +499,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             txtPedidos.setLineWrap(true);
             txtPedidos.setWrapStyleWord(true);
 
-            txtPedidos.setRows(Math.max(comanda.getListaPedidos().size(), 4));
+            txtPedidos.setRows(Math.max(comanda.getPedidos().size(), 4));
 
             JPanel body = new JPanel(new BorderLayout());
             body.setBackground(Color.decode("#D9D9D9"));

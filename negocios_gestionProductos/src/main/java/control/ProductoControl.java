@@ -1,46 +1,47 @@
 package control;
 
-import fachada.ProductoFachada;
-import dto.IngredienteDTO;
-import dto.IngredienteEnProductoDTO;
-import dto.ProductoDTO;
+import dtos.IngredienteEnProductoDTO;
+import dtos.ProductoDTO;
+import dtos.ProductoIngredienteDTO;
 import enums.TipoProducto;
+import excepcion.NegocioException;
+import inventario.SistemaInventario;
 import java.util.ArrayList;
 import java.util.List;
+import objetosNegocio.ProductoBO;
 
-/**
- *
- * @author DishUp
- */
 public class ProductoControl {
 
-    private final ProductoFachada productoFachada;
+    private final ProductoBO productoBO;
 
-    public ProductoControl(ProductoFachada productoFachada) {
-        this.productoFachada = productoFachada;
+    public ProductoControl() {
+        this.productoBO = new ProductoBO(new SistemaInventario());
     }
 
-    public ProductoFachada getProductoFachada() {
-        return productoFachada;
+    public List<ProductoDTO> obtenerProductos() throws NegocioException {
+        return productoBO.obtenerProductos();
     }
 
-    public List<ProductoDTO> obtenerProductos() {
-        return productoFachada.obtenerProductos();
-    }
-    
-    public List<ProductoDTO> obtenerProductosPorTipo(TipoProducto tipo) {
-        return productoFachada.obtenerProductosPorTipo(tipo);
+    public List<ProductoDTO> obtenerProductosPorTipo(TipoProducto tipo) throws NegocioException {
+        return productoBO.obtenerProductosPorTipo(tipo);
     }
 
-    public List<IngredienteEnProductoDTO> obtenerIngredientesRemovibles(String idProducto) {
-        return productoFachada.obtenerIngredientesRemovibles(idProducto);
+    public List<IngredienteEnProductoDTO> obtenerIngredientesRemovibles(String idProducto) throws NegocioException {
+        return productoBO.obtenerIngredientesRemoviblesPorProducto(idProducto);
     }
 
-    public List<ProductoDTO> obtenerTodos() {
+    public List<ProductoIngredienteDTO> obtenerIngredientesDeProducto(String idProducto) throws NegocioException {
+        return productoBO.obtenerIngredientesDeProducto(idProducto);
+    }
+
+    public List<ProductoDTO> obtenerTodos() throws NegocioException {
+
         List<ProductoDTO> lista = new ArrayList<>();
 
         lista.addAll(obtenerProductosPorTipo(TipoProducto.COMIDA));
+
         lista.addAll(obtenerProductosPorTipo(TipoProducto.BEBIDA));
+
         lista.addAll(obtenerProductosPorTipo(TipoProducto.BOTANA));
 
         return lista;

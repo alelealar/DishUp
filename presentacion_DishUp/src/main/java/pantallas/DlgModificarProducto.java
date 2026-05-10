@@ -4,10 +4,10 @@
  */
 package pantallas;
 
-import dto.IngredienteDTO;
-import dto.IngredienteEnProductoDTO;
-import dto.PedidoNuevoDTO;
-import dto.ProductoDTO;
+import dtos.IngredienteDTO;
+import dtos.IngredienteEnProductoDTO;
+import dtos.PedidoNuevoDTO;
+import dtos.ProductoDTO;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BoxLayout;
@@ -18,45 +18,50 @@ import javax.swing.JCheckBox;
  * @author valeria
  */
 public class DlgModificarProducto extends javax.swing.JDialog {
+
     private String idProductoActual;
+    private float precioProductoActual;
+    private Integer tiempoPreparacionActual;
     private PedidoNuevoDTO resultado;
     private List<JCheckBox> checksIngredientes = new ArrayList<>();
 
     public DlgModificarProducto(java.awt.Frame parent, ProductoDTO producto, List<IngredienteEnProductoDTO> ingredientesRemovibles) {
         super(parent, true);
         initComponents();
+        // System.out.println("ID RECIBIDO: " + producto.getId());
         this.idProductoActual = producto.getId();
+        this.precioProductoActual = producto.getPrecio();
+        this.tiempoPreparacionActual = producto.getTiempoPreparacion();
         lblNombreProducto.setText(producto.getNombre());
         configurarPanelIngredientes(ingredientesRemovibles);
         this.setLocationRelativeTo(null);
     }
 
-   
     private void configurarPanelIngredientes(List<IngredienteEnProductoDTO> ingredientes) {
         pnlListaIngredientes.setLayout(new BoxLayout(pnlListaIngredientes, BoxLayout.Y_AXIS));
-        pnlListaIngredientes.removeAll(); 
-        jScrollPane1.setBorder(null); 
+        pnlListaIngredientes.removeAll();
+        jScrollPane1.setBorder(null);
         jScrollPane1.getViewport().setBackground(new java.awt.Color(255, 248, 235));
 
         for (IngredienteEnProductoDTO ing : ingredientes) {
-            
+
             JCheckBox check = new JCheckBox("Sin " + ing.getNombre());
             check.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
-            check.setBackground(new java.awt.Color(255, 248, 235)); 
-            check.setFont(new java.awt.Font("Segoe UI", 0, 18)); 
-            check.setName(String.valueOf(ing.getId())); 
+            check.setBackground(new java.awt.Color(255, 248, 235));
+            check.setFont(new java.awt.Font("Segoe UI", 0, 18));
+            check.setName(String.valueOf(ing.getId()));
             checksIngredientes.add(check);
-            pnlListaIngredientes.add(check); 
+            pnlListaIngredientes.add(check);
         }
 
         pnlListaIngredientes.revalidate();
         pnlListaIngredientes.repaint();
     }
 
-    public PedidoNuevoDTO getResultado() { 
-        return resultado; 
+    public PedidoNuevoDTO getResultado() {
+        return resultado;
     }
-    
+
     /**
      * Creates new form DlgModificarProducto
      */
@@ -254,16 +259,18 @@ public class DlgModificarProducto extends javax.swing.JDialog {
                 especificaciones.append(chk.getText()).append(", ");
             }
         }
-        
+
         if (especificaciones.length() > 0) {
             especificaciones.setLength(especificaciones.length() - 2);
         }
 
         resultado = new PedidoNuevoDTO();
-        resultado.setIdProducto(idProductoActual);
+        resultado.setId(idProductoActual);
         resultado.setNombreProducto(lblNombreProducto.getText());
         resultado.setCantidad(1);
         resultado.setEspecificaciones(especificaciones.toString());
+        resultado.setPrecioProducto(precioProductoActual);
+        resultado.setTiempoPreparacion(tiempoPreparacionActual);
 
         this.dispose();
     }//GEN-LAST:event_btnListoActionPerformed

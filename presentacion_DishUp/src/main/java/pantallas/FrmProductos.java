@@ -6,10 +6,10 @@ package pantallas;
 
 import control.ProductoControl;
 import coordinador.CoordinadorInterfaces;
-import dto.IngredienteDTO;
-import dto.IngredienteEnProductoDTO;
-import dto.PedidoNuevoDTO;
-import dto.ProductoDTO;
+import dtos.IngredienteDTO;
+import dtos.IngredienteEnProductoDTO;
+import dtos.PedidoNuevoDTO;
+import dtos.ProductoDTO;
 import enums.TipoProductoDTO;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -44,8 +44,6 @@ public final class FrmProductos extends javax.swing.JFrame {
 
     private CoordinadorInterfaces coordinador;
 
-    private ProductoControl control;
-
     private Integer numMesa;
     private String nombreCliente;
 
@@ -54,9 +52,8 @@ public final class FrmProductos extends javax.swing.JFrame {
      *
      * @param coor
      */
-    public FrmProductos(CoordinadorInterfaces coor, ProductoControl productoControl) {
+    public FrmProductos(CoordinadorInterfaces coor) {
         this.coordinador = coor;
-        this.control = productoControl;
         initComponents();
 
         this.setLocationRelativeTo(null);
@@ -588,7 +585,6 @@ public final class FrmProductos extends javax.swing.JFrame {
     public void cargarProductosPorTipo(TipoProductoDTO tipo) {
         panProductos.removeAll();
 
-        // List<ProductoDTO> productos = control.obtenerProductosPorTipo(tipo);
         List<ProductoDTO> productos = coordinador.obtenerProductosParaUI();
 
         for (ProductoDTO producto : productos) {
@@ -636,8 +632,7 @@ public final class FrmProductos extends javax.swing.JFrame {
     }
 
     private void productoSeleccionado(ProductoDTO producto) {
-        List<IngredienteEnProductoDTO> removibles = control.obtenerIngredientesRemovibles(producto.getId());
-
+        List<IngredienteEnProductoDTO> removibles = coordinador.obtenerIngredientesRemovibles(producto.getId());
         coordinador.abrirPersonalizacionProducto(this, producto, removibles);
     }
 
@@ -693,6 +688,7 @@ public final class FrmProductos extends javax.swing.JFrame {
         btnX.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnX.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
+                coordinador.eliminarPedidoTemporal(pedido);
                 pnlPedidos.remove(item);
                 pnlPedidos.revalidate();
                 pnlPedidos.repaint();

@@ -1,24 +1,24 @@
 package control;
 
-import fachada.MesaFachada;
-import dto.MesaDTO;
+import daos.MesaDAO;
+import dtos.MesaDTO;
 import excepcion.NegocioException;
+import interfaces.IMesaDAO;
 import java.util.List;
+import objetosNegocio.MesaBO;
 
-/**
- *
- * @author DishUp
- */
 public class MesaControl {
 
-    private final MesaFachada fachada;
+    private final MesaBO mesaBO;
 
-    public MesaControl(MesaFachada fachada) {
-        this.fachada = fachada;
+    public MesaControl() {
+        IMesaDAO mesaDAO = new MesaDAO();
+        this.mesaBO = new MesaBO(mesaDAO);
     }
 
     public List<MesaDTO> obtenerMesasPorMesero(String idMesero) throws NegocioException {
-        return fachada.obtenerMesasPorMesero(idMesero);
+        return mesaBO.obtenerMesasPorMesero(idMesero);
+        
         /*
         List<MesaDTO> mesas = new ArrayList<>();
 

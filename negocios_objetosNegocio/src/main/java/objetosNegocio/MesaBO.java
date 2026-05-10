@@ -1,47 +1,56 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 package objetosNegocio;
 
-import Interface.IMesaBO;
-import adaptadores.MesaAdapter;
+import adaptadores.MesaNegocioAdapter;
 import daos.MesaDAO;
-import dto.MesaDTO;
-import entidadesMongo.Mesa;
-import enums.EstadoMesaDTO;
-import excepciones.NegocioException;
+import dtos.MesaDTO;
+import entidades.Mesa;
+import excepcion.NegocioException;
+import excepciones.PersistenciaException;
 import interfaces.IMesaDAO;
-import java.util.ArrayList;
 import java.util.List;
 
-
 /**
+ * BO de mesas.
+ *
+ * Trabaja hacia afuera con DTOs. Internamente convierte entidades y maneja
+ * excepciones de persistencia hacia negocio.
  *
  * @author DishUp
  */
+public class MesaBO {
 
-public class MesaBO implements IMesaBO {
-    
-    private IMesaDAO mesaDAO;
+    private final IMesaDAO mesaDAO;
+    private final MesaNegocioAdapter mesaAdapter;
 
     public MesaBO() {
         this.mesaDAO = new MesaDAO();
+        this.mesaAdapter = new MesaNegocioAdapter();
     }
-    
-    @Override
-    public List<MesaDTO> obtenerMesasPorMesero(String idMesero) throws NegocioException {
-        if(idMesero == null || idMesero.isBlank()){
-            throw new NegocioException("El id es invalido");
-        }
-        List<Mesa> mesas = mesaDAO.obtenerMesasPorMesero(idMesero);
-        
-        return MesaAdapter.listEntityToDTO(mesas);
-    }
-    
-}
 
+    public MesaBO(IMesaDAO mesaDAO) {
+        this.mesaDAO = mesaDAO;
+        this.mesaAdapter = new MesaNegocioAdapter();
+    }
+
+    public List<MesaDTO> obtenerMesasPorMesero(String idMesero) throws NegocioException {
+
+        if (idMesero == null || idMesero.isBlank()) {
+            throw new NegocioException("El id del mesero es inválido.");
+        }
+
+        try {
+
+            List<Mesa> mesas = mesaDAO.obtenerMesasPorMesero(idMesero);
+
+            return mesaAdapter.listaEntidadADTO(mesas);
+
+        } catch (PersistenciaException ex) {
+
+            throw new NegocioException("No fue posible obtener las mesas del mesero.", ex);
+        }
+    }
+  
+}
 
 /*
         mesas.add(new MesaDTO(1, 1, EstadoMesaDTO.LIBRE, 1));

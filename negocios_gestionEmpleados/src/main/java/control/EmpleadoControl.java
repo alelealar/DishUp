@@ -1,40 +1,29 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 package control;
 
-import dto.EmpleadoDTO;
+import daos.EmpleadoDAO;
+import dtos.EmpleadoDTO;
 import excepcion.NegocioException;
-import fachada.EmpleadoFachada;
-
-
-/**
- *
- * @author DishUp
- */
+import interfaces.IEmpleadoDAO;
+import objetosNegocio.EmpleadoBO;
 
 public class EmpleadoControl {
-    private final EmpleadoFachada empleadoFachada;
 
-    public EmpleadoControl(EmpleadoFachada empleadoFachada) {
-        this.empleadoFachada = empleadoFachada;
+    private final EmpleadoBO empleadoBO;
+
+    public EmpleadoControl() {
+        IEmpleadoDAO empleadoDAO = new EmpleadoDAO();
+        this.empleadoBO = new EmpleadoBO(empleadoDAO);
     }
 
-    public EmpleadoFachada getEmpleadoFachada() {
-        return empleadoFachada;
+    public EmpleadoDTO obtenerEmpleado(EmpleadoDTO empleado) throws NegocioException {
+        return empleadoBO.obtenerEmpleado(empleado);
     }
-    
-    public EmpleadoDTO obtenerEmpleado(EmpleadoDTO empleado) throws NegocioException{
-        return empleadoFachada.obtenerEmpleado(empleado);
+
+    public EmpleadoDTO login(EmpleadoDTO empleado) throws NegocioException {
+        return empleadoBO.login(empleado);
     }
-    
-    public EmpleadoDTO login(EmpleadoDTO empleado) throws NegocioException{
-        return empleadoFachada.login(empleado);
-    }
-    
-    public void activarEmpleado(EmpleadoDTO empleado) throws NegocioException{
-        empleadoFachada.activarEmpleado(empleado);
+
+    public void activarEmpleado(EmpleadoDTO empleado) throws NegocioException {
+        empleadoBO.activarEmpleado(empleado);
     }
 }

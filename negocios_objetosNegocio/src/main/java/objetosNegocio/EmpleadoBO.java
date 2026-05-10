@@ -1,123 +1,123 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
-
 package objetosNegocio;
 
-
-import adaptadores.EmpleadoAdapter;
+import adaptadores.EmpleadoNegocioAdapter;
 import daos.EmpleadoDAO;
-import dto.EmpleadoDTO;
-import entidadesMongo.Empleado;
+import dtos.EmpleadoDTO;
+import entidades.Empleado;
 import enums.EstadoEmpleado;
 import excepcion.NegocioException;
 import excepciones.PersistenciaException;
+import interfaces.IEmpleadoDAO;
 
+public class EmpleadoBO {
 
-
-/**
- *
- * @author DishUp
- */
-
-public class EmpleadoBO implements IEmpleadoBO{
-    
-    private final EmpleadoDAO emDAO;
+    private final IEmpleadoDAO empleadoDAO;
+    private final EmpleadoNegocioAdapter empleadoAdapter;
 
     public EmpleadoBO() {
-        this.emDAO = new EmpleadoDAO();
+        this.empleadoDAO = new EmpleadoDAO();
+        this.empleadoAdapter = new EmpleadoNegocioAdapter();
     }
 
-    @Override
-    public EmpleadoDTO obtenerEmpleado(EmpleadoDTO empleado) throws NegocioException {
-        if (empleado == null) {
-            throw new NegocioException("Empleado nulo");
-        }
+    public EmpleadoBO(IEmpleadoDAO empleadoDAO) {
+        this.empleadoDAO = empleadoDAO;
+        this.empleadoAdapter = new EmpleadoNegocioAdapter();
+    }
 
-        if (empleado.getUser() == null || empleado.getUser().trim().isEmpty()) {
-            throw new NegocioException("Usuario obligatorio");
-        }
+    public EmpleadoDTO obtenerEmpleado(EmpleadoDTO empleadoDTO) throws NegocioException {
 
-        if (empleado.getRol() == null || empleado.getRol().trim().isEmpty()) {
-            throw new NegocioException("Rol obligatorio");
-        }
-
-        if (empleado.getEstado() == null || empleado.getEstado().trim().isEmpty()) {
-            throw new NegocioException("Estado obligatorio");
-        }
-        
-        Empleado entidad = EmpleadoAdapter.toEntity(empleado);
-        
-        Empleado consultado;
+        validarEmpleadoConsulta(empleadoDTO);
 
         try {
-            consultado = emDAO.obtenerEmpleado(entidad);
+
+            Empleado empleado = empleadoAdapter.aEntidad(empleadoDTO);
+
+            Empleado consultado = empleadoDAO.obtenerEmpleado(empleado);
 
             if (consultado == null) {
-                throw new NegocioException("Empleado no encontrado");
+                throw new NegocioException("Empleado no encontrado.");
             }
 
-            return EmpleadoAdapter.toDTO(consultado);
+            return empleadoAdapter.aDTO(consultado);
 
         } catch (PersistenciaException ex) {
-            throw new NegocioException("Error al consultar empleado: " + ex.getMessage());
+            throw new NegocioException("No fue posible consultar el empleado.", ex);
         }
     }
-    
-    @Override
-    public EmpleadoDTO login(EmpleadoDTO empleado) throws NegocioException {
 
-        if (empleado == null) {
-            throw new NegocioException("Empleado nulo");
+    public EmpleadoDTO login(EmpleadoDTO empleadoDTO) throws NegocioException {
+
+        if (empleadoDTO == null) {
+            throw new NegocioException("Empleado nulo.");
         }
 
-        if (empleado.getUser() == null || empleado.getUser().isBlank()) {
-            throw new NegocioException("Usuario obligatorio");
-        }
+        if (empleadoDTO.getUser() == null || empleadoDTO.getUser().isBlank()) {
 
-        String user = empleado.getUser();
+            throw new NegocioException("Usuario obligatorio.");
+        }
 
         try {
-            Empleado consultado = emDAO.obtenerEmpleadoPorUser(user);
+
+            Empleado consultado = empleadoDAO.obtenerEmpleadoPorUser(empleadoDTO.getUser());
 
             if (consultado == null) {
-                throw new NegocioException("Usuario incorrecto");
+                throw new NegocioException("Usuario incorrecto.");
             }
 
-            return EmpleadoAdapter.toDTO(consultado);
+            return empleadoAdapter.aDTO(consultado);
 
         } catch (PersistenciaException ex) {
-            throw new NegocioException("Error al iniciar sesión: " + ex.getMessage());
+            throw new NegocioException("No fue posible iniciar sesión.", ex);
         }
     }
 
-    @Override
-    public void activarEmpleado(EmpleadoDTO empleado) throws NegocioException{
-        if (empleado == null) {
-            throw new NegocioException("Empleado nulo");
-        }
-        
-        if (empleado.getId() == null) {
-            throw new NegocioException("id nulo");
+    public void activarEmpleado(EmpleadoDTO empleadoDTO) throws NegocioException {
+
+        if (empleadoDTO == null) {
+            throw new NegocioException("Empleado nulo.");
         }
 
-        if (empleado.getUser() == null || empleado.getUser().isBlank()) {
-            throw new NegocioException("Usuario obligatorio");
+        if (empleadoDTO.getUser() == null || empleadoDTO.getUser().isBlank()) {
+            throw new NegocioException("Usuario obligatorio.");
         }
-        
-        String user = empleado.getUser();
-        
-        try{
-            Empleado consultado = emDAO.obtenerEmpleadoPorUser(user);
-            
+
+        try {
+
+            Empleado consultado = empleadoDAO.obtenerEmpleadoPorUser(empleadoDTO.getUser());
+
             if (consultado == null) {
-                throw new NegocioException("Usuario incorrecto");
+                throw new NegocioException("Empleado no encontrado.");
             }
-            
-            emDAO.actualizarEstadoEmpleado(consultado.getId(), EstadoEmpleado.ACTIVO);
+
+            empleadoDAO.actualizarEstadoEmpleado(
+                    consultado.getId(),
+                    EstadoEmpleado.ACTIVO
+            );
+
         } catch (PersistenciaException ex) {
-            throw new NegocioException("Error al activar al empleado: " + ex.getMessage());
+            throw new NegocioException("No fue posible activar el empleado.", ex);
+        }
+    }
+
+    private void validarEmpleadoConsulta(EmpleadoDTO empleadoDTO) throws NegocioException {
+
+        if (empleadoDTO == null) {
+            throw new NegocioException("Empleado nulo.");
+        }
+
+        if (empleadoDTO.getUser() == null || empleadoDTO.getUser().isBlank()) {
+
+            throw new NegocioException("Usuario obligatorio.");
+        }
+
+        if (empleadoDTO.getRol() == null || empleadoDTO.getRol().isBlank()) {
+
+            throw new NegocioException("Rol obligatorio.");
+        }
+
+        if (empleadoDTO.getEstado() == null || empleadoDTO.getEstado().isBlank()) {
+
+            throw new NegocioException("Estado obligatorio.");
         }
     }
 }

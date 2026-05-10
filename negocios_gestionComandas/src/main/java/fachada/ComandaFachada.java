@@ -1,31 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package fachada;
 
-import objetosNegocio.ComandaBO;
-import dto.ComandaDTO;
-import dto.PedidoNuevoDTO;
+import control.ComandaControl;
+import dtos.ComandaDTO;
+import dtos.PedidoNuevoDTO;
+import excepcion.NegocioException;
 import java.util.List;
 
-/**
- *
- * @author DishUp
- */
 public class ComandaFachada {
 
-    private final ComandaBO comandaBO;
+    private final ComandaControl comandaControl;
 
-    public ComandaFachada(ComandaBO comandaBO) {
-        this.comandaBO = comandaBO;
+    public ComandaFachada() {
+        this.comandaControl = new ComandaControl();
     }
 
-    public void crearComanda(String nombreCliente, int numeroMesa, List<PedidoNuevoDTO> pedidos) {
-        comandaBO.crearComanda(nombreCliente, numeroMesa, pedidos);
+    public void crearComanda(String nombreCliente,int numeroMesa,List<PedidoNuevoDTO> pedidos) throws NegocioException {
+        comandaControl.crearComanda(nombreCliente,numeroMesa,pedidos);
     }
 
-    public List<ComandaDTO> obtenerComandasPorMesa(int numeroMesa) {
-        return comandaBO.obtenerComandasPorMesa(numeroMesa);
+    public List<ComandaDTO> obtenerComandasPorMesa(int numeroMesa) throws NegocioException {
+        return comandaControl.obtenerComandasPorMesa(numeroMesa);
     }
 }

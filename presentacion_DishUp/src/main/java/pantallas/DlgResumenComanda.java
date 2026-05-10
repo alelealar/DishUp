@@ -2,8 +2,8 @@ package pantallas;
 
 
 import coordinador.CoordinadorInterfaces;
-import dto.PedidoNuevoDTO;
-import dto.ComandaDTO;
+import dtos.PedidoNuevoDTO;
+import dtos.ComandaDTO;
 import java.time.LocalDate;
 import java.util.List;
 import javax.swing.BoxLayout;

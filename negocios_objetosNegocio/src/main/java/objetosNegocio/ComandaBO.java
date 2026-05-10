@@ -1,191 +1,134 @@
 package objetosNegocio;
 
-import dto.ComandaDTO;
-import dto.PedidoDTO;
-import dto.PedidoNuevoDTO;
-import dto.ProductoIngredienteDTO;
-import entidadesMongo.Comanda;
-import entidadesMongo.Mesa;
-import entidadesMongo.Pedido;
+import adaptadores.ComandaNegocioAdapter;
+import daos.ComandaDAO;
+import dtos.ComandaDTO;
+import dtos.PedidoNuevoDTO;
+import dtos_infraestructura.InventarioRequestDTO;
+import entidades.Comanda;
+import entidades.Pedido;
 import enums.EstadoComanda;
 import enums.EstadoPedido;
-import enums.EstadoPedidoDTO;
+import excepcion.NegocioException;
 import excepciones.PersistenciaException;
 import interfaces.IComandaDAO;
-import inventario.InventarioAPI;
+import inventario.SistemaInventario;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class ComandaBO{
+public class ComandaBO {
 
-    private final InventarioAPI inventarioAPI;
-    
     private final IComandaDAO comandaDAO;
-    
+    private final ComandaNegocioAdapter adapter;
+    private final SistemaInventario inventarioAPI;
     private final ProductoBO productoBO;
 
     public ComandaBO() {
-        this.comandaDAO = comandaDAO;
-        this.inventarioAPI = new InventarioAPI();
+        this.comandaDAO = new ComandaDAO();
+        this.adapter = new ComandaNegocioAdapter();
+        this.inventarioAPI = new SistemaInventario();
         this.productoBO = new ProductoBO(inventarioAPI);
     }
 
-    @Override
-    public void crearComanda(String nombreCliente, int numeroMesa, List<PedidoNuevoDTO> pedidosDTO) {
+    public void crearComanda(String nombreCliente, int numeroMesa, List<PedidoNuevoDTO> pedidosDTO)
+            throws NegocioException {
 
-        // Validar/descontar inventario
-        boolean exito = procesarComanda(pedidosDTO);
-
-        if (!exito) {
-            throw new RuntimeException("No hay suficiente stock");
+        if (nombreCliente == null || nombreCliente.isBlank()) {
+            throw new NegocioException("Cliente inválido");
         }
 
-        // Crear entidad Comanda
+        if (pedidosDTO == null || pedidosDTO.isEmpty()) {
+            throw new NegocioException("Pedidos vacíos");
+        }
+
+        boolean stockOk = procesarComanda(pedidosDTO);
+
+        if (!stockOk) {
+            throw new NegocioException("Sin stock suficiente");
+        }
+
         Comanda comanda = new Comanda();
         comanda.setNombreCliente(nombreCliente);
         comanda.setFecha(LocalDateTime.now());
         comanda.setEstado(EstadoComanda.PENDIENTE);
 
-        // Mesa
-        Mesa mesa = new Mesa();
+        entidades.Mesa mesa = new entidades.Mesa();
         mesa.setNumero(numeroMesa);
-
         comanda.setMesa(mesa);
 
-        // Pedidos
-        List<Pedido> pedidosEntidad = new ArrayList<>();
+        List<Pedido> pedidos = new ArrayList<>();
 
         for (PedidoNuevoDTO dto : pedidosDTO) {
 
-            Pedido pedido = new Pedido();
+            Pedido p = new Pedido();
+            p.setIdProducto(dto.getId());
+            p.setNombreProducto(dto.getNombreProducto());
+            p.setCantidad(dto.getCantidad());
+            p.setDescripcion(dto.getEspecificaciones());
+            p.setEstado(EstadoPedido.PENDIENTE);
+            p.setFechaPedido(LocalDateTime.now());
+            p.setPrecioProducto(dto.getPrecioProducto());
 
-            pedido.setIdProducto(dto.getIdProducto());
-            pedido.setNombreProducto(dto.getNombreProducto());
-            pedido.setDescripcion(dto.getEspecificaciones());
-            pedido.setEstado(EstadoPedido.PENDIENTE);
-            pedido.setFechaPedido(LocalDateTime.now());
-            pedido.setPrecioProducto(dto.getPrecioProducto());
-
-            pedidosEntidad.add(pedido);
+            pedidos.add(p);
         }
 
-        comanda.setPedidos(pedidosEntidad);
+        comanda.setPedidos(pedidos);
 
-        // Guardar en Mongo
         try {
             comandaDAO.insertarComanda(comanda);
         } catch (PersistenciaException e) {
-            throw new RuntimeException("Error al guardar la comanda: " + e.getMessage());
+            throw new NegocioException("Error al guardar comanda", e);
         }
     }
 
-    public boolean procesarComanda(List<PedidoNuevoDTO> pedidos) {
+    public boolean procesarComanda(List<PedidoNuevoDTO> pedidos) throws NegocioException {
 
-        Map<String, Integer> mapaIngredientes = new HashMap<>();
+        if (pedidos == null || pedidos.isEmpty()) {
+            throw new NegocioException("La lista de pedidos está vacía");
+        }
+
+        List<InventarioRequestDTO> inventarioList = new ArrayList<>();
 
         for (PedidoNuevoDTO pedido : pedidos) {
 
-            List<ProductoIngredienteDTO> ingredientes
-                    = productoBO.obtenerIngredientesDeProducto(
-                            pedido.getIdProducto()
-                    );
-
-            for (ProductoIngredienteDTO ing : ingredientes) {
-
-                String id = ing.getIdIngrediente();
-                int cantidad = ing.getCantidadRequerida();
-
-                mapaIngredientes.put(
-                        id,
-                        mapaIngredientes.getOrDefault(id, 0) + cantidad
-                );
+            if (pedido == null) {
+                throw new NegocioException("Pedido inválido");
             }
+
+            productoBO.obtenerIngredientesDeProducto(pedido.getId());
+
+            InventarioRequestDTO dto = new InventarioRequestDTO();
+
+            dto.setIdIngrediente(pedido.getId());
+            dto.setCantidad(pedido.getCantidad());
+
+            inventarioList.add(dto);
         }
 
-        List<ProductoIngredienteDTO> ingredientesTotales
-                = new ArrayList<>();
+      //  boolean exito = inventarioAPI.descontarStock(inventarioList);
 
-        for (Map.Entry<String, Integer> entry : mapaIngredientes.entrySet()) {
-
-            ProductoIngredienteDTO dto = new ProductoIngredienteDTO();
-
-            dto.setIdIngrediente(entry.getKey());
-            dto.setCantidadRequerida(entry.getValue());
-
-            ingredientesTotales.add(dto);
-        }
-
-        boolean exito = inventarioAPI.descontarStock(pedidos);
-
-        if (!exito) {
-            throw new RuntimeException("No hay suficiente stock");
-        }
+//        if (!exito) {
+//            throw new NegocioException("No hay suficiente stock para procesar la comanda");
+//        }
 
         return true;
     }
 
-    @Override
     public List<ComandaDTO> obtenerComandasPorMesa(int numeroMesa) {
+
         try {
-
             List<Comanda> comandas = comandaDAO.obtenerComandasPorMesa(numeroMesa);
-
             List<ComandaDTO> listaDTO = new ArrayList<>();
 
             for (Comanda c : comandas) {
-
-                ComandaDTO dto = new ComandaDTO();
-
-                dto.setId(c.getId());
-                dto.setNombreCliente(c.getNombreCliente());
-                dto.setFecha(c.getFecha().toLocalDate());
-                dto.setIdMesa(c.getMesa().getNumero());
-
-                List<PedidoDTO> pedidosDTO = new ArrayList<>();
-
-                if (c.getPedidos() != null) {
-
-                    for (Pedido p : c.getPedidos()) {
-
-                        PedidoDTO pedidoDTO = new PedidoDTO();
-
-                        pedidoDTO.setId(p.getId());
-
-                        pedidoDTO.setCantidad(p.getCantidad());
-
-                        pedidoDTO.setNombreProducto(p.getNombreProducto());
-
-                        pedidoDTO.setDescripcion(p.getDescripcion());
-
-                        pedidoDTO.setPrecioProducto(p.getPrecioProducto());
-                        
-                        pedidoDTO.setFechaPedido(p.getFechaPedido());
-                        if (p.getEstado() != null) {
-                            pedidoDTO.setEstado(
-                                    EstadoPedidoDTO.valueOf(
-                                            p.getEstado().name()
-                                    )
-                            );
-                        }
-
-                        pedidosDTO.add(pedidoDTO);
-                    }
-                }
-
-                dto.setListaPedidos(pedidosDTO);
-
-                listaDTO.add(dto);
+                listaDTO.add(adapter.aDTO(c));
             }
 
             return listaDTO;
 
         } catch (Exception e) {
-            throw new RuntimeException(
-                    "Error al obtener comandas: " + e.getMessage()
-            );
+            throw new RuntimeException("Error al obtener comandas", e);
         }
     }
 }

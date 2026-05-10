@@ -1,67 +1,60 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package daos;
 
+import adaptadores.ComandaPersistenciaAdapter;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
+import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.set;
 import com.mongodb.client.result.InsertOneResult;
-import entidadesMongo.Comanda;
-import entidadesMongo.Pedido;
+import com.mongodb.client.result.UpdateResult;
+import conexion.ConexionMongo;
+import entidades.Comanda;
+import entidades.Pedido;
+import entidadesMongo.ComandaEntidadMongo;
 import excepciones.PersistenciaException;
 import interfaces.IComandaDAO;
-import org.bson.types.ObjectId;
-import org.bson.conversions.Bson;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Updates;
-import com.mongodb.client.result.UpdateResult;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.types.ObjectId;
 
-/**
- *
- * @author valeria
- */
 public class ComandaDAO implements IComandaDAO {
 
-    private final MongoCollection<Comanda> coleccion;
+    private final MongoCollection<ComandaEntidadMongo> coleccion;
+    private final ComandaPersistenciaAdapter adapter;
 
     public ComandaDAO() {
-        this.coleccion = conexion.ConexionMongo.obtenerBaseDatos().getCollection("comandas", Comanda.class);
-    }
-
-    @Override
-    public boolean agregarPedido(String idComanda, Pedido nuevoPedido) throws PersistenciaException {
-        try {
-            Bson filtro = Filters.eq("_id", new ObjectId(idComanda));
-            Bson operacion = Updates.push("pedidos", nuevoPedido);
-
-            UpdateResult resultado = coleccion.updateOne(filtro, operacion);
-            return resultado.getModifiedCount() > 0;
-        } catch (Exception e) {
-            throw new PersistenciaException("No se pudo agregar el pedido: " + e.getMessage());
-        }
+        this.coleccion = ConexionMongo.obtenerBaseDatos()
+                .getCollection("comandas", ComandaEntidadMongo.class);
+        this.adapter = new ComandaPersistenciaAdapter();
     }
 
     @Override
     public Comanda insertarComanda(Comanda comanda) throws PersistenciaException {
+
         if (comanda == null) {
-            throw new PersistenciaException("La comanda es nula");
+            throw new PersistenciaException("Comanda nula");
         }
+
         try {
-            InsertOneResult resultado = this.coleccion.insertOne(comanda);
+            ComandaEntidadMongo mongo = adapter.aMongo(comanda);
 
-            if (resultado.getInsertedId() == null) {
-                throw new PersistenciaException("Error al guardar la comanda");
+            InsertOneResult result = coleccion.insertOne(mongo);
+
+            if (result.getInsertedId() == null) {
+                throw new PersistenciaException("Error al insertar comanda");
             }
-            String idGenerado = resultado.getInsertedId().asObjectId().getValue().toHexString();
 
-            comanda.setId(idGenerado);
+            String id = result.getInsertedId()
+                    .asObjectId()
+                    .getValue()
+                    .toHexString();
 
-            return comanda;
-        } catch (MongoException me) {
-            throw new PersistenciaException("Error de base de datos: " + me.getMessage());
+            mongo.setId(id);
+
+            return adapter.aDominio(mongo);
+
+        } catch (MongoException e) {
+            throw new PersistenciaException("Error Mongo insertar comanda", e);
         }
     }
 
@@ -69,24 +62,40 @@ public class ComandaDAO implements IComandaDAO {
     public List<Comanda> obtenerTodas() throws PersistenciaException {
 
         try {
+            List<ComandaEntidadMongo> listaMongo =
+                    coleccion.find().into(new ArrayList<>());
 
-            return coleccion.find().into(new ArrayList<>());
+            List<Comanda> lista = new ArrayList<>();
+
+            for (ComandaEntidadMongo m : listaMongo) {
+                lista.add(adapter.aDominio(m));
+            }
+
+            return lista;
 
         } catch (MongoException e) {
-
-            throw new PersistenciaException("Error al obtener comandas");
+            throw new PersistenciaException("Error al obtener comandas", e);
         }
     }
 
     @Override
     public List<Comanda> obtenerComandasPorMesa(int numeroMesa) throws PersistenciaException {
+
         try {
-            Bson filtro = Filters.eq("mesa.numero", numeroMesa);
+            List<ComandaEntidadMongo> listaMongo =
+                    coleccion.find(eq("mesa.numero", numeroMesa))
+                            .into(new ArrayList<>());
 
-            return coleccion.find(filtro).into(new ArrayList<>());
+            List<Comanda> lista = new ArrayList<>();
 
-        } catch (Exception e) {
-            throw new PersistenciaException("Error al obtener comandas: " + e.getMessage());
+            for (ComandaEntidadMongo m : listaMongo) {
+                lista.add(adapter.aDominio(m));
+            }
+
+            return lista;
+
+        } catch (MongoException e) {
+            throw new PersistenciaException("Error al consultar comandas", e);
         }
     }
 
@@ -94,12 +103,13 @@ public class ComandaDAO implements IComandaDAO {
     public Comanda obtenerPorId(String id) throws PersistenciaException {
 
         try {
+            ComandaEntidadMongo mongo =
+                    coleccion.find(eq("_id", new ObjectId(id))).first();
 
-            return coleccion.find(Filters.eq("_id", new ObjectId(id))).first();
+            return adapter.aDominio(mongo);
 
-        } catch (Exception e) {
-
-            throw new PersistenciaException("Error al buscar la comanda");
+        } catch (MongoException e) {
+            throw new PersistenciaException("Error al buscar comanda", e);
         }
     }
 
@@ -107,21 +117,20 @@ public class ComandaDAO implements IComandaDAO {
     public boolean actualizarEstado(String idComanda, String nuevoEstado) throws PersistenciaException {
 
         try {
-
-            Bson filtro = Filters.eq("_id", new ObjectId(idComanda));
-
-            Bson update = Updates.set(
-                    "estado",
-                    nuevoEstado
+            UpdateResult result = coleccion.updateOne(
+                    eq("_id", new ObjectId(idComanda)),
+                    set("estado", nuevoEstado)
             );
 
-            UpdateResult resultado = coleccion.updateOne(filtro, update);
+            return result.getModifiedCount() > 0;
 
-            return resultado.getModifiedCount() > 0;
-
-        } catch (Exception e) {
-
-            throw new PersistenciaException("Error al actualizar estado");
+        } catch (MongoException e) {
+            throw new PersistenciaException("Error al actualizar estado", e);
         }
+    }
+
+    @Override
+    public boolean agregarPedido(String idComanda, Pedido nuevoPedido) throws PersistenciaException {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

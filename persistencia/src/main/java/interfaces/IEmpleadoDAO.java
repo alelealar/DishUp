@@ -5,9 +5,8 @@
 
 package interfaces;
 
-import entidadesMongo.Empleado;
+import entidades.Empleado;
 import enums.EstadoEmpleado;
-import enums.RolEmpleado;
 import excepciones.PersistenciaException;
 
 /**
