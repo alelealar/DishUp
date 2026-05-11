@@ -25,6 +25,7 @@ public class PedidoEntidadMongo {
     private String descripcion;
     private float precioProducto;
     private EstadoPedido estado;
+    private Integer tiempoPreparacion;
     private LocalDateTime fechaPedido;
 
     public PedidoEntidadMongo() {
@@ -104,5 +105,12 @@ public class PedidoEntidadMongo {
     public void setFechaPedido(LocalDateTime fechaPedido) {
         this.fechaPedido = fechaPedido;
     }
-    
+
+    public Integer getTiempoPreparacion() {
+        return tiempoPreparacion;
+    }
+
+    public void setTiempoPreparacion(Integer tiempoFaltante) {
+        this.tiempoPreparacion = tiempoFaltante;
+    } 
 }

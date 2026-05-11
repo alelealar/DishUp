@@ -10,6 +10,8 @@ import dtos.IngredienteEnProductoDTO;
 import dtos.MesaDTO;
 import dtos.PedidoNuevoDTO;
 import dtos.ProductoDTO;
+import enums.TipoProductoDTO;
+import enums.TipoProductoDTOInfraestructura;
 import excepcion.NegocioException;
 import fachada.ComandaFachada;
 import fachada.EmpleadoFachada;

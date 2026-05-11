@@ -4,8 +4,6 @@ import control.ProductoControl;
 import dtos.IngredienteEnProductoDTO;
 import dtos.ProductoDTO;
 import dtos.ProductoIngredienteDTO;
-import dtos_infraestructura.ProductoDTOInfraestructura;
-import enums.TipoProducto;
 import enums.TipoProductoDTOInfraestructura;
 import excepcion.NegocioException;
 import interfaz.IGestionProductos;

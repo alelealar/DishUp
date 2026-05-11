@@ -62,8 +62,7 @@ public class ComandaDAO implements IComandaDAO {
     public List<Comanda> obtenerTodas() throws PersistenciaException {
 
         try {
-            List<ComandaEntidadMongo> listaMongo =
-                    coleccion.find().into(new ArrayList<>());
+            List<ComandaEntidadMongo> listaMongo = coleccion.find().into(new ArrayList<>());               
 
             List<Comanda> lista = new ArrayList<>();
 
@@ -82,9 +81,7 @@ public class ComandaDAO implements IComandaDAO {
     public List<Comanda> obtenerComandasPorMesa(int numeroMesa) throws PersistenciaException {
 
         try {
-            List<ComandaEntidadMongo> listaMongo =
-                    coleccion.find(eq("mesa.numero", numeroMesa))
-                            .into(new ArrayList<>());
+            List<ComandaEntidadMongo> listaMongo = coleccion.find(eq("mesa.numero", numeroMesa)).into(new ArrayList<>());
 
             List<Comanda> lista = new ArrayList<>();
 

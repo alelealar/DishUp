@@ -488,6 +488,8 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
                             .append(ped.getDescripcion())
                             .append(")");
                 }
+                
+                sb.append(" - ").append(ped.getTiempoPreparacion());
 
                 sb.append("\n");
             }

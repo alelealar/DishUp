@@ -48,6 +48,7 @@ public class ComandaNegocioAdapter {
                 pedidoDTO.setCantidad(pedido.getCantidad());
                 pedidoDTO.setDescripcion(pedido.getDescripcion());
                 pedidoDTO.setPrecioProducto(pedido.getPrecioProducto());
+                pedidoDTO.setTiempoPreparacion(pedido.getTiempoPreparacion());
                 pedidoDTO.setFechaPedido(pedido.getFechaPedido());
 
                 pedidosDTO.add(pedidoDTO);

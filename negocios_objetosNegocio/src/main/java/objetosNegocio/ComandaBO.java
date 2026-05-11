@@ -66,6 +66,7 @@ public class ComandaBO {
             p.setCantidad(dto.getCantidad());
             p.setDescripcion(dto.getEspecificaciones());
             p.setEstado(EstadoPedido.PENDIENTE);
+            p.setTiempoPreparacion(dto.getTiempoPreparacion());
             p.setFechaPedido(LocalDateTime.now());
             p.setPrecioProducto(dto.getPrecioProducto());
 
@@ -126,7 +127,7 @@ public class ComandaBO {
 
             return listaDTO;
 
-        } catch (Exception e) {
+        } catch (PersistenciaException e) {
             throw new RuntimeException("Error al obtener comandas", e);
         }
     }

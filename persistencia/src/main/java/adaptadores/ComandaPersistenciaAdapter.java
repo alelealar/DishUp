@@ -41,27 +41,21 @@ public class ComandaPersistenciaAdapter {
                 PedidoEntidadMongo pedidoMongo = new PedidoEntidadMongo();
 
                 pedidoMongo.setId(pedido.getId());
-                pedidoMongo.setIdProducto(
-                        pedido.getIdProducto()
-                );
-                pedidoMongo.setNombreProducto(
-                        pedido.getNombreProducto()
-                );
-                pedidoMongo.setCantidad(
-                        pedido.getCantidad()
-                );
-                pedidoMongo.setDescripcion(
-                        pedido.getDescripcion()
-                );
-                pedidoMongo.setPrecioProducto(
-                        pedido.getPrecioProducto()
-                );
-                pedidoMongo.setEstado(
-                        pedido.getEstado()
-                );
-                pedidoMongo.setFechaPedido(
-                        pedido.getFechaPedido()
-                );
+                pedidoMongo.setIdProducto(pedido.getIdProducto());
+                
+                pedidoMongo.setNombreProducto(pedido.getNombreProducto());
+                
+                pedidoMongo.setCantidad(pedido.getCantidad());
+                
+                pedidoMongo.setDescripcion(pedido.getDescripcion());
+                
+                pedidoMongo.setPrecioProducto(pedido.getPrecioProducto());
+                
+                pedidoMongo.setEstado(pedido.getEstado());
+                
+                pedidoMongo.setFechaPedido(pedido.getFechaPedido());
+                
+                pedidoMongo.setTiempoPreparacion(pedido.getTiempoPreparacion());
 
                 pedidosMongo.add(pedidoMongo);
             }
@@ -124,6 +118,7 @@ public class ComandaPersistenciaAdapter {
                 pedido.setFechaPedido(
                         pedidoMongo.getFechaPedido()
                 );
+                pedido.setTiempoPreparacion(pedidoMongo.getTiempoPreparacion());
 
                 pedidos.add(pedido);
             }
