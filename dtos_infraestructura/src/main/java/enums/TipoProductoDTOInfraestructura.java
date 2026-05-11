@@ -9,7 +9,7 @@ package enums;
  *
  * @author DishUp
  */
-public enum TipoProductoDTO {
+public enum TipoProductoDTOInfraestructura {
     BEBIDA,
     COMIDA,
     BOTANA

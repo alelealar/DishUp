@@ -10,7 +10,7 @@ package dtos;
  */
 public class ProductoIngredienteDTO {
     private String id;
-    private int idProducto;
+    private String idProducto;
     private String idIngrediente;
     private int cantidadRequerida; // Cantidad de unidades
     private boolean removible;
@@ -19,7 +19,7 @@ public class ProductoIngredienteDTO {
     }
 
 
-    public ProductoIngredienteDTO(String id, int idProducto, String idIngrediente, int cantidadRequerida, boolean removible) {
+    public ProductoIngredienteDTO(String id, String idProducto, String idIngrediente, int cantidadRequerida, boolean removible) {
         this.id = id;
         this.idProducto = idProducto;
         this.idIngrediente = idIngrediente;
@@ -35,11 +35,11 @@ public class ProductoIngredienteDTO {
         this.id = id;
     }
 
-    public int getIdProducto() {
+    public String getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(int idProducto) {
+    public void setIdProducto(String idProducto) {
         this.idProducto = idProducto;
     }
 

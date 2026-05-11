@@ -2,7 +2,7 @@ package inventario;
 
 import adaptadores.ProductoInfraestructuraAdapter;
 import dtos_infraestructura.InventarioRequestDTO;
-import entidades.Producto;
+import dtos_infraestructura.ProductoDTOInfraestructura;
 import excepciones.InfraestructuraException;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -16,7 +16,8 @@ import org.json.JSONObject;
 
 public class SistemaInventario {
 
-    private final String BASE_URL = "https://sistema-inventario-3m6j.onrender.com";
+    private final String BASE_URL = "http://localhost:5000";
+    // private final String BASE_URL = "https://sistema-inventario-3m6j.onrender.com";
     private final ProductoInfraestructuraAdapter productoAdapter;
 
     public SistemaInventario() {
@@ -24,21 +25,21 @@ public class SistemaInventario {
     }
 
     // OBTENER PRODUCTOS
-    public List<Producto> obtenerProductos() throws InfraestructuraException {
+    public List<ProductoDTOInfraestructura> obtenerProductos() throws InfraestructuraException {
 
-        List<Producto> lista = new ArrayList<>();
+        List<ProductoDTOInfraestructura> lista = new ArrayList<>();
 
         try {
             URL url = new URL(BASE_URL + "/productos");
+
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
             conn.setRequestMethod("GET");
 
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(conn.getInputStream())
-            );
+            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
             StringBuilder response = new StringBuilder();
+
             String line;
 
             while ((line = in.readLine()) != null) {
@@ -50,9 +51,12 @@ public class SistemaInventario {
             JSONArray array = new JSONArray(response.toString());
 
             for (int i = 0; i < array.length(); i++) {
+
                 JSONObject obj = array.getJSONObject(i);
-                Producto producto = productoAdapter.desdeJSON(obj, BASE_URL);
-                lista.add(producto);
+
+                ProductoDTOInfraestructura dto = productoAdapter.convertirJSONADTO(obj, BASE_URL);
+
+                lista.add(dto);
             }
 
             return lista;
@@ -63,15 +67,15 @@ public class SistemaInventario {
     }
 
     // OBTENER PRODUCTO POR ID
-    public Producto obtenerProductoPorId(String idProducto) throws InfraestructuraException {
+    public ProductoDTOInfraestructura obtenerProductoPorId(String idProducto) throws InfraestructuraException {
 
         if (idProducto == null || idProducto.isBlank()) {
             return null;
         }
 
-        List<Producto> productos = obtenerProductos();
+        List<ProductoDTOInfraestructura> productos = obtenerProductos();
 
-        for (Producto producto : productos) {
+        for (ProductoDTOInfraestructura producto : productos) {
             if (producto.getId().equals(idProducto)) {
                 return producto;
             }
@@ -80,9 +84,8 @@ public class SistemaInventario {
         return null;
     }
 
-    // DESCONTAR STOCK (CORREGIDO)
-    public boolean descontarStock(List<InventarioRequestDTO> pedidos)
-            throws InfraestructuraException {
+    // DESCONTAR STOCK 
+    public boolean descontarStock(List<InventarioRequestDTO> pedidos) throws InfraestructuraException {
 
         if (pedidos == null || pedidos.isEmpty()) {
             throw new InfraestructuraException("Lista de pedidos vacía");
@@ -103,7 +106,7 @@ public class SistemaInventario {
 
                 JSONObject obj = new JSONObject();
 
-                obj.put("productoId", pedido.getIdIngrediente());
+                obj.put("productoId", pedido.getIdProducto());
 
                 obj.put("cantidad", pedido.getCantidad());
 
@@ -119,16 +122,11 @@ public class SistemaInventario {
 
             int responseCode = conn.getResponseCode();
 
-            // ✔ manejo correcto de errores HTTP
             if (responseCode != 200) {
-                throw new InfraestructuraException(
-                        "Error HTTP al descontar stock: " + responseCode
-                );
+                throw new InfraestructuraException("Error HTTP al descontar stock: " + responseCode);
             }
 
-            BufferedReader br = new BufferedReader(
-                    new InputStreamReader(conn.getInputStream())
-            );
+            BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
 
             StringBuilder response = new StringBuilder();
             String line;

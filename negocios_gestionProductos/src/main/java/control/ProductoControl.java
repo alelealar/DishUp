@@ -3,12 +3,9 @@ package control;
 import dtos.IngredienteEnProductoDTO;
 import dtos.ProductoDTO;
 import dtos.ProductoIngredienteDTO;
-import dtos_infraestructura.ProductoDTOInfraestructura;
-import enums.TipoProducto;
-import enums.TipoProductoDTO;
+import enums.TipoProductoDTOInfraestructura;
 import excepcion.NegocioException;
-import interfaces.ISistemaInventario;
-import inventario.SistemaInventario;
+import fachada.InventarioFachada;
 import java.util.ArrayList;
 import java.util.List;
 import objetosNegocio.ProductoBO;
@@ -18,14 +15,14 @@ public class ProductoControl {
     private final ProductoBO productoBO;
 
     public ProductoControl() {
-        this.productoBO = new ProductoBO((ISistemaInventario) new SistemaInventario());
+        this.productoBO = new ProductoBO((InventarioFachada) new InventarioFachada());
     }
 
     public List<ProductoDTO> obtenerProductos() throws NegocioException {
         return productoBO.obtenerProductos();
     }
 
-    public List<ProductoDTO> obtenerProductosPorTipo(TipoProductoDTO tipo) throws NegocioException {
+    public List<ProductoDTO> obtenerProductosPorTipo(TipoProductoDTOInfraestructura tipo) throws NegocioException {
         return productoBO.obtenerProductosPorTipo(tipo);
     }
 
@@ -41,11 +38,11 @@ public class ProductoControl {
 
         List<ProductoDTO> lista = new ArrayList<>();
 
-        lista.addAll(obtenerProductosPorTipo(TipoProductoDTO.COMIDA));
+        lista.addAll(obtenerProductosPorTipo(TipoProductoDTOInfraestructura.COMIDA));
 
-        lista.addAll(obtenerProductosPorTipo(TipoProductoDTO.BEBIDA));
+        lista.addAll(obtenerProductosPorTipo(TipoProductoDTOInfraestructura.BEBIDA));
 
-        lista.addAll(obtenerProductosPorTipo(TipoProductoDTO.BOTANA));
+        lista.addAll(obtenerProductosPorTipo(TipoProductoDTOInfraestructura.BOTANA));
 
         return lista;
     }

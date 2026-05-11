@@ -9,23 +9,23 @@ package dtos_infraestructura;
  * @author DishUp
  */
 public class InventarioRequestDTO {
-    private String idIngrediente;
+    private String idProducto;
     private Integer cantidad;
 
     public InventarioRequestDTO() {
     }
 
-    public InventarioRequestDTO(String idIngrediente, Integer cantidad) {
-        this.idIngrediente = idIngrediente;
+    public InventarioRequestDTO(String idProducto, Integer cantidad) {
+        this.idProducto = idProducto;
         this.cantidad = cantidad;
     }
 
-    public String getIdIngrediente() {
-        return idIngrediente;
+    public String getIdProducto() {
+        return idProducto;
     }
 
-    public void setIdIngrediente(String idIngrediente) {
-        this.idIngrediente = idIngrediente;
+    public void setIdProducto(String idProducto) {
+        this.idProducto = idProducto;
     }
 
     public Integer getCantidad() {

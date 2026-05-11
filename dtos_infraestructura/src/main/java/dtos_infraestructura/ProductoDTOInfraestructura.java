@@ -4,7 +4,7 @@
  */
 package dtos_infraestructura;
 
-import enums.TipoProductoDTO;
+import enums.TipoProductoDTOInfraestructura;
 import java.util.List;
 
 /**
@@ -17,14 +17,14 @@ public class ProductoDTOInfraestructura {
     private float precio;
     private boolean disponible;
     private Integer tiempoPreparacion;
-    private TipoProductoDTO tipo;
+    private TipoProductoDTOInfraestructura tipo;
     private String urlImagen;
     private List<IngredienteDTOInfraestructura> ingredientes;
 
     public ProductoDTOInfraestructura() {
     }
 
-    public ProductoDTOInfraestructura(String id, String nombre, float precio, boolean disponible, Integer tiempoPreparacion, TipoProductoDTO tipo, String urlImagen, List ingredientes) {
+    public ProductoDTOInfraestructura(String id, String nombre, float precio, boolean disponible, Integer tiempoPreparacion, TipoProductoDTOInfraestructura tipo, String urlImagen, List ingredientes) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
@@ -75,11 +75,11 @@ public class ProductoDTOInfraestructura {
         this.tiempoPreparacion = tiempoPreparacion;
     }
 
-    public TipoProductoDTO getTipo() {
+    public TipoProductoDTOInfraestructura getTipo() {
         return tipo;
     }
 
-    public void setTipo(TipoProductoDTO tipo) {
+    public void setTipo(TipoProductoDTOInfraestructura tipo) {
         this.tipo = tipo;
     }
 

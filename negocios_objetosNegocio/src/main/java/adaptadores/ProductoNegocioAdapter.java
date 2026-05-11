@@ -1,100 +1,111 @@
 package adaptadores;
 
-import dtos.IngredienteEnProductoDTO;
 import dtos.ProductoDTO;
-import dtos.ProductoIngredienteDTO;
+import dtos.IngredienteEnProductoDTO;
+import dtos_infraestructura.IngredienteDTOInfraestructura;
+import dtos_infraestructura.ProductoDTOInfraestructura;
 import entidades.IngredienteEnProducto;
 import entidades.Producto;
+import enums.TipoProducto;
 import enums.TipoProductoDTO;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Adapter encargado de convertir ingredientes y modificadores de productos.
- *
+ * Adapter encargado de convertir productos entre
+ * infraestructura, dominio y DTOs de aplicación.
+ * 
  * @author DishUp
  */
 public class ProductoNegocioAdapter {
 
-    public List<IngredienteEnProductoDTO> convertirIngredientesRemovibles(List<IngredienteEnProducto> ingredientes) {
-
-        List<IngredienteEnProductoDTO> removibles = new ArrayList<>();
-
-        if (ingredientes == null) {
-            return removibles;
-        }
-
-        for (IngredienteEnProducto ingrediente : ingredientes) {
-
-            if (ingrediente != null && ingrediente.isRemovible()) {
-
-                IngredienteEnProductoDTO dto = new IngredienteEnProductoDTO();
-
-                dto.setNombre(
-                        ingrediente.getNombre()
-                );
-
-                dto.setCantidad(
-                        ingrediente.getCantidad()
-                );
-
-                dto.setRemovible(
-                        ingrediente.isRemovible()
-                );
-
-                removibles.add(dto);
-            }
-        }
-
-        return removibles;
+    public ProductoNegocioAdapter() {
     }
 
-    public List<String> convertirIngredientesAModificadores(List<IngredienteEnProductoDTO> ingredientes) {
+    public Producto aDominio(ProductoDTOInfraestructura dto) {
 
-        List<String> modificadores = new ArrayList<>();
-
-        if (ingredientes == null) {
-            return modificadores;
+        if (dto == null) {
+            return null;
         }
 
-        for (IngredienteEnProductoDTO ingrediente : ingredientes) {
-            if (ingrediente != null) {
-                modificadores.add(
-                        "Sin " + ingrediente.getNombre().toLowerCase()
-                );
+        Producto producto = new Producto();
+
+        producto.setId(dto.getId());
+        producto.setNombre(dto.getNombre());
+        producto.setPrecio(dto.getPrecio());
+        producto.setDisponible(dto.isDisponible());
+        producto.setTiempoPreparacion(dto.getTiempoPreparacion());
+        producto.setTipo(TipoProducto.valueOf(dto.getTipo().name()));
+        producto.setUrlImagen(dto.getUrlImagen());
+
+        List<IngredienteEnProducto> ingredientes = new ArrayList<>();
+
+        if (dto.getIngredientes() != null) {
+            for (IngredienteDTOInfraestructura ing : dto.getIngredientes()) {
+
+                IngredienteEnProducto ingrediente = new IngredienteEnProducto();
+
+                ingrediente.setNombre(ing.getNombre());
+                ingrediente.setCantidad(ing.getCantidad());
+                ingrediente.setRemovible(ing.isRemovible());
+
+                ingredientes.add(ingrediente);
             }
         }
 
-        return modificadores;
+        producto.setIngredientes(ingredientes);
+
+        return producto;
     }
 
-    public List<ProductoIngredienteDTO> convertirAProductoIngredienteDTO(String idProducto, List<IngredienteEnProducto> ingredientes) {
+    public List<Producto> listaADominio(List<ProductoDTOInfraestructura> listaDTO) {
 
-        List<ProductoIngredienteDTO> lista = new ArrayList<>();
+        List<Producto> productos = new ArrayList<>();
 
-        if (ingredientes == null) {
-            return lista;
+        if (listaDTO == null) {
+            return productos;
         }
 
-        for (IngredienteEnProducto ingrediente : ingredientes) {
+        for (ProductoDTOInfraestructura dto : listaDTO) {
+            productos.add(aDominio(dto));
+        }
 
-            if (ingrediente != null) {
+        return productos;
+    }
 
-                ProductoIngredienteDTO dto = new ProductoIngredienteDTO();
+    public ProductoDTO aDTO(Producto producto) {
 
-                dto.setIdProducto(Integer.parseInt(idProducto));
+        if (producto == null) {
+            return null;
+        }
 
-                dto.setIdIngrediente(ingrediente.getNombre());
+        ProductoDTO dto = new ProductoDTO();
+        
+        dto.setId(producto.getId());
+        dto.setNombre(producto.getNombre());
+        dto.setPrecio(producto.getPrecio());
+        dto.setDisponible(producto.isDisponible());
+        dto.setTiempoPreparacion(producto.getTiempoPreparacion());
+        dto.setTipo(TipoProductoDTO.valueOf(producto.getTipo().name()));
+        dto.setUrlImagen(producto.getUrlImagen());
 
-                dto.setCantidadRequerida(ingrediente.getCantidad());
+        List<IngredienteEnProductoDTO> ingredientes = new ArrayList<>();
 
-                dto.setRemovible(ingrediente.isRemovible());
+        if (producto.getIngredientes() != null) {
+            for (IngredienteEnProducto ingrediente : producto.getIngredientes()) {
 
-                lista.add(dto);
+                IngredienteEnProductoDTO dtoIngrediente = new IngredienteEnProductoDTO();
+
+                dtoIngrediente.setNombre(ingrediente.getNombre());
+                dtoIngrediente.setCantidad(ingrediente.getCantidad());
+                dtoIngrediente.setRemovible(ingrediente.isRemovible());
+
+                ingredientes.add(dtoIngrediente);
             }
         }
+        dto.setIngredientes(ingredientes);
 
-        return lista;
+        return dto;
     }
 
     public List<ProductoDTO> listaDominioADTO(List<Producto> productos) {
@@ -110,46 +121,5 @@ public class ProductoNegocioAdapter {
         }
 
         return lista;
-    }
-
-    public ProductoDTO aDTO(Producto producto) {
-
-        if (producto == null) {
-            return null;
-        }
-
-        ProductoDTO dto = new ProductoDTO();
-
-        dto.setId(producto.getId());
-        dto.setNombre(producto.getNombre());
-        dto.setPrecio(producto.getPrecio());
-        dto.setDisponible(producto.isDisponible());
-        dto.setTiempoPreparacion(producto.getTiempoPreparacion());
-
-        dto.setTipo(TipoProductoDTO.valueOf(producto.getTipo().name()));
-
-        dto.setUrlImagen(producto.getUrlImagen());
-
-        List<IngredienteEnProductoDTO> ingredientes = new ArrayList<>();
-
-        if (producto.getIngredientes() != null) {
-
-            for (IngredienteEnProducto ingrediente : producto.getIngredientes()) {
-
-                IngredienteEnProductoDTO dtoIngrediente = new IngredienteEnProductoDTO();
-
-                dtoIngrediente.setNombre(ingrediente.getNombre());
-
-                dtoIngrediente.setCantidad(ingrediente.getCantidad());
-
-                dtoIngrediente.setRemovible(ingrediente.isRemovible());
-
-                ingredientes.add(dtoIngrediente);
-            }
-        }
-
-        dto.setIngredientes(ingredientes);
-
-        return dto;
     }
 }

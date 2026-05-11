@@ -99,7 +99,7 @@ public class ComandaBO {
 
             InventarioRequestDTO dto = new InventarioRequestDTO();
 
-            dto.setIdIngrediente(pedido.getId());
+            dto.setIdProducto(pedido.getId());
             dto.setCantidad(pedido.getCantidad());
 
             inventarioList.add(dto);

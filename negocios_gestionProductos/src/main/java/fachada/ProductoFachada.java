@@ -6,7 +6,7 @@ import dtos.ProductoDTO;
 import dtos.ProductoIngredienteDTO;
 import dtos_infraestructura.ProductoDTOInfraestructura;
 import enums.TipoProducto;
-import enums.TipoProductoDTO;
+import enums.TipoProductoDTOInfraestructura;
 import excepcion.NegocioException;
 import interfaz.IGestionProductos;
 import java.util.List;
@@ -25,7 +25,7 @@ public class ProductoFachada implements IGestionProductos{
     }
 
     @Override
-    public List<ProductoDTO> obtenerProductosPorTipo(TipoProductoDTO tipo) throws NegocioException {
+    public List<ProductoDTO> obtenerProductosPorTipo(TipoProductoDTOInfraestructura tipo) throws NegocioException {
         return productoControl.obtenerProductosPorTipo(tipo);
     }
 
