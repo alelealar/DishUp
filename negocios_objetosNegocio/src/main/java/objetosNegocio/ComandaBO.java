@@ -11,8 +11,8 @@ import enums.EstadoComanda;
 import enums.EstadoPedido;
 import excepcion.NegocioException;
 import excepciones.PersistenciaException;
+import fachada.InventarioFachada;
 import interfaces.IComandaDAO;
-import inventario.SistemaInventario;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,18 +21,17 @@ public class ComandaBO {
 
     private final IComandaDAO comandaDAO;
     private final ComandaNegocioAdapter adapter;
-    private final SistemaInventario inventarioAPI;
+    private final InventarioFachada inventarioAPI;
     private final ProductoBO productoBO;
 
     public ComandaBO() {
         this.comandaDAO = new ComandaDAO();
         this.adapter = new ComandaNegocioAdapter();
-        this.inventarioAPI = new SistemaInventario();
+        this.inventarioAPI = new InventarioFachada();
         this.productoBO = new ProductoBO(inventarioAPI);
     }
 
-    public void crearComanda(String nombreCliente, int numeroMesa, List<PedidoNuevoDTO> pedidosDTO)
-            throws NegocioException {
+    public void crearComanda(String nombreCliente, int numeroMesa, List<PedidoNuevoDTO> pedidosDTO) throws NegocioException {        
 
         if (nombreCliente == null || nombreCliente.isBlank()) {
             throw new NegocioException("Cliente inválido");

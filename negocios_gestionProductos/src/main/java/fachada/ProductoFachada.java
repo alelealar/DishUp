@@ -4,11 +4,14 @@ import control.ProductoControl;
 import dtos.IngredienteEnProductoDTO;
 import dtos.ProductoDTO;
 import dtos.ProductoIngredienteDTO;
+import dtos_infraestructura.ProductoDTOInfraestructura;
 import enums.TipoProducto;
+import enums.TipoProductoDTO;
 import excepcion.NegocioException;
+import interfaz.IGestionProductos;
 import java.util.List;
 
-public class ProductoFachada {
+public class ProductoFachada implements IGestionProductos{
 
     private final ProductoControl productoControl;
 
@@ -16,22 +19,27 @@ public class ProductoFachada {
         this.productoControl = new ProductoControl();
     }
 
+    @Override
     public List<ProductoDTO> obtenerProductos() throws NegocioException {
         return productoControl.obtenerProductos();
     }
 
-    public List<ProductoDTO> obtenerProductosPorTipo(TipoProducto tipo) throws NegocioException {
+    @Override
+    public List<ProductoDTO> obtenerProductosPorTipo(TipoProductoDTO tipo) throws NegocioException {
         return productoControl.obtenerProductosPorTipo(tipo);
     }
 
+    @Override
     public List<IngredienteEnProductoDTO> obtenerIngredientesRemovibles(String idProducto) throws NegocioException {
         return productoControl.obtenerIngredientesRemovibles(idProducto);
     }
 
+    @Override
     public List<ProductoIngredienteDTO> obtenerIngredientesDeProducto(String idProducto) throws NegocioException {
         return productoControl.obtenerIngredientesDeProducto(idProducto);
     }
 
+    @Override
     public List<ProductoDTO> obtenerTodos() throws NegocioException {
         return productoControl.obtenerTodos();
     }

@@ -15,6 +15,10 @@ import fachada.ComandaFachada;
 import fachada.EmpleadoFachada;
 import fachada.MesaFachada;
 import fachada.ProductoFachada;
+import interfaces.IGestionComandas;
+import interfaz.IGestionEmpleados;
+import interfaz.IGestionMesas;
+import interfaz.IGestionProductos;
 import java.util.ArrayList;
 import java.util.List;
 import pantallas.DlgModificarProducto;
@@ -33,10 +37,10 @@ public class CoordinadorInterfaces {
     private FrmCliente frmCliente;
     private FrmProductos frmProductos;
 
-    private ProductoFachada productoFachada;
-    private ComandaFachada comandaFachada;
-    private EmpleadoFachada empleadoFachada;
-    private MesaFachada mesaFachada;
+    private IGestionProductos productoFachada;
+    private IGestionComandas comandaFachada;
+    private IGestionEmpleados empleadoFachada;
+    private IGestionMesas mesaFachada;
 
     public CoordinadorInterfaces() {
         this.productoFachada = new ProductoFachada();

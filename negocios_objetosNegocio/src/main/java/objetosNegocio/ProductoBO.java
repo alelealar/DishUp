@@ -4,27 +4,26 @@ import adaptadores.ProductoNegocioAdapter;
 import dtos.IngredienteEnProductoDTO;
 import dtos.ProductoDTO;
 import dtos.ProductoIngredienteDTO;
+import dtos_infraestructura.ProductoDTOInfraestructura;
 import entidades.Producto;
-import enums.TipoProducto;
+import enums.TipoProductoDTO;
 import excepcion.NegocioException;
 import excepciones.InfraestructuraException;
-import inventario.SistemaInventario;
+import interfaces.ISistemaInventario;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoBO {
 
-    private final SistemaInventario inventarioAPI;
+    private final ISistemaInventario inventarioAPI;
     private final ProductoNegocioAdapter productoAdapter;
 
-    public ProductoBO(SistemaInventario inventarioAPI) {
+    public ProductoBO(ISistemaInventario inventarioAPI) {
         this.inventarioAPI = inventarioAPI;
         this.productoAdapter = new ProductoNegocioAdapter();
     }
 
-    public List<ProductoDTO> obtenerProductosPorTipo(TipoProducto tipo)
-            throws NegocioException {
-
+    public List<ProductoDTO> obtenerProductosPorTipo(TipoProductoDTO tipo)throws NegocioException {
         if (tipo == null) {
             throw new NegocioException("El tipo de producto es obligatorio.");
         }
@@ -32,9 +31,9 @@ public class ProductoBO {
         try {
 
             List<Producto> todos = inventarioAPI.obtenerProductos();
-
+                    
             List<ProductoDTO> filtrados = new ArrayList<>();
-
+                 
             for (Producto producto : todos) {
 
                 if (producto.getTipo() == tipo) {
@@ -52,9 +51,7 @@ public class ProductoBO {
         }
     }
 
-    public List<IngredienteEnProductoDTO>
-            obtenerIngredientesRemoviblesPorProducto(String idProducto) throws NegocioException {
-
+    public List<IngredienteEnProductoDTO> obtenerIngredientesRemoviblesPorProducto(String idProducto) throws NegocioException {       
         if (idProducto == null || idProducto.isBlank()) {
 
             throw new NegocioException("El id del producto es obligatorio.");

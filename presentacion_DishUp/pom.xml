@@ -13,20 +13,66 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>negocios_gestionMesas</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.262719</groupId>
+                    <artifactId>dominio</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.262719</groupId>
+                    <artifactId>dtos_infraestructura</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.262719</groupId>
+                    <artifactId>infraestructura_inventario</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.262719</groupId>
+                    <artifactId>negocios_objetosNegocio</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>negocios_gestionProductos</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.262719</groupId>
+                    <artifactId>negocios_objetosNegocio</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>negocios_gestionEmpleados</artifactId>
             <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.262719</groupId>
+                    <artifactId>negocios_objetosNegocio</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>negocios_gestionComandas</artifactId>
+            <version>${project.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.262719</groupId>
+                    <artifactId>negocios_objetosNegocio</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>dto_negocios</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>negocios_objetosNegocio</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
