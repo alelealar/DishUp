@@ -1,9 +1,13 @@
 package adaptadores;
 
 import dtos.ComandaDTO;
+import dtos.EmpleadoDTO;
 import dtos.PedidoDTO;
 import entidades.Comanda;
 import entidades.Pedido;
+import enums.EstadoComanda;
+import enums.EstadoPedido;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,7 +47,7 @@ public class ComandaNegocioAdapter {
                 PedidoDTO pedidoDTO = new PedidoDTO();
 
                 pedidoDTO.setId(pedido.getId());
-                pedidoDTO.setId(pedido.getIdProducto());
+                pedidoDTO.setIdProducto(pedido.getIdProducto());
 
                 pedidoDTO.setNombreProducto(pedido.getNombreProducto());
                 pedidoDTO.setCantidad(pedido.getCantidad());
@@ -58,5 +62,48 @@ public class ComandaNegocioAdapter {
         dto.setPedidos(pedidosDTO);
 
         return dto;
+    }
+
+    public Comanda aEntidad(String nombreCliente, int numeroMesa, List<PedidoDTO> pedidosDTO, EmpleadoDTO empleadoDTO) {
+
+        Comanda comanda = new Comanda();
+
+        comanda.setNombreCliente(nombreCliente);
+        comanda.setFecha(LocalDateTime.now());
+        comanda.setEstado(EstadoComanda.PENDIENTE);
+
+        // Mesa
+        entidades.Mesa mesa = new entidades.Mesa();
+        mesa.setNumero(numeroMesa);
+        comanda.setMesa(mesa);
+
+        // Empleado
+        EmpleadoNegocioAdapter empleadoAdapter = new EmpleadoNegocioAdapter();
+
+        comanda.setEmpleado(empleadoAdapter.aEntidad(empleadoDTO));
+
+        // Pedidos
+        List<Pedido> pedidos = new ArrayList<>();
+
+        if (pedidosDTO != null) {
+
+            for (PedidoDTO dto : pedidosDTO) {
+
+                Pedido pedido = new Pedido();
+
+                pedido.setNombreProducto(dto.getNombreProducto());
+                pedido.setCantidad(dto.getCantidad());
+                pedido.setDescripcion(dto.getDescripcion());
+                pedido.setEstado(EstadoPedido.PENDIENTE);
+                pedido.setFechaPedido(LocalDateTime.now());
+                pedido.setPrecioProducto(dto.getPrecioProducto());
+
+                pedidos.add(pedido);
+            }
+        }
+
+        comanda.setPedidos(pedidos);
+
+        return comanda;
     }
 }

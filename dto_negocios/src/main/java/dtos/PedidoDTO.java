@@ -20,6 +20,7 @@ import java.time.LocalDateTime;
 public class PedidoDTO {
 
     private String id;
+    private Integer idProducto;
     private String nombreProducto;
     private Integer cantidad;
     private EstadoPedidoDTO estado;
@@ -27,8 +28,9 @@ public class PedidoDTO {
     private float precioProducto;
     private LocalDateTime fechaPedido;
 
-    public PedidoDTO(String id, String nombreProducto, Integer cantidad, EstadoPedidoDTO estado, Integer tiempoPreparacion, String descripcion, float precioProducto, LocalDateTime fechaPedido) {
+    public PedidoDTO(String id, Integer idProducto, String nombreProducto, Integer cantidad, EstadoPedidoDTO estado, String descripcion, float precioProducto, LocalDateTime fechaPedido) {
         this.id = id;
+        this.idProducto = idProducto;
         this.nombreProducto = nombreProducto;
         this.cantidad = cantidad;
         this.estado = estado;
@@ -46,6 +48,14 @@ public class PedidoDTO {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Integer getIdProducto() {
+        return idProducto;
+    }
+
+    public void setIdProducto(Integer idProducto) {
+        this.idProducto = idProducto;
     }
 
     public String getNombreProducto() {
@@ -96,4 +106,13 @@ public class PedidoDTO {
         this.fechaPedido = fechaPedido;
     }
 
+    @Override
+    public String toString() {
+
+        if (descripcion == null || descripcion.isBlank()) {
+            return nombreProducto + " $" + precioProducto;
+        }
+
+        return nombreProducto + " (" + descripcion + ") $" + precioProducto;
+    }
 }

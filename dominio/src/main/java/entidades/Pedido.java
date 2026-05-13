@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class Pedido {
 
     private String id;
-    private String idProducto;
+    private Integer idProducto;
     private String nombreProducto;
     private Integer cantidad;
     private String descripcion;
@@ -25,7 +25,7 @@ public class Pedido {
     public Pedido() {
     }
 
-    public Pedido(String id, String idProducto, String nombreProducto, Integer cantidad, String descripcion, float precioProducto, EstadoPedido estado, LocalDateTime fechaPedido) {
+    public Pedido(String id, Integer idProducto, String nombreProducto, Integer cantidad, String descripcion, float precioProducto, EstadoPedido estado, LocalDateTime fechaPedido) {
         this.id = id;
         this.idProducto = idProducto;
         this.nombreProducto = nombreProducto;
@@ -44,11 +44,11 @@ public class Pedido {
         this.id = id;
     }
 
-    public String getIdProducto() {
+    public Integer getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(String idProducto) {
+    public void setIdProducto(Integer idProducto) {
         this.idProducto = idProducto;
     }
 

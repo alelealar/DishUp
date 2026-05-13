@@ -1,4 +1,5 @@
 package adaptadores;
+
 import entidades.Comanda;
 import entidades.Mesa;
 import entidades.Pedido;
@@ -42,19 +43,19 @@ public class ComandaPersistenciaAdapter {
 
                 pedidoMongo.setId(pedido.getId());
                 pedidoMongo.setIdProducto(pedido.getIdProducto());
-                
+
                 pedidoMongo.setNombreProducto(pedido.getNombreProducto());
-                
+
                 pedidoMongo.setCantidad(pedido.getCantidad());
-                
+
                 pedidoMongo.setDescripcion(pedido.getDescripcion());
-                
+
                 pedidoMongo.setPrecioProducto(pedido.getPrecioProducto());
-                
+
                 pedidoMongo.setEstado(pedido.getEstado());
-                
+
                 pedidoMongo.setFechaPedido(pedido.getFechaPedido());
-                
+
                 pedidosMongo.add(pedidoMongo);
             }
         }
@@ -77,12 +78,14 @@ public class ComandaPersistenciaAdapter {
         comanda.setFecha(mongo.getFecha());
         comanda.setEstado(mongo.getEstado());
         comanda.setMontoTotal(mongo.getMontoTotal());
-        comanda.getEmpleado().setNombres(mongo.getNombreEmpleado());
+        
+        entidades.Empleado empleado = new entidades.Empleado();
+        empleado.setNombres(mongo.getNombreEmpleado());
 
+        comanda.setEmpleado(empleado);
+        
         Mesa mesa = new Mesa();
-        mesa.setNumero(
-                mongo.getNumeroMesa()
-        );
+        mesa.setNumero(mongo.getNumeroMesa());
 
         comanda.setMesa(mesa);
 
@@ -90,8 +93,8 @@ public class ComandaPersistenciaAdapter {
 
         if (mongo.getPedidos() != null) {
 
-            for (PedidoEntidadMongo pedidoMongo :
-                    mongo.getPedidos()) {
+            for (PedidoEntidadMongo pedidoMongo
+                    : mongo.getPedidos()) {
 
                 Pedido pedido = new Pedido();
 

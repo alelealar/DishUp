@@ -8,10 +8,8 @@ import dtos.ComandaDTO;
 import dtos.EmpleadoDTO;
 import dtos.IngredienteEnProductoDTO;
 import dtos.MesaDTO;
-import dtos.PedidoNuevoDTO;
+import dtos.PedidoDTO;
 import dtos.ProductoDTO;
-import enums.TipoProductoDTO;
-import enums.TipoProductoDTOInfraestructura;
 import excepcion.NegocioException;
 import fachada.ComandaFachada;
 import fachada.EmpleadoFachada;
@@ -34,6 +32,9 @@ import pantallas.FrmProductos;
  * @author DishUp
  */
 public class CoordinadorInterfaces {
+
+    private EmpleadoDTO empleadoActual;
+    private ComandaDTO comandaActual;
 
     private FrmPantallaComandas frmComandas;
     private FrmCliente frmCliente;
@@ -59,7 +60,7 @@ public class CoordinadorInterfaces {
         this.frmComandas = frmComandas;
     }
 
-    private List<PedidoNuevoDTO> comandaTemporal = new ArrayList<>();
+    private List<PedidoDTO> comandaTemporal = new ArrayList<>();
 
     public void mostrarRegistrarCliente(MesaDTO mesa) {
         frmCliente = new FrmCliente(this);
@@ -92,7 +93,7 @@ public class CoordinadorInterfaces {
         DlgModificarProducto dlg = new DlgModificarProducto(frm, producto, removibles);
         dlg.setVisible(true);
 
-        PedidoNuevoDTO pedido = dlg.getResultado();
+        PedidoDTO pedido = dlg.getResultado();
 
         if (pedido != null) {
             comandaTemporal.add(pedido);
@@ -107,9 +108,9 @@ public class CoordinadorInterfaces {
 
     }
 
-    public void enviarComandaAFinal(String nombreCliente, int numeroMesa, List<PedidoNuevoDTO> pedidos) {
+    public void enviarComandaAFinal(String nombreCliente, int numeroMesa, List<PedidoDTO> pedidos) {
         try {
-            comandaFachada.crearComanda(nombreCliente, numeroMesa, pedidos);
+            comandaFachada.crearComanda(nombreCliente, numeroMesa, pedidos, empleadoActual);
 
             this.frmComandas.setVisible(true);
             this.frmComandas.refrescarMesaActual();
@@ -145,7 +146,8 @@ public class CoordinadorInterfaces {
     }
 
     public EmpleadoDTO validarExistenciaUsuario(EmpleadoDTO e) throws NegocioException {
-        return empleadoFachada.login(e);
+        empleadoActual = empleadoFachada.login(e);
+        return empleadoActual;
     }
 
     public void abrirFrmComandasMesero(String id, String nombre) {
@@ -171,8 +173,64 @@ public class CoordinadorInterfaces {
         }
     }
 
-    public void eliminarPedidoTemporal(PedidoNuevoDTO pedido) {
+    public void eliminarPedidoTemporal(PedidoDTO pedido) {
         comandaTemporal.remove(pedido);
     }
 
+    public void abrirAgregarPedido(ComandaDTO comanda) {
+
+        this.comandaActual = comanda;
+
+        FrmProductos frm = new FrmProductos(this);
+
+        frm.setMesaAndCliente(
+                comanda.getNumMesa(),
+                comanda.getNombreCliente()
+        );
+
+        frm.cargarPedidosExistentes(comanda);
+
+        frm.setVisible(true);
+    }
+
+    public void agregarPedidosAComanda(ComandaDTO comanda, int numeroMesa, String nombreCliente) {
+        try {
+
+            for (PedidoDTO pedido : comandaTemporal) {
+                comanda.getPedidos().add(pedido);
+            }
+
+            comandaFachada.agregarPedidosAComanda(comanda.getId(), comandaTemporal);
+
+            this.frmComandas.refrescarMesaActual();
+
+            if (this.frmProductos != null) {
+                this.frmProductos.dispose();
+                this.frmProductos = null;
+            }
+
+            comandaTemporal.clear();
+
+        } catch (NegocioException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+    }
+
+    public void abrirResumenAgregarPedido(ComandaDTO comanda) {
+
+        List<PedidoDTO> pedidosExistentes = comanda.getPedidos();
+
+        DlgResumenComanda dlg = new DlgResumenComanda(
+                this,
+                frmProductos,
+                pedidosExistentes,
+                comandaTemporal,
+                comanda.getNumMesa(),
+                comanda.getNombreCliente(),
+                true,
+                comanda
+        );
+
+        dlg.setVisible(true);
+    }
 }

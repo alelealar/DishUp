@@ -6,7 +6,7 @@ package pantallas;
 
 import dtos.IngredienteDTO;
 import dtos.IngredienteEnProductoDTO;
-import dtos.PedidoNuevoDTO;
+import dtos.PedidoDTO;
 import dtos.ProductoDTO;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class DlgModificarProducto extends javax.swing.JDialog {
     private String idProductoActual;
     private float precioProductoActual;
     private Integer tiempoPreparacionActual;
-    private PedidoNuevoDTO resultado;
+    private PedidoDTO resultado;
     private List<JCheckBox> checksIngredientes = new ArrayList<>();
 
     public DlgModificarProducto(java.awt.Frame parent, ProductoDTO producto, List<IngredienteEnProductoDTO> ingredientesRemovibles) {
@@ -58,7 +58,7 @@ public class DlgModificarProducto extends javax.swing.JDialog {
         pnlListaIngredientes.repaint();
     }
 
-    public PedidoNuevoDTO getResultado() {
+    public PedidoDTO getResultado() {
         return resultado;
     }
 
@@ -264,11 +264,11 @@ public class DlgModificarProducto extends javax.swing.JDialog {
             especificaciones.setLength(especificaciones.length() - 2);
         }
 
-        resultado = new PedidoNuevoDTO();
+        resultado = new PedidoDTO();
         resultado.setId(idProductoActual);
         resultado.setNombreProducto(lblNombreProducto.getText());
         resultado.setCantidad(1);
-        resultado.setEspecificaciones(especificaciones.toString());
+        resultado.setDescripcion(especificaciones.toString());
         resultado.setPrecioProducto(precioProductoActual);
 
         this.dispose();

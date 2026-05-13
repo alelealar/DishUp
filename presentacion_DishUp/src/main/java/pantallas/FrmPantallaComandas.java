@@ -49,7 +49,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null);
         panMesas.setLayout(new BoxLayout(panMesas, BoxLayout.Y_AXIS));
-        
+
         panComandas.revalidate();
         panComandas.repaint();
 
@@ -488,7 +488,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
                             .append(ped.getDescripcion())
                             .append(")");
                 }
-                
+
                 sb.append("\n");
             }
 
@@ -514,6 +514,10 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             btnAgregar.setPreferredSize(new Dimension(140, 35));
             btnAgregar.setFocusPainted(false);
 
+            btnAgregar.addActionListener(e -> {
+                coordinador.abrirAgregarPedido(comanda);
+            });
+
             JButton btnCancelar = new JButton("Cancelar comanda");
             btnCancelar.setBackground(Color.decode("#FF9C9C"));
             btnCancelar.setPreferredSize(new Dimension(160, 35));
@@ -538,10 +542,10 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             mostrarComandasDeMesa(mesaSeleccionada.getNumeroMesa(), comandas);
         }
     }
-    
-    public void setMesero(String id, String empleado){
+
+    public void setMesero(String id, String empleado) {
         idMesero = id;
         lblEmpleado.setText(empleado);
-        
+
     }
 }

@@ -6,9 +6,10 @@ package pantallas;
 
 import control.ProductoControl;
 import coordinador.CoordinadorInterfaces;
+import dtos.ComandaDTO;
 import dtos.IngredienteDTO;
 import dtos.IngredienteEnProductoDTO;
-import dtos.PedidoNuevoDTO;
+import dtos.PedidoDTO;
 import dtos.ProductoDTO;
 import enums.TipoProductoDTOInfraestructura;
 import java.awt.BasicStroke;
@@ -43,6 +44,8 @@ import javax.swing.border.Border;
 public final class FrmProductos extends javax.swing.JFrame {
 
     private CoordinadorInterfaces coordinador;
+
+    private ComandaDTO comandaActual;
 
     private Integer numMesa;
     private String nombreCliente;
@@ -452,8 +455,11 @@ public final class FrmProductos extends javax.swing.JFrame {
     }//GEN-LAST:event_txtBuscadorKeyReleased
 
     private void btnEnviarAComandaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarAComandaActionPerformed
-
-        coordinador.abrirResumenComanda(this, numMesa, nombreCliente);
+        if (comandaActual != null) {
+            coordinador.abrirResumenAgregarPedido(comandaActual);
+        } else {
+            coordinador.abrirResumenComanda(this, numMesa, nombreCliente);
+        }
     }//GEN-LAST:event_btnEnviarAComandaActionPerformed
 
     private JPanel crearCardProducto(ProductoDTO producto) {
@@ -636,7 +642,7 @@ public final class FrmProductos extends javax.swing.JFrame {
         coordinador.abrirPersonalizacionProducto(this, producto, removibles);
     }
 
-    public void agregarPedidoVisual(PedidoNuevoDTO pedido) {
+    public void agregarPedidoVisual(PedidoDTO pedido) {
         // 1. Limpieza de pegamentos anteriores
         pnlPedidos.setLayout(new BoxLayout(pnlPedidos, BoxLayout.Y_AXIS));
         for (Component c : pnlPedidos.getComponents()) {
@@ -706,7 +712,7 @@ public final class FrmProductos extends javax.swing.JFrame {
         txtLista.setWrapStyleWord(true);
 
         // Formatear como lista
-        String detallesFormateados = pedido.getEspecificaciones().replace(", ", "\n• ");
+        String detallesFormateados = pedido.getDescripcion().replace(", ", "\n• ");
         txtLista.setText("• " + detallesFormateados);
 
         // Relleno interno del recuadro gris
@@ -736,4 +742,99 @@ public final class FrmProductos extends javax.swing.JFrame {
         });
     }
 
+    public void cargarPedidosExistentes(ComandaDTO comanda) {
+
+        this.comandaActual = comanda;
+
+        for (PedidoDTO pedido : comanda.getPedidos()) {
+            agregarPedidoBloqueado(pedido);
+        }
+    }
+
+    public void agregarPedidoBloqueado(PedidoDTO pedido) {
+
+        pnlPedidos.setLayout(new BoxLayout(pnlPedidos, BoxLayout.Y_AXIS));
+
+        for (Component c : pnlPedidos.getComponents()) {
+            if (c instanceof Box.Filler) {
+                pnlPedidos.remove(c);
+            }
+        }
+
+        JPanel item = new JPanel();
+        item.setLayout(new BoxLayout(item, BoxLayout.Y_AXIS));
+
+        item.setBackground(new Color(235, 235, 235));
+        item.setOpaque(false);
+
+        Border margenGrisExterior = BorderFactory.createEmptyBorder(8, 18, 8, 18);
+
+        Border lineaGris = BorderFactory.createLineBorder(Color.decode("#E58343"));
+
+        Border margenInteriorBlanco = BorderFactory.createEmptyBorder(12, 12, 12, 12);
+
+        item.setBorder(BorderFactory.createCompoundBorder(
+                margenGrisExterior,
+                BorderFactory.createCompoundBorder(
+                        lineaGris,
+                        margenInteriorBlanco
+                )
+        ));
+
+        item.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        // HEADER
+        JPanel header = new JPanel(new BorderLayout());
+        header.setOpaque(false);
+        header.setMaximumSize(new Dimension(Integer.MAX_VALUE, 25));
+        header.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        JLabel lblNombre = new JLabel(pedido.getNombreProducto().toUpperCase());
+
+        lblNombre.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        lblNombre.setForeground(new Color(80, 80, 80));
+
+        header.add(lblNombre, BorderLayout.WEST);
+
+        // DETALLES
+        JTextArea txtLista = new JTextArea();
+
+        txtLista.setEditable(false);
+
+        txtLista.setBackground(new Color(242, 242, 242));
+
+        txtLista.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+
+        txtLista.setLineWrap(true);
+        txtLista.setWrapStyleWord(true);
+
+        String detallesFormateados
+                = pedido.getDescripcion().replace(", ", "\n• ");
+
+        txtLista.setText("• " + detallesFormateados);
+
+        txtLista.setBorder(
+                BorderFactory.createEmptyBorder(10, 10, 10, 10)
+        );
+
+        txtLista.setAlignmentX(Component.LEFT_ALIGNMENT);
+
+        // ENSAMBLAJE
+        item.add(header);
+        item.add(Box.createVerticalStrut(10));
+        item.add(txtLista);
+
+        item.setMaximumSize(
+                new Dimension(
+                        Integer.MAX_VALUE,
+                        item.getPreferredSize().height
+                )
+        );
+
+        pnlPedidos.add(item);
+        pnlPedidos.add(Box.createVerticalGlue());
+
+        pnlPedidos.revalidate();
+        pnlPedidos.repaint();
+    }
 }

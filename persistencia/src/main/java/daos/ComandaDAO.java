@@ -23,8 +23,7 @@ public class ComandaDAO implements IComandaDAO {
     private final ComandaPersistenciaAdapter adapter;
 
     public ComandaDAO() {
-        this.coleccion = ConexionMongo.obtenerBaseDatos()
-                .getCollection("comandas", ComandaEntidadMongo.class);
+        this.coleccion = ConexionMongo.obtenerBaseDatos().getCollection("comandas", ComandaEntidadMongo.class);
         this.adapter = new ComandaPersistenciaAdapter();
     }
 
@@ -62,7 +61,7 @@ public class ComandaDAO implements IComandaDAO {
     public List<Comanda> obtenerTodas() throws PersistenciaException {
 
         try {
-            List<ComandaEntidadMongo> listaMongo = coleccion.find().into(new ArrayList<>());               
+            List<ComandaEntidadMongo> listaMongo = coleccion.find().into(new ArrayList<>());
 
             List<Comanda> lista = new ArrayList<>();
 
@@ -81,7 +80,7 @@ public class ComandaDAO implements IComandaDAO {
     public List<Comanda> obtenerComandasPorMesa(int numeroMesa) throws PersistenciaException {
 
         try {
-            List<ComandaEntidadMongo> listaMongo = coleccion.find(eq("mesa.numero", numeroMesa)).into(new ArrayList<>());
+            List<ComandaEntidadMongo> listaMongo = coleccion.find(eq("numeroMesa", numeroMesa)).into(new ArrayList<>());
 
             List<Comanda> lista = new ArrayList<>();
 
@@ -100,8 +99,7 @@ public class ComandaDAO implements IComandaDAO {
     public Comanda obtenerPorId(String id) throws PersistenciaException {
 
         try {
-            ComandaEntidadMongo mongo =
-                    coleccion.find(eq("_id", new ObjectId(id))).first();
+            ComandaEntidadMongo mongo = coleccion.find(eq("_id", new ObjectId(id))).first();
 
             return adapter.aDominio(mongo);
 
@@ -127,7 +125,20 @@ public class ComandaDAO implements IComandaDAO {
     }
 
     @Override
-    public boolean agregarPedido(String idComanda, Pedido nuevoPedido) throws PersistenciaException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean agregarPedidoAComanda(String idComanda, Pedido nuevoPedido) throws PersistenciaException {
+        try {
+
+            UpdateResult result = coleccion.updateOne(eq("_id", new ObjectId(idComanda)),
+                    com.mongodb.client.model.Updates.push(
+                            "pedidos",
+                            nuevoPedido
+                    )
+            );
+
+            return result.getModifiedCount() > 0;
+
+        } catch (MongoException e) {
+            throw new PersistenciaException("Error al agregar pedido a comanda", e);
+        }
     }
 }

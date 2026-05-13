@@ -3,11 +3,11 @@ package objetosNegocio;
 import adaptadores.ComandaNegocioAdapter;
 import daos.ComandaDAO;
 import dtos.ComandaDTO;
-import dtos.PedidoNuevoDTO;
+import dtos.EmpleadoDTO;
+import dtos.PedidoDTO;
 import dtos_infraestructura.InventarioRequestDTO;
 import entidades.Comanda;
 import entidades.Pedido;
-import enums.EstadoComanda;
 import enums.EstadoPedido;
 import excepcion.NegocioException;
 import excepciones.PersistenciaException;
@@ -31,7 +31,7 @@ public class ComandaBO {
         this.productoBO = new ProductoBO(inventarioAPI);
     }
 
-    public void crearComanda(String nombreCliente, int numeroMesa, List<PedidoNuevoDTO> pedidosDTO) throws NegocioException {        
+    public void crearComanda(String nombreCliente, int numeroMesa, List<PedidoDTO> pedidosDTO, EmpleadoDTO empleadoActual) throws NegocioException {
 
         if (nombreCliente == null || nombreCliente.isBlank()) {
             throw new NegocioException("Cliente inválido");
@@ -47,24 +47,22 @@ public class ComandaBO {
             throw new NegocioException("Sin stock suficiente");
         }
 
-        Comanda comanda = new Comanda();
-        comanda.setNombreCliente(nombreCliente);
-        comanda.setFecha(LocalDateTime.now());
-        comanda.setEstado(EstadoComanda.PENDIENTE);
-
-        entidades.Mesa mesa = new entidades.Mesa();
-        mesa.setNumero(numeroMesa);
-        comanda.setMesa(mesa);
+        Comanda comanda = adapter.aEntidad(
+                nombreCliente,
+                numeroMesa,
+                pedidosDTO,
+                empleadoActual
+        );
 
         List<Pedido> pedidos = new ArrayList<>();
 
-        for (PedidoNuevoDTO dto : pedidosDTO) {
+        for (PedidoDTO dto : pedidosDTO) {
 
             Pedido p = new Pedido();
-            p.setIdProducto(dto.getId());
+            p.setIdProducto(dto.getIdProducto());
             p.setNombreProducto(dto.getNombreProducto());
             p.setCantidad(dto.getCantidad());
-            p.setDescripcion(dto.getEspecificaciones());
+            p.setDescripcion(dto.getDescripcion());
             p.setEstado(EstadoPedido.PENDIENTE);
             p.setFechaPedido(LocalDateTime.now());
             p.setPrecioProducto(dto.getPrecioProducto());
@@ -81,7 +79,7 @@ public class ComandaBO {
         }
     }
 
-    public boolean procesarComanda(List<PedidoNuevoDTO> pedidos) throws NegocioException {
+    public boolean procesarComanda(List<PedidoDTO> pedidos) throws NegocioException {
 
         if (pedidos == null || pedidos.isEmpty()) {
             throw new NegocioException("La lista de pedidos está vacía");
@@ -89,7 +87,7 @@ public class ComandaBO {
 
         List<InventarioRequestDTO> inventarioList = new ArrayList<>();
 
-        for (PedidoNuevoDTO pedido : pedidos) {
+        for (PedidoDTO pedido : pedidos) {
 
             if (pedido == null) {
                 throw new NegocioException("Pedido inválido");
@@ -105,12 +103,10 @@ public class ComandaBO {
             inventarioList.add(dto);
         }
 
-      //  boolean exito = inventarioAPI.descontarStock(inventarioList);
-
+        //  boolean exito = inventarioAPI.descontarStock(inventarioList);
 //        if (!exito) {
 //            throw new NegocioException("No hay suficiente stock para procesar la comanda");
 //        }
-
         return true;
     }
 
@@ -128,6 +124,40 @@ public class ComandaBO {
 
         } catch (PersistenciaException e) {
             throw new RuntimeException("Error al obtener comandas", e);
+        }
+    }
+
+    public void agregarPedidosAComanda(String idComanda, List<PedidoDTO> pedidosDTO) throws NegocioException {
+
+        if (pedidosDTO == null || pedidosDTO.isEmpty()) {
+            throw new NegocioException("Pedidos vacíos");
+        }
+
+        boolean stockOk = procesarComanda(pedidosDTO);
+
+        if (!stockOk) {
+            throw new NegocioException("Sin stock suficiente");
+        }
+
+        try {
+
+            for (PedidoDTO dto : pedidosDTO) {
+
+                Pedido pedido = new Pedido();
+
+                pedido.setIdProducto(dto.getIdProducto());
+                pedido.setNombreProducto(dto.getNombreProducto());
+                pedido.setCantidad(dto.getCantidad());
+                pedido.setDescripcion(dto.getDescripcion());
+                pedido.setEstado(EstadoPedido.PENDIENTE);
+                pedido.setFechaPedido(LocalDateTime.now());
+                pedido.setPrecioProducto(dto.getPrecioProducto());
+
+                comandaDAO.agregarPedidoAComanda(idComanda, pedido);
+            }
+
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al agregar pedidos a comanda", e);
         }
     }
 }

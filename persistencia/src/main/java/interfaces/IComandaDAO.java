@@ -16,5 +16,5 @@ public interface IComandaDAO {
 
     boolean actualizarEstado(String idComanda, String nuevoEstado) throws PersistenciaException;
 
-    boolean agregarPedido(String idComanda, entidades.Pedido nuevoPedido) throws PersistenciaException;
+    boolean agregarPedidoAComanda(String idComanda, entidades.Pedido nuevoPedido) throws PersistenciaException;
 }

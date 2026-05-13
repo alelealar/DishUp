@@ -1,8 +1,9 @@
 package pantallas;
 
-
 import coordinador.CoordinadorInterfaces;
-import dtos.PedidoNuevoDTO;
+import dtos.ComandaDTO;
+import dtos.PedidoDTO;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -14,21 +15,57 @@ public class DlgResumenComanda extends javax.swing.JDialog {
 
     private Integer numMesa;
     private String nombreCliente;
-    private List<PedidoNuevoDTO> productos;
+    private List<PedidoDTO> productos;
     private CoordinadorInterfaces coordinador;
+
+    private List<PedidoDTO> pedidosExistentes = new ArrayList<>();
+    private List<PedidoDTO> pedidosNuevos = new ArrayList<>();
+    private boolean modoAgregar;
+    private ComandaDTO comandaActual;
 
     /**
      * Creates new form DlgResumenComanda
      */
-    public DlgResumenComanda(CoordinadorInterfaces coordinador, java.awt.Frame parent, List<PedidoNuevoDTO> productos, Integer numMesa, String nombreCliente) {
+    public DlgResumenComanda(CoordinadorInterfaces coordinador, java.awt.Frame parent, List<PedidoDTO> productos, Integer numMesa, String nombreCliente) {
         super(parent, true);
         this.coordinador = coordinador;
         initComponents();
         this.productos = productos;
+        this.pedidosNuevos = productos;
+        this.modoAgregar = false;
         this.numMesa = numMesa;
         this.nombreCliente = nombreCliente;
 
-        configurarListaPedidos(productos);
+        configurarListaPedidos();
+        this.setLocationRelativeTo(null);
+    }
+
+    public DlgResumenComanda(
+            CoordinadorInterfaces coordinador,
+            java.awt.Frame parent,
+            List<PedidoDTO> pedidosExistentes,
+            List<PedidoDTO> pedidosNuevos,
+            Integer numMesa,
+            String nombreCliente,
+            boolean modoAgregar,
+            ComandaDTO comandaActual
+    ) {
+        super(parent, true);
+
+        this.coordinador = coordinador;
+        this.pedidosExistentes = pedidosExistentes;
+        this.pedidosNuevos = pedidosNuevos;
+        this.numMesa = numMesa;
+        this.nombreCliente = nombreCliente;
+        this.modoAgregar = modoAgregar;
+        this.comandaActual = comandaActual;
+
+        initComponents();
+
+        configurarListaPedidos();
+
+        setMesaAndCliente(numMesa, nombreCliente);
+
         this.setLocationRelativeTo(null);
     }
 
@@ -146,16 +183,21 @@ public class DlgResumenComanda extends javax.swing.JDialog {
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
     private void btnConfirmarMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnConfirmarMouseClicked
-        if (productos == null || productos.isEmpty()) {
+        if (pedidosNuevos == null || pedidosNuevos.isEmpty()) {
             JOptionPane.showMessageDialog(this,
-                    "Debes agregar al menos un producto para crear la comanda",
+                    "Debes agregar al menos un pedido nuevo para crear la comanda",
                     "Validación",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        coordinador.enviarComandaAFinal(nombreCliente, numMesa, productos);
-        this.dispose();
+        if (modoAgregar) {
+            coordinador.agregarPedidosAComanda(comandaActual, numMesa, nombreCliente);
+        } else {
+            coordinador.enviarComandaAFinal(nombreCliente, numMesa, productos);
+        }
+
+        dispose();
     }//GEN-LAST:event_btnConfirmarMouseClicked
 
 
@@ -174,32 +216,56 @@ public class DlgResumenComanda extends javax.swing.JDialog {
         lblNombreCliente.setText("Resumen comanda: " + cliente);
     }
 
-    private void configurarListaPedidos(List<PedidoNuevoDTO> comandaTemporal) {
-        productos = comandaTemporal;
-        pnlListaProductos.setLayout(new javax.swing.BoxLayout(pnlListaProductos, javax.swing.BoxLayout.Y_AXIS));
+    private void configurarListaPedidos() {
+
+        pnlListaProductos.setLayout(
+                new javax.swing.BoxLayout(
+                        pnlListaProductos,
+                        javax.swing.BoxLayout.Y_AXIS
+                )
+        );
+
         pnlListaProductos.removeAll();
 
-        jScrollPane.getViewport().setBackground(new java.awt.Color(255, 248, 235));
+        // PEDIDOS EXISTENTES
+        for (PedidoDTO ped : pedidosExistentes) {
 
-        java.util.Map<String, Integer> agrupador = new java.util.HashMap<>();
-        for (PedidoNuevoDTO ped : comandaTemporal) {
-            String detalle = ped.toString();
-            agrupador.put(detalle, agrupador.getOrDefault(detalle, 0) + 1);
+            javax.swing.JLabel lbl = new javax.swing.JLabel(
+                    "• " + ped.toString()
+            );
+
+            lbl.setFont(new java.awt.Font("Trebuchet MS", java.awt.Font.PLAIN, 14));
+
+            lbl.setBorder(
+                    javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10)
+            );
+
+            pnlListaProductos.add(lbl);
         }
 
-        for (java.util.Map.Entry<String, Integer> entry : agrupador.entrySet()) {
-            String textoAgrupado = entry.getValue() + " x " + entry.getKey();
+        // PEDIDOS NUEVOS
+        if (pedidosNuevos != null) {
+            for (PedidoDTO ped : pedidosNuevos) {
 
-            javax.swing.JLabel lblPedido = new javax.swing.JLabel(textoAgrupado);
+                javax.swing.JLabel lbl = new javax.swing.JLabel(
+                        "• " + ped.toString()
+                );
 
-            lblPedido.setAlignmentX(java.awt.Component.LEFT_ALIGNMENT);
-            lblPedido.setFont(new java.awt.Font("Trebuchet MS", java.awt.Font.PLAIN, 14));
-            lblPedido.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10));
+                lbl.setForeground(new java.awt.Color(0, 140, 0)); // VERDE
 
-            pnlListaProductos.add(lblPedido);
+                lbl.setFont(
+                        new java.awt.Font("Trebuchet MS", java.awt.Font.BOLD, 14)
+                );
+
+                lbl.setBorder(
+                        javax.swing.BorderFactory.createEmptyBorder(5, 10, 5, 10)
+                );
+
+                pnlListaProductos.add(lbl);
+            }
         }
-
         pnlListaProductos.revalidate();
         pnlListaProductos.repaint();
     }
+
 }

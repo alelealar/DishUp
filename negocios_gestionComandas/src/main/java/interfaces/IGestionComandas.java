@@ -6,7 +6,8 @@
 package interfaces;
 
 import dtos.ComandaDTO;
-import dtos.PedidoNuevoDTO;
+import dtos.EmpleadoDTO;
+import dtos.PedidoDTO;
 import excepcion.NegocioException;
 import java.util.List;
 
@@ -16,7 +17,9 @@ import java.util.List;
  */
 public interface IGestionComandas {
     
-    void crearComanda(String nombreCliente, int numeroMesa, List<PedidoNuevoDTO> pedidos) throws NegocioException;
+    public void crearComanda(String nombreCliente,int numeroMesa,List<PedidoDTO> pedidos, EmpleadoDTO empleadoActual) throws NegocioException;
 
-    List<ComandaDTO> obtenerComandasPorMesa(int numeroMesa) throws NegocioException;
+    public List<ComandaDTO> obtenerComandasPorMesa(int numeroMesa) throws NegocioException;
+    
+    public void agregarPedidosAComanda(String idComanda, List<PedidoDTO> pedidos) throws NegocioException;
 }

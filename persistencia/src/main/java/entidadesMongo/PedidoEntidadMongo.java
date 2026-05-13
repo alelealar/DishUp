@@ -19,7 +19,7 @@ public class PedidoEntidadMongo {
     @BsonRepresentation(BsonType.OBJECT_ID)
     private String id;
 
-    private String idProducto;
+    private Integer idProducto;
     private String nombreProducto;
     private int cantidad;
     private String descripcion;
@@ -30,7 +30,7 @@ public class PedidoEntidadMongo {
     public PedidoEntidadMongo() {
     }
 
-    public PedidoEntidadMongo(String id, String idProducto, String nombreProducto, int cantidad, String descripcion, float precioProducto, EstadoPedido estado, LocalDateTime fechaPedido) {
+    public PedidoEntidadMongo(String id, Integer idProducto, String nombreProducto, int cantidad, String descripcion, float precioProducto, EstadoPedido estado, LocalDateTime fechaPedido) {
         this.id = id;
         this.idProducto = idProducto;
         this.nombreProducto = nombreProducto;
@@ -49,11 +49,11 @@ public class PedidoEntidadMongo {
         this.id = id;
     }
 
-    public String getIdProducto() {
+    public Integer getIdProducto() {
         return idProducto;
     }
 
-    public void setIdProducto(String idProducto) {
+    public void setIdProducto(Integer idProducto) {
         this.idProducto = idProducto;
     }
 
