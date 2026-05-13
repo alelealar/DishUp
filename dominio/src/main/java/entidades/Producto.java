@@ -16,7 +16,6 @@ public class Producto {
     private String nombre;
     private float precio;
     private boolean disponible;
-    private Integer tiempoPreparacion;
     private TipoProducto tipo;
     private String urlImagen;
     private List<IngredienteEnProducto> ingredientes;
@@ -24,12 +23,11 @@ public class Producto {
     public Producto() {
     }
 
-    public Producto(String id, String nombre, float precio, boolean disponible, Integer tiempoPreparacion, TipoProducto tipo, String urlImagen, List<IngredienteEnProducto> ingredientes) {
+    public Producto(String id, String nombre, float precio, boolean disponible, TipoProducto tipo, String urlImagen, List<IngredienteEnProducto> ingredientes) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
         this.disponible = disponible;
-        this.tiempoPreparacion = tiempoPreparacion;
         this.tipo = tipo;
         this.urlImagen = urlImagen;
         this.ingredientes = ingredientes;
@@ -65,14 +63,6 @@ public class Producto {
 
     public void setDisponible(boolean disponible) {
         this.disponible = disponible;
-    }
-
-    public Integer getTiempoPreparacion() {
-        return tiempoPreparacion;
-    }
-
-    public void setTiempoPreparacion(Integer tiempoPreparacion) {
-        this.tiempoPreparacion = tiempoPreparacion;
     }
 
     public TipoProducto getTipo() {

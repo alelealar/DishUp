@@ -5,7 +5,8 @@
 
 package dtos;
 
-import java.time.LocalDate;
+import enums.EstadoComandaDTO;
+import java.time.LocalDateTime;
 import java.util.List;
 
 
@@ -21,28 +22,30 @@ import java.util.List;
  */
 
 public class ComandaDTO {
+    
     private String id;
     private String nombreCliente;
-    private LocalDate fecha;
-    private Double total;
+    private String nombreEmpleado;
+    private LocalDateTime fecha;
+    private float total;
+    private EstadoComandaDTO estado;
+    private Integer numMesa;
     private List<PedidoDTO> pedidos;
-    private Integer idMesa;
-
-    public ComandaDTO( String nombreCliente, LocalDate fecha, List<PedidoDTO> pedidos, Integer idMesa) {
-       
-        this.nombreCliente = nombreCliente;
-        this.fecha = fecha;
-        this.pedidos = pedidos;
-        this.idMesa = idMesa;
-    }
+    private List<PagoDTO> pagos;
 
     public ComandaDTO() {
     }
-    
-    public void calcularTotal(){
-        int cantidadProductos = pedidos.size();
-        double resultado = cantidadProductos*100;
-        setTotal(resultado);
+
+    public ComandaDTO(String id, String nombreCliente, String nombreEmpleado, LocalDateTime fecha, float total, EstadoComandaDTO estado, Integer numMesa, List<PedidoDTO> pedidos, List<PagoDTO> pagos) {
+        this.id = id;
+        this.nombreCliente = nombreCliente;
+        this.nombreEmpleado = nombreEmpleado;
+        this.fecha = fecha;
+        this.total = total;
+        this.estado = estado;
+        this.numMesa = numMesa;
+        this.pedidos = pedidos;
+        this.pagos = pagos;
     }
 
     public String getId() {
@@ -61,20 +64,44 @@ public class ComandaDTO {
         this.nombreCliente = nombreCliente;
     }
 
-    public LocalDate getFecha() {
+    public String getNombreEmpleado() {
+        return nombreEmpleado;
+    }
+
+    public void setNombreEmpleado(String nombreEmpleado) {
+        this.nombreEmpleado = nombreEmpleado;
+    }
+
+    public LocalDateTime getFecha() {
         return fecha;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(LocalDateTime fecha) {
         this.fecha = fecha;
     }
-  
-    public Double getTotal() {
+
+    public float getTotal() {
         return total;
     }
 
-    public void setTotal(Double total) {
+    public void setTotal(float total) {
         this.total = total;
+    }
+
+    public EstadoComandaDTO getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoComandaDTO estado) {
+        this.estado = estado;
+    }
+
+    public Integer getNumMesa() {
+        return numMesa;
+    }
+
+    public void setNumMesa(Integer mesa) {
+        this.numMesa = mesa;
     }
 
     public List<PedidoDTO> getPedidos() {
@@ -85,15 +112,12 @@ public class ComandaDTO {
         this.pedidos = pedidos;
     }
 
-    public Integer getIdMesa() {
-        return idMesa;
+    public List<PagoDTO> getPagos() {
+        return pagos;
     }
 
-    public void setIdMesa(Integer idMesa) {
-        this.idMesa = idMesa;
+    public void setPagos(List<PagoDTO> pagos) {
+        this.pagos = pagos;
     }
-    
-    
-    
     
 }

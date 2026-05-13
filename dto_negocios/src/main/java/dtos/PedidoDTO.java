@@ -23,7 +23,6 @@ public class PedidoDTO {
     private String nombreProducto;
     private Integer cantidad;
     private EstadoPedidoDTO estado;
-    private Integer tiempoPreparacion;
     private String descripcion;
     private float precioProducto;
     private LocalDateTime fechaPedido;
@@ -33,7 +32,6 @@ public class PedidoDTO {
         this.nombreProducto = nombreProducto;
         this.cantidad = cantidad;
         this.estado = estado;
-        this.tiempoPreparacion = tiempoPreparacion;
         this.descripcion = descripcion;
         this.precioProducto = precioProducto;
         this.fechaPedido = fechaPedido;
@@ -72,14 +70,6 @@ public class PedidoDTO {
 
     public void setEstado(EstadoPedidoDTO estado) {
         this.estado = estado;
-    }
-
-    public Integer getTiempoPreparacion() {
-        return tiempoPreparacion;
-    }
-
-    public void setTiempoPreparacion(Integer tiempoPreparacion) {
-        this.tiempoPreparacion = tiempoPreparacion;
     }
 
     public String getDescripcion() {

@@ -17,7 +17,6 @@ public class Pedido {
     private String idProducto;
     private String nombreProducto;
     private Integer cantidad;
-    private Integer tiempoPreparacion;
     private String descripcion;
     private float precioProducto;
     private EstadoPedido estado;
@@ -26,12 +25,11 @@ public class Pedido {
     public Pedido() {
     }
 
-    public Pedido(String id, String idProducto, String nombreProducto, Integer cantidad, Integer tiempoPreparacion, String descripcion, float precioProducto, EstadoPedido estado, LocalDateTime fechaPedido) {
+    public Pedido(String id, String idProducto, String nombreProducto, Integer cantidad, String descripcion, float precioProducto, EstadoPedido estado, LocalDateTime fechaPedido) {
         this.id = id;
         this.idProducto = idProducto;
         this.nombreProducto = nombreProducto;
         this.cantidad = cantidad;
-        this.tiempoPreparacion = tiempoPreparacion;
         this.descripcion = descripcion;
         this.precioProducto = precioProducto;
         this.estado = estado;
@@ -68,14 +66,6 @@ public class Pedido {
 
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
-    }
-
-    public Integer getTiempoPreparacion() {
-        return tiempoPreparacion;
-    }
-
-    public void setTiempoPreparacion(Integer tiempoPreparacion) {
-        this.tiempoPreparacion = tiempoPreparacion;
     }
 
     public String getDescripcion() {

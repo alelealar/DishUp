@@ -25,12 +25,12 @@ public class ComandaPersistenciaAdapter {
         mongo.setNombreCliente(comanda.getNombreCliente());
         mongo.setFecha(comanda.getFecha());
         mongo.setEstado(comanda.getEstado());
-        mongo.setTotal(comanda.getTotal());
+        mongo.setMontoTotal(comanda.getMontoTotal());
+        mongo.setNumeroMesa(comanda.getMesa().getNumero());
+        mongo.setNombreEmpleado(comanda.getEmpleado().getNombres());
 
         MesaEntidadMongo mesaMongo = new MesaEntidadMongo();
         mesaMongo.setNumero(comanda.getMesa().getNumero());
-
-        mongo.setMesa(mesaMongo);
 
         List<PedidoEntidadMongo> pedidosMongo = new ArrayList<>();
 
@@ -55,8 +55,6 @@ public class ComandaPersistenciaAdapter {
                 
                 pedidoMongo.setFechaPedido(pedido.getFechaPedido());
                 
-                pedidoMongo.setTiempoPreparacion(pedido.getTiempoPreparacion());
-
                 pedidosMongo.add(pedidoMongo);
             }
         }
@@ -78,11 +76,12 @@ public class ComandaPersistenciaAdapter {
         comanda.setNombreCliente(mongo.getNombreCliente());
         comanda.setFecha(mongo.getFecha());
         comanda.setEstado(mongo.getEstado());
-        comanda.setTotal(mongo.getTotal());
+        comanda.setMontoTotal(mongo.getMontoTotal());
+        comanda.getEmpleado().setNombres(mongo.getNombreEmpleado());
 
         Mesa mesa = new Mesa();
         mesa.setNumero(
-                mongo.getMesa().getNumero()
+                mongo.getNumeroMesa()
         );
 
         comanda.setMesa(mesa);
@@ -118,7 +117,6 @@ public class ComandaPersistenciaAdapter {
                 pedido.setFechaPedido(
                         pedidoMongo.getFechaPedido()
                 );
-                pedido.setTiempoPreparacion(pedidoMongo.getTiempoPreparacion());
 
                 pedidos.add(pedido);
             }

@@ -22,15 +22,16 @@ public class ComandaNegocioAdapter {
 
         dto.setId(comanda.getId());
         dto.setNombreCliente(comanda.getNombreCliente());
+        dto.setNombreEmpleado(comanda.getEmpleado().getNombres() + comanda.getEmpleado().getApellidoPaterno() + comanda.getEmpleado().getApellidoMaterno());
 
         if (comanda.getFecha() != null) {
-            dto.setFecha(comanda.getFecha().toLocalDate());
+            dto.setFecha(comanda.getFecha());
         }
 
-        dto.setTotal(comanda.getTotal());
+        dto.setTotal(comanda.getMontoTotal());
 
         if (comanda.getMesa() != null) {
-            dto.setIdMesa(comanda.getMesa().getNumero());
+            dto.setNumMesa(comanda.getMesa().getNumero());
         }
 
         List<PedidoDTO> pedidosDTO = new ArrayList<>();
@@ -48,7 +49,6 @@ public class ComandaNegocioAdapter {
                 pedidoDTO.setCantidad(pedido.getCantidad());
                 pedidoDTO.setDescripcion(pedido.getDescripcion());
                 pedidoDTO.setPrecioProducto(pedido.getPrecioProducto());
-                pedidoDTO.setTiempoPreparacion(pedido.getTiempoPreparacion());
                 pedidoDTO.setFechaPedido(pedido.getFechaPedido());
 
                 pedidosDTO.add(pedidoDTO);

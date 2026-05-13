@@ -15,23 +15,27 @@ import java.util.List;
 public class Comanda {
     private String id;
     private String nombreCliente;
-    private LocalDateTime fecha;
-    private Double total;
-    private EstadoComanda estado;
+    private Empleado empleado;
     private Mesa mesa;
+    private LocalDateTime fecha;
+    private float montoTotal;
+    private EstadoComanda estado;
     private List<Pedido> pedidos;
+    private List<Pago> pagos;
 
     public Comanda() {
     }
 
-    public Comanda(String id, String nombreCliente, LocalDateTime fecha, Double total, EstadoComanda estado, Mesa mesa, List pedidos) {
+    public Comanda(String id, String nombreCliente, Empleado empleado, Mesa mesa, LocalDateTime fecha, float montoTotal, EstadoComanda estado, List<Pedido> pedidos, List<Pago> pagos) {
         this.id = id;
         this.nombreCliente = nombreCliente;
-        this.fecha = fecha;
-        this.total = total;
-        this.estado = estado;
+        this.empleado = empleado;
         this.mesa = mesa;
+        this.fecha = fecha;
+        this.montoTotal = montoTotal;
+        this.estado = estado;
         this.pedidos = pedidos;
+        this.pagos = pagos;
     }
 
     public String getId() {
@@ -50,28 +54,12 @@ public class Comanda {
         this.nombreCliente = nombreCliente;
     }
 
-    public LocalDateTime getFecha() {
-        return fecha;
+    public Empleado getEmpleado() {
+        return empleado;
     }
 
-    public void setFecha(LocalDateTime fecha) {
-        this.fecha = fecha;
-    }
-
-    public Double getTotal() {
-        return total;
-    }
-
-    public void setTotal(Double total) {
-        this.total = total;
-    }
-
-    public EstadoComanda getEstado() {
-        return estado;
-    }
-
-    public void setEstado(EstadoComanda estado) {
-        this.estado = estado;
+    public void setEmpleado(Empleado empleado) {
+        this.empleado = empleado;
     }
 
     public Mesa getMesa() {
@@ -82,12 +70,44 @@ public class Comanda {
         this.mesa = mesa;
     }
 
+    public LocalDateTime getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(LocalDateTime fecha) {
+        this.fecha = fecha;
+    }
+
+    public float getMontoTotal() {
+        return montoTotal;
+    }
+
+    public void setMontoTotal(float montoTotal) {
+        this.montoTotal = montoTotal;
+    }
+
+    public EstadoComanda getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoComanda estado) {
+        this.estado = estado;
+    }
+
     public List<Pedido> getPedidos() {
         return pedidos;
     }
 
     public void setPedidos(List<Pedido> pedidos) {
         this.pedidos = pedidos;
+    }
+
+    public List<Pago> getPagos() {
+        return pagos;
+    }
+
+    public void setPagos(List<Pago> pagos) {
+        this.pagos = pagos;
     }
 
 }

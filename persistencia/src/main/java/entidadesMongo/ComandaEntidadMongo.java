@@ -24,10 +24,11 @@ public class ComandaEntidadMongo {
     private String id;
 
     private String nombreCliente;
+    private String nombreEmpleado;
+    private Integer numeroMesa;
     private LocalDateTime fecha;
-    private Double total;
+    private float montoTotal;
     private EstadoComanda estado;
-    private MesaEntidadMongo mesa;
 
     private List<PedidoEntidadMongo> pedidos;
     private List<PagoEntidadMongo> pagos;
@@ -35,13 +36,14 @@ public class ComandaEntidadMongo {
     public ComandaEntidadMongo() {
     }
 
-    public ComandaEntidadMongo(String id, String nombreCliente, LocalDateTime fecha, Double total, EstadoComanda estado, MesaEntidadMongo mesa, List<PedidoEntidadMongo> pedidos, List<PagoEntidadMongo> pagos) {
+    public ComandaEntidadMongo(String id, String nombreCliente, String nombreEmpleado, Integer numeroMesa, LocalDateTime fecha, float montoTotal, EstadoComanda estado, List<PedidoEntidadMongo> pedidos, List<PagoEntidadMongo> pagos) {
         this.id = id;
         this.nombreCliente = nombreCliente;
+        this.nombreEmpleado = nombreEmpleado;
+        this.numeroMesa = numeroMesa;
         this.fecha = fecha;
-        this.total = total;
+        this.montoTotal = montoTotal;
         this.estado = estado;
-        this.mesa = mesa;
         this.pedidos = pedidos;
         this.pagos = pagos;
     }
@@ -62,6 +64,22 @@ public class ComandaEntidadMongo {
         this.nombreCliente = nombreCliente;
     }
 
+    public String getNombreEmpleado() {
+        return nombreEmpleado;
+    }
+
+    public void setNombreEmpleado(String nombreEmpleado) {
+        this.nombreEmpleado = nombreEmpleado;
+    }
+
+    public Integer getNumeroMesa() {
+        return numeroMesa;
+    }
+
+    public void setNumeroMesa(Integer numeroMesa) {
+        this.numeroMesa = numeroMesa;
+    }
+
     public LocalDateTime getFecha() {
         return fecha;
     }
@@ -70,12 +88,12 @@ public class ComandaEntidadMongo {
         this.fecha = fecha;
     }
 
-    public Double getTotal() {
-        return total;
+    public float getMontoTotal() {
+        return montoTotal;
     }
 
-    public void setTotal(Double total) {
-        this.total = total;
+    public void setMontoTotal(float montoTotal) {
+        this.montoTotal = montoTotal;
     }
 
     public EstadoComanda getEstado() {
@@ -84,14 +102,6 @@ public class ComandaEntidadMongo {
 
     public void setEstado(EstadoComanda estado) {
         this.estado = estado;
-    }
-
-    public MesaEntidadMongo getMesa() {
-        return mesa;
-    }
-
-    public void setMesa(MesaEntidadMongo mesa) {
-        this.mesa = mesa;
     }
 
     public List<PedidoEntidadMongo> getPedidos() {
@@ -109,5 +119,4 @@ public class ComandaEntidadMongo {
     public void setPagos(List<PagoEntidadMongo> pagos) {
         this.pagos = pagos;
     }
-
 }

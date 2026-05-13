@@ -270,7 +270,6 @@ public class DlgModificarProducto extends javax.swing.JDialog {
         resultado.setCantidad(1);
         resultado.setEspecificaciones(especificaciones.toString());
         resultado.setPrecioProducto(precioProductoActual);
-        resultado.setTiempoPreparacion(tiempoPreparacionActual);
 
         this.dispose();
     }//GEN-LAST:event_btnListoActionPerformed

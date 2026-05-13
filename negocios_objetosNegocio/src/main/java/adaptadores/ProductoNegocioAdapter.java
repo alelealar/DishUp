@@ -34,7 +34,6 @@ public class ProductoNegocioAdapter {
         producto.setNombre(dto.getNombre());
         producto.setPrecio(dto.getPrecio());
         producto.setDisponible(dto.isDisponible());
-        producto.setTiempoPreparacion(dto.getTiempoPreparacion());
         producto.setTipo(TipoProducto.valueOf(dto.getTipo().name()));
         producto.setUrlImagen(dto.getUrlImagen());
 
@@ -85,7 +84,6 @@ public class ProductoNegocioAdapter {
         dto.setNombre(producto.getNombre());
         dto.setPrecio(producto.getPrecio());
         dto.setDisponible(producto.isDisponible());
-        dto.setTiempoPreparacion(producto.getTiempoPreparacion());
         dto.setTipo(TipoProductoDTO.valueOf(producto.getTipo().name()));
         dto.setUrlImagen(producto.getUrlImagen());
 

@@ -20,7 +20,6 @@ public class PedidoNuevoDTO {
     private String id;
     private String nombreProducto;
     private String especificaciones;
-    private Integer tiempoPreparacion;
     private Integer cantidad;
     private float precioProducto;
     private LocalDateTime fechaPedido;
@@ -29,7 +28,6 @@ public class PedidoNuevoDTO {
         this.id = id;
         this.nombreProducto = nombreProducto;
         this.especificaciones = especificaciones;
-        this.tiempoPreparacion = tiempoPreparacion;
         this.cantidad = cantidad;
         this.precioProducto = precioProducto;
         this.fechaPedido = fechaPedido;
@@ -61,15 +59,7 @@ public class PedidoNuevoDTO {
     public void setEspecificaciones(String especificaciones) {
         this.especificaciones = especificaciones;
     }
-
-    public Integer getTiempoPreparacion() {
-        return tiempoPreparacion;
-    }
-
-    public void setTiempoPreparacion(Integer tiempoPreparacion) {
-        this.tiempoPreparacion = tiempoPreparacion;
-    }
-
+    
     public Integer getCantidad() {
         return cantidad;
     }

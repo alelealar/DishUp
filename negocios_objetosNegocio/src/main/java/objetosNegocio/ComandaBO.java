@@ -66,7 +66,6 @@ public class ComandaBO {
             p.setCantidad(dto.getCantidad());
             p.setDescripcion(dto.getEspecificaciones());
             p.setEstado(EstadoPedido.PENDIENTE);
-            p.setTiempoPreparacion(dto.getTiempoPreparacion());
             p.setFechaPedido(LocalDateTime.now());
             p.setPrecioProducto(dto.getPrecioProducto());
 
