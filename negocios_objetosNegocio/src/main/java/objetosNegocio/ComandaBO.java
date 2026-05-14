@@ -8,6 +8,7 @@ import dtos.PedidoDTO;
 import dtos_infraestructura.InventarioRequestDTO;
 import entidades.Comanda;
 import entidades.Pedido;
+import enums.EstadoComanda;
 import enums.EstadoPedido;
 import excepcion.NegocioException;
 import excepciones.PersistenciaException;
@@ -160,4 +161,35 @@ public class ComandaBO {
             throw new NegocioException("Error al agregar pedidos a comanda", e);
         }
     }
+
+    public boolean eliminarComanda(String idComanda) throws NegocioException {
+
+        if (idComanda == null || idComanda.isBlank()) {
+            throw new NegocioException("El id de la comanda es inválido");
+        }
+
+        try {
+
+            Comanda comanda = comandaDAO.obtenerPorId(idComanda);
+
+            if (comanda == null) {
+                throw new NegocioException("La comanda no existe");
+            }
+            if (comanda.getEstado() != EstadoComanda.PENDIENTE) {
+                throw new NegocioException("Solo se pueden eliminar comandas en estado PENDIENTE");
+            }
+
+            boolean eliminada = comandaDAO.eliminarComanda(idComanda);
+
+            if (!eliminada) {
+                throw new NegocioException("No se pudo eliminar la comanda");
+            }
+
+            return true;
+
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al eliminar la comanda", e);
+        }
+    }
+
 }

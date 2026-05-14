@@ -344,7 +344,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
     public void botonesVisibles() {
         btnPagoGeneral.setVisible(true);
-        btnEnviarComandas.setVisible(true);
+        btnEnviarComandas.setVisible(false);
         btnLevantarComanda.setVisible(true);
     }
 
@@ -445,7 +445,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
                 panComandasLlenas.add(new ComandaCard(c));
                 panComandasLlenas.add(Box.createVerticalStrut(10));
             }
-            btnEnviarComandas.setVisible(true);
+            btnEnviarComandas.setVisible(false);
             btnPagoGeneral.setVisible(true);
         }
 
@@ -465,7 +465,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             header.setBackground(Color.decode("#FFDA92"));
             header.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
-            JLabel lblTitulo = new JLabel(comanda.getNombreCliente().toUpperCase() + ": "+comanda.getEstado()+" | $"+comanda.getTotal());
+            JLabel lblTitulo = new JLabel(comanda.getNombreCliente().toUpperCase() + ": " + comanda.getEstado() + " | $" + comanda.getTotal());
             lblTitulo.setFont(new Font("Arial", Font.BOLD, 14));
 
             JButton btnPago = new JButton("Pago");
@@ -526,8 +526,65 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             btnCancelar.setPreferredSize(new Dimension(160, 35));
             btnCancelar.setFocusPainted(false);
 
-            footer.add(btnAgregar);
-            footer.add(btnCancelar);
+            if (comanda.getEstado() != null) {
+
+                switch (comanda.getEstado().name()) {
+
+                    case "PENDIENTE":
+                        footer.add(btnAgregar);
+                        footer.add(btnCancelar);
+                        break;
+
+                    case "LISTA":
+                        footer.add(btnAgregar);
+                        break;
+
+                    case "PAGADA":
+                        // No agregar botones
+                        break;
+                }
+            }
+            
+            btnCancelar.addActionListener(e -> {
+
+                int confirmacion = JOptionPane.showConfirmDialog(
+                        this,
+                        "¿Seguro que deseas cancelar esta comanda?",
+                        "Confirmar cancelación",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.WARNING_MESSAGE
+                );
+
+                if (confirmacion == JOptionPane.YES_OPTION) {
+
+                    try {
+
+                        boolean eliminada = coordinador.eliminarComanda(comanda.getId());
+
+                        if (eliminada) {
+
+                            JOptionPane.showMessageDialog(
+                                    this,
+                                    "Comanda cancelada correctamente",
+                                    "Éxito",
+                                    JOptionPane.INFORMATION_MESSAGE
+                            );
+
+                            refrescarMesaActual();
+
+                        }
+
+                    } catch (Exception ex) {
+
+                        JOptionPane.showMessageDialog(
+                                this,
+                                ex.getMessage(),
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                    }
+                }
+            });
 
             add(header, BorderLayout.NORTH);
             add(body, BorderLayout.CENTER);
@@ -549,6 +606,5 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
     public void setMesero(String id, String empleado) {
         idMesero = id;
         lblEmpleado.setText(empleado);
-
     }
 }

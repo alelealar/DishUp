@@ -5,6 +5,7 @@ import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.eq;
 import static com.mongodb.client.model.Updates.set;
+import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
 import conexion.ConexionMongo;
@@ -141,4 +142,26 @@ public class ComandaDAO implements IComandaDAO {
             throw new PersistenciaException("Error al agregar pedido a comanda", e);
         }
     }
+
+    @Override
+    public boolean eliminarComanda(String idComanda) throws PersistenciaException {
+        if (idComanda == null || idComanda.isBlank()) {
+            throw new PersistenciaException("El id de la comanda es inválido");
+        }
+
+        try {
+            DeleteResult result = coleccion.deleteOne(
+                    eq("_id", new ObjectId(idComanda))
+            );
+
+            return result.getDeletedCount() > 0;
+
+        } catch (IllegalArgumentException e) {
+            throw new PersistenciaException("Id de comanda inválido", e);
+
+        } catch (MongoException e) {
+            throw new PersistenciaException("Error al eliminar comanda", e);
+        }
+    }
+
 }

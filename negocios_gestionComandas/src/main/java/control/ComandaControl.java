@@ -35,4 +35,12 @@ public class ComandaControl {
             throw new ComandasException("No fue posible agregar pedidos a la comanda con ID: " + idComanda);
         }
     }
+    
+    public boolean eliminarComanda(String idComanda) throws ComandasException {
+        try {
+            return comandaBO.eliminarComanda(idComanda);
+        } catch (NegocioException ex) {
+            throw new ComandasException("No fue posible eliminar la comanda: " + ex.getMessage());
+        }
+    }
 }

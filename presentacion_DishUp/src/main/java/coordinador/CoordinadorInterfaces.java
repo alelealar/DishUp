@@ -210,7 +210,7 @@ public class CoordinadorInterfaces {
                 this.frmProductos.dispose();
                 this.frmProductos = null;
             }
-            
+
             comandaTemporal.clear();
             this.frmComandas.setVisible(true);
 
@@ -235,5 +235,9 @@ public class CoordinadorInterfaces {
         );
 
         dlg.setVisible(true);
+    }
+
+    public boolean eliminarComanda(String idComanda) throws ComandasException {
+        return comandaFachada.eliminarComanda(idComanda);
     }
 }

@@ -30,4 +30,9 @@ public class ComandaFachada implements IGestionComandas {
     public void agregarPedidosAComanda(String idComanda, List<PedidoDTO> pedidos) throws ComandasException {
         comandaControl.agregarPedidoAComanda(idComanda, pedidos);
     }
+
+    @Override
+    public boolean eliminarComanda(String idComanda) throws ComandasException {
+        return comandaControl.eliminarComanda(idComanda);
+    }
 }

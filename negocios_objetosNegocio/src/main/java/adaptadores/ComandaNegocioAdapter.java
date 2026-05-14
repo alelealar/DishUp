@@ -34,6 +34,12 @@ public class ComandaNegocioAdapter {
 
         dto.setTotal(comanda.getMontoTotal());
 
+        dto.setEstado(
+                enums.EstadoComandaDTO.valueOf(
+                        comanda.getEstado().name()
+                )
+        );
+        
         if (comanda.getMesa() != null) {
             dto.setNumMesa(comanda.getMesa().getNumero());
         }
