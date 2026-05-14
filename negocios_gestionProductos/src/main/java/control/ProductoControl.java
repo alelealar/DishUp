@@ -3,7 +3,7 @@ package control;
 import dtos.IngredienteEnProductoDTO;
 import dtos.ProductoDTO;
 import dtos.ProductoIngredienteDTO;
-import enums.TipoProductoDTOInfraestructura;
+import enums.TipoProductoDTO;
 import excepcion.NegocioException;
 import excepciones.ProductosException;
 import interfaces.ISistemaInventario;
@@ -18,12 +18,13 @@ public class ProductoControl {
     public ProductoControl(ISistemaInventario inventario) {
         this.productoBO = new ProductoBO(inventario);
     }
-
+     /*
     public List<ProductoDTO> obtenerProductos() throws NegocioException {
         return productoBO.obtenerProductos();
     }
 
-    public List<ProductoDTO> obtenerProductosPorTipo(TipoProductoDTOInfraestructura tipo) throws ProductosException {
+    */
+    public List<ProductoDTO> obtenerProductosPorTipo(TipoProductoDTO tipo) throws ProductosException {
         try {
             return productoBO.obtenerProductosPorTipo(tipo);
         } catch (NegocioException ex) {
@@ -51,11 +52,11 @@ public class ProductoControl {
 
         List<ProductoDTO> lista = new ArrayList<>();
 
-        lista.addAll(obtenerProductosPorTipo(TipoProductoDTOInfraestructura.COMIDA));
+        lista.addAll(obtenerProductosPorTipo(TipoProductoDTO.COMIDA));
 
-        lista.addAll(obtenerProductosPorTipo(TipoProductoDTOInfraestructura.BEBIDA));
+        lista.addAll(obtenerProductosPorTipo(TipoProductoDTO.BEBIDA));
 
-        lista.addAll(obtenerProductosPorTipo(TipoProductoDTOInfraestructura.BOTANA));
+        lista.addAll(obtenerProductosPorTipo(TipoProductoDTO.BOTANA));
 
         return lista;
     }

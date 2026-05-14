@@ -4,8 +4,7 @@ import control.ProductoControl;
 import dtos.IngredienteEnProductoDTO;
 import dtos.ProductoDTO;
 import dtos.ProductoIngredienteDTO;
-import enums.TipoProductoDTOInfraestructura;
-import excepcion.NegocioException;
+import enums.TipoProductoDTO;
 import excepciones.ProductosException;
 import interfaces.ISistemaInventario;
 import interfaz.IGestionProductos;
@@ -21,16 +20,7 @@ public class ProductoFachada implements IGestionProductos{
     }
 
     @Override
-    public List<ProductoDTO> obtenerProductos() throws ProductosException {
-        try {
-            return productoControl.obtenerProductos();
-        } catch (NegocioException ex) {
-            throw new ProductosException( "No fue posible obtener la lista de productos.");
-        }
-    }
-
-    @Override
-    public List<ProductoDTO> obtenerProductosPorTipo(TipoProductoDTOInfraestructura tipo) throws ProductosException {
+    public List<ProductoDTO> obtenerProductosPorTipo(TipoProductoDTO tipo) throws ProductosException {
         return productoControl.obtenerProductosPorTipo(tipo);
     }
 

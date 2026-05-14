@@ -8,7 +8,7 @@ import dtos.ProductoIngredienteDTO;
 import dtos_infraestructura.ProductoDTOInfraestructura;
 import entidades.Producto;
 import enums.TipoProducto;
-import enums.TipoProductoDTOInfraestructura;
+import enums.TipoProductoDTO;
 import excepcion.NegocioException;
 import excepciones.InfraestructuraException;
 import interfaces.ISistemaInventario;
@@ -27,7 +27,7 @@ public class ProductoBO {
         this.ingredienteAdapter = new IngredienteNegocioAdapter();
     }
 
-    public List<ProductoDTO> obtenerProductosPorTipo(TipoProductoDTOInfraestructura tipo) throws NegocioException {
+    public List<ProductoDTO> obtenerProductosPorTipo(TipoProductoDTO tipo) throws NegocioException {
 
         if (tipo == null) {
             throw new NegocioException("El tipo de producto es obligatorio.");
@@ -107,7 +107,7 @@ public class ProductoBO {
             throw new NegocioException("No fue posible obtener los ingredientes.", ex);
         }
     }
-
+     /*
     public List<ProductoDTO> obtenerProductos() throws NegocioException {
 
         try {
@@ -120,4 +120,5 @@ public class ProductoBO {
             throw new NegocioException("No fue posible obtener los productos.", ex);
         }
     }
+    */
 }

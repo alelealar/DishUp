@@ -10,6 +10,7 @@ import dtos.IngredienteEnProductoDTO;
 import dtos.MesaDTO;
 import dtos.PedidoDTO;
 import dtos.ProductoDTO;
+import enums.TipoProductoDTO;
 import excepciones.ComandasException;
 import excepciones.EmpleadosException;
 import excepciones.ProductosException;
@@ -138,9 +139,9 @@ public class CoordinadorInterfaces {
         }
     }
 
-    public List<ProductoDTO> obtenerProductosParaUI() {
+    public List<ProductoDTO> obtenerProductosParaUI(TipoProductoDTO tipo) {
         try {
-            return productoFachada.obtenerProductos();
+            return productoFachada.obtenerProductosPorTipo(tipo);
         } catch (ProductosException e) {
             System.out.println("Error al obtener productos: " + e.getMessage());
             return new ArrayList<>();

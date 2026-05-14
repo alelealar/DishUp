@@ -441,13 +441,14 @@ public final class FrmProductos extends javax.swing.JFrame {
 
     private void txtBuscadorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscadorKeyReleased
         String textoBusqueda = txtBuscador.getText().trim().toLowerCase();
+        TipoProductoDTO tipo = (TipoProductoDTO) cbxTipoProducto.getSelectedItem();
 
         if (textoBusqueda.isEmpty() || textoBusqueda.equals("buscar...")) {
             refrescarProductosPorCategoria();
             return;
         }
 
-        filtrarProductos(textoBusqueda);
+        filtrarProductos(textoBusqueda, tipo);
     }//GEN-LAST:event_txtBuscadorKeyReleased
 
     private void btnEnviarAComandaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEnviarAComandaActionPerformed
@@ -587,10 +588,9 @@ public final class FrmProductos extends javax.swing.JFrame {
     public void cargarProductosPorTipo(TipoProductoDTO tipo) {
         panProductos.removeAll();
 
-        List<ProductoDTO> productos = coordinador.obtenerProductosParaUI();
+        List<ProductoDTO> productos = coordinador.obtenerProductosParaUI(tipo);
 
         for (ProductoDTO producto : productos) {
-            // System.out.println(producto.getNombre() + " - " + producto.getTipo());
 
             if (producto.getTipo().name().equals(tipo.name())) {
                 JPanel card = crearCardProducto(producto);
@@ -602,12 +602,12 @@ public final class FrmProductos extends javax.swing.JFrame {
         panProductos.repaint();
     }
 
-    public void filtrarProductos(String filtro) {
+    public void filtrarProductos(String filtro, TipoProductoDTO tipo) {
         panProductos.removeAll();
         int productosEncontrados = 0;
 
         TipoProductoDTO tipoActual = (TipoProductoDTO) cbxTipoProducto.getSelectedItem();
-        List<ProductoDTO> productos = coordinador.obtenerProductosParaUI(); // ✅
+        List<ProductoDTO> productos = coordinador.obtenerProductosParaUI(tipo);
 
         for (ProductoDTO producto : productos) {
             if (producto.getTipo().equals(tipoActual)
