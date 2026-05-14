@@ -5,6 +5,7 @@ import dtos.ProductoDTO;
 import dtos.ProductoIngredienteDTO;
 import enums.TipoProductoDTOInfraestructura;
 import excepcion.NegocioException;
+import excepciones.ProductosException;
 import fachada.InventarioFachada;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,19 +23,31 @@ public class ProductoControl {
         return productoBO.obtenerProductos();
     }
 
-    public List<ProductoDTO> obtenerProductosPorTipo(TipoProductoDTOInfraestructura tipo) throws NegocioException {
-        return productoBO.obtenerProductosPorTipo(tipo);
+    public List<ProductoDTO> obtenerProductosPorTipo(TipoProductoDTOInfraestructura tipo) throws ProductosException {
+        try {
+            return productoBO.obtenerProductosPorTipo(tipo);
+        } catch (NegocioException ex) {
+            throw new ProductosException( "No fue posible obtener los productos del tipo seleccionado.");
+        }
     }
 
-    public List<IngredienteEnProductoDTO> obtenerIngredientesRemovibles(String idProducto) throws NegocioException {
-        return productoBO.obtenerIngredientesRemoviblesPorProducto(idProducto);
+    public List<IngredienteEnProductoDTO> obtenerIngredientesRemovibles(String idProducto) throws ProductosException {
+        try {
+            return productoBO.obtenerIngredientesRemoviblesPorProducto(idProducto);
+        } catch (NegocioException ex) {
+            throw new ProductosException( "No fue posible obtener los ingredientes removibles del producto.");
+        }
     }
 
-    public List<ProductoIngredienteDTO> obtenerIngredientesDeProducto(String idProducto) throws NegocioException {
-        return productoBO.obtenerIngredientesDeProducto(idProducto);
+    public List<ProductoIngredienteDTO> obtenerIngredientesDeProducto(String idProducto) throws ProductosException {
+        try {
+            return productoBO.obtenerIngredientesDeProducto(idProducto);
+        } catch (NegocioException ex) {
+            throw new ProductosException( "No fue posible obtener los ingredientes del producto.");
+        }
     }
 
-    public List<ProductoDTO> obtenerTodos() throws NegocioException {
+    public List<ProductoDTO> obtenerTodos() throws ProductosException {
 
         List<ProductoDTO> lista = new ArrayList<>();
 

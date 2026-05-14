@@ -2,7 +2,7 @@ package fachada;
 
 import control.MesaControl;
 import dtos.MesaDTO;
-import excepcion.NegocioException;
+import excepciones.MesasException;
 import interfaz.IGestionMesas;
 import java.util.List;
 
@@ -15,7 +15,7 @@ public class MesaFachada implements IGestionMesas{
     }
 
     @Override
-    public List<MesaDTO> obtenerMesasPorMesero(String idMesero) throws NegocioException {
+    public List<MesaDTO> obtenerMesasPorMesero(String idMesero) throws MesasException {
         return mesaControl.obtenerMesasPorMesero(idMesero);
     }
 }

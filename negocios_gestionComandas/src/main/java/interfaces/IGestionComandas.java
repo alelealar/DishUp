@@ -9,17 +9,18 @@ import dtos.ComandaDTO;
 import dtos.EmpleadoDTO;
 import dtos.PedidoDTO;
 import excepcion.NegocioException;
+import excepciones.ComandasException;
 import java.util.List;
 
 /**
  *
- * @author Alejandra Leal Armenta, 262719
+ * @author DishUp
  */
 public interface IGestionComandas {
     
-    public void crearComanda(String nombreCliente,int numeroMesa,List<PedidoDTO> pedidos, EmpleadoDTO empleadoActual) throws NegocioException;
+    public void crearComanda(String nombreCliente,int numeroMesa,List<PedidoDTO> pedidos, EmpleadoDTO empleadoActual) throws ComandasException;
 
-    public List<ComandaDTO> obtenerComandasPorMesa(int numeroMesa) throws NegocioException;
+    public List<ComandaDTO> obtenerComandasPorMesa(int numeroMesa) throws ComandasException;
     
-    public void agregarPedidosAComanda(String idComanda, List<PedidoDTO> pedidos) throws NegocioException;
+    public void agregarPedidosAComanda(String idComanda, List<PedidoDTO> pedidos) throws ComandasException;
 }

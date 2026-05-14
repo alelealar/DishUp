@@ -4,7 +4,7 @@ import control.ComandaControl;
 import dtos.ComandaDTO;
 import dtos.EmpleadoDTO;
 import dtos.PedidoDTO;
-import excepcion.NegocioException;
+import excepciones.ComandasException;
 import interfaces.IGestionComandas;
 import java.util.List;
 
@@ -17,17 +17,17 @@ public class ComandaFachada implements IGestionComandas {
     }
 
     @Override
-    public void crearComanda(String nombreCliente, int numeroMesa, List<PedidoDTO> pedidos, EmpleadoDTO empleadoActual) throws NegocioException {
+    public void crearComanda(String nombreCliente, int numeroMesa, List<PedidoDTO> pedidos, EmpleadoDTO empleadoActual) throws ComandasException {
         comandaControl.crearComanda(nombreCliente, numeroMesa, pedidos, empleadoActual);
     }
 
     @Override
-    public List<ComandaDTO> obtenerComandasPorMesa(int numeroMesa) throws NegocioException {
+    public List<ComandaDTO> obtenerComandasPorMesa(int numeroMesa) throws ComandasException {
         return comandaControl.obtenerComandasPorMesa(numeroMesa);
     }
 
     @Override
-    public void agregarPedidosAComanda(String idComanda, List<PedidoDTO> pedidos) throws NegocioException {
+    public void agregarPedidosAComanda(String idComanda, List<PedidoDTO> pedidos) throws ComandasException {
         comandaControl.agregarPedidoAComanda(idComanda, pedidos);
     }
 }

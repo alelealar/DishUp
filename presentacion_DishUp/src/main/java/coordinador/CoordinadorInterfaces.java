@@ -10,7 +10,9 @@ import dtos.IngredienteEnProductoDTO;
 import dtos.MesaDTO;
 import dtos.PedidoDTO;
 import dtos.ProductoDTO;
-import excepcion.NegocioException;
+import excepciones.ComandasException;
+import excepciones.EmpleadosException;
+import excepciones.ProductosException;
 import fachada.ComandaFachada;
 import fachada.EmpleadoFachada;
 import fachada.MesaFachada;
@@ -122,7 +124,7 @@ public class CoordinadorInterfaces {
 
             comandaTemporal.clear();
 
-        } catch (NegocioException e) {
+        } catch (ComandasException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }
@@ -130,7 +132,7 @@ public class CoordinadorInterfaces {
     public List<ComandaDTO> getComandasDeMesa(int numeroMesa) {
         try {
             return comandaFachada.obtenerComandasPorMesa(numeroMesa);
-        } catch (NegocioException e) {
+        } catch (ComandasException e) {
             System.out.println("Error al obtener comandas: " + e.getMessage());
             return new ArrayList<>();
         }
@@ -139,13 +141,13 @@ public class CoordinadorInterfaces {
     public List<ProductoDTO> obtenerProductosParaUI() {
         try {
             return productoFachada.obtenerProductos();
-        } catch (NegocioException e) {
+        } catch (ProductosException e) {
             System.out.println("Error al obtener productos: " + e.getMessage());
             return new ArrayList<>();
         }
     }
 
-    public EmpleadoDTO validarExistenciaUsuario(EmpleadoDTO e) throws NegocioException {
+    public EmpleadoDTO validarExistenciaUsuario(EmpleadoDTO e) throws EmpleadosException {
         empleadoActual = empleadoFachada.login(e);
         return empleadoActual;
     }
@@ -160,14 +162,14 @@ public class CoordinadorInterfaces {
         frmComandas.setVisible(true);
     }
 
-    public void activarEmpleado(EmpleadoDTO e) throws NegocioException {
+    public void activarEmpleado(EmpleadoDTO e) throws EmpleadosException {
         empleadoFachada.activarEmpleado(e);
     }
 
     public List<IngredienteEnProductoDTO> obtenerIngredientesRemovibles(String idProducto) {
         try {
             return productoFachada.obtenerIngredientesRemovibles(idProducto);
-        } catch (NegocioException e) {
+        } catch (ProductosException e) {
             System.out.println("Error al obtener ingredientes removibles: " + e.getMessage());
             return new ArrayList<>();
         }
@@ -208,10 +210,11 @@ public class CoordinadorInterfaces {
                 this.frmProductos.dispose();
                 this.frmProductos = null;
             }
-
+            
             comandaTemporal.clear();
+            this.frmComandas.setVisible(true);
 
-        } catch (NegocioException e) {
+        } catch (ComandasException e) {
             System.out.println("Error: " + e.getMessage());
         }
     }

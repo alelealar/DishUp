@@ -6,13 +6,13 @@
 package interfaz;
 
 import dtos.MesaDTO;
-import excepcion.NegocioException;
+import excepciones.MesasException;
 import java.util.List;
 
 /**
  *
- * @author Alejandra Leal Armenta, 262719
+ * @author DishUp
  */
 public interface IGestionMesas {
-    List<MesaDTO> obtenerMesasPorMesero(String idMesero) throws NegocioException;
+    List<MesaDTO> obtenerMesasPorMesero(String idMesero) throws MesasException;
 }

@@ -6,7 +6,7 @@ package pantallas;
 
 import coordinador.CoordinadorInterfaces;
 import dtos.EmpleadoDTO;
-import excepcion.NegocioException;
+import excepciones.EmpleadosException;
 import javax.swing.JOptionPane;
 
 /**
@@ -171,7 +171,7 @@ public class FrmInicioSesión extends javax.swing.JFrame {
             }
             
             this.dispose();
-        } catch (NegocioException ex) {
+        } catch (EmpleadosException ex) {
             JOptionPane.showMessageDialog(this,ex.getMessage(),"Error",JOptionPane.ERROR_MESSAGE);
         }
     }//GEN-LAST:event_btnIngresarMouseClicked

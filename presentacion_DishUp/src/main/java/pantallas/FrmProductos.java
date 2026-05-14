@@ -4,14 +4,12 @@
  */
 package pantallas;
 
-import control.ProductoControl;
 import coordinador.CoordinadorInterfaces;
 import dtos.ComandaDTO;
-import dtos.IngredienteDTO;
 import dtos.IngredienteEnProductoDTO;
 import dtos.PedidoDTO;
 import dtos.ProductoDTO;
-import enums.TipoProductoDTOInfraestructura;
+import enums.TipoProductoDTO;
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -31,9 +29,7 @@ import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
@@ -87,8 +83,8 @@ public final class FrmProductos extends javax.swing.JFrame {
 
         // CARGA INICIAL
         cargarCBX_TipoProducto();
-        cbxTipoProducto.setSelectedItem(TipoProductoDTOInfraestructura.BEBIDA);
-        cargarProductosPorTipo(TipoProductoDTOInfraestructura.BEBIDA);
+        cbxTipoProducto.setSelectedItem(TipoProductoDTO.BEBIDA);
+        cargarProductosPorTipo(TipoProductoDTO.BEBIDA);
 
         // OBLIGATORIO: Esto asegura que el panel gris use todo el espacio disponible
         pnlContenedorPedidos.revalidate();
@@ -552,7 +548,7 @@ public final class FrmProductos extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAtras;
     private javax.swing.JButton btnEnviarAComanda;
-    private javax.swing.JComboBox<TipoProductoDTOInfraestructura> cbxTipoProducto;
+    private javax.swing.JComboBox<enums.TipoProductoDTO> cbxTipoProducto;
     private javax.swing.JLabel imgLogo;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -575,7 +571,7 @@ public final class FrmProductos extends javax.swing.JFrame {
     private void cargarCBX_TipoProducto() {
         cbxTipoProducto.removeAllItems();
 
-        for (TipoProductoDTOInfraestructura tipo : TipoProductoDTOInfraestructura.values()) {
+        for (TipoProductoDTO tipo : TipoProductoDTO.values()) {
             cbxTipoProducto.addItem(tipo);
         }
     }
@@ -588,7 +584,7 @@ public final class FrmProductos extends javax.swing.JFrame {
         lblCliente.setText("CLIENTE: " + cliente);
     }
 
-    public void cargarProductosPorTipo(TipoProductoDTOInfraestructura tipo) {
+    public void cargarProductosPorTipo(TipoProductoDTO tipo) {
         panProductos.removeAll();
 
         List<ProductoDTO> productos = coordinador.obtenerProductosParaUI();
@@ -610,7 +606,7 @@ public final class FrmProductos extends javax.swing.JFrame {
         panProductos.removeAll();
         int productosEncontrados = 0;
 
-        TipoProductoDTOInfraestructura tipoActual = (TipoProductoDTOInfraestructura) cbxTipoProducto.getSelectedItem();
+        TipoProductoDTO tipoActual = (TipoProductoDTO) cbxTipoProducto.getSelectedItem();
         List<ProductoDTO> productos = coordinador.obtenerProductosParaUI(); // ✅
 
         for (ProductoDTO producto : productos) {
@@ -633,7 +629,7 @@ public final class FrmProductos extends javax.swing.JFrame {
     }
 
     private void refrescarProductosPorCategoria() {
-        TipoProductoDTOInfraestructura tipo = (TipoProductoDTOInfraestructura) cbxTipoProducto.getSelectedItem();
+        TipoProductoDTO tipo = (TipoProductoDTO) cbxTipoProducto.getSelectedItem();
         cargarProductosPorTipo(tipo);
     }
 

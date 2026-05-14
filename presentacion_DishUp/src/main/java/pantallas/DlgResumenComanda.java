@@ -196,8 +196,9 @@ public class DlgResumenComanda extends javax.swing.JDialog {
         } else {
             coordinador.enviarComandaAFinal(nombreCliente, numMesa, productos);
         }
-
-        dispose();
+        
+        this.dispose();
+        
     }//GEN-LAST:event_btnConfirmarMouseClicked
 
 

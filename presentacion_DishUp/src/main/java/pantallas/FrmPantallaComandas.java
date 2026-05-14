@@ -9,7 +9,7 @@ import coordinador.CoordinadorInterfaces;
 import dtos.ComandaDTO;
 import dtos.MesaDTO;
 import dtos.PedidoDTO;
-import excepcion.NegocioException;
+import excepciones.MesasException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -26,6 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.SwingUtilities;
 
 /**
  *
@@ -52,6 +53,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
         panComandas.revalidate();
         panComandas.repaint();
+        jScrollPane3.getVerticalScrollBar().setUnitIncrement(25);
 
         btnEnviarComandas.setVisible(false);
         btnPagoGeneral.setVisible(false);
@@ -376,7 +378,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
         try {
             mesas = control.obtenerMesasPorMesero(String.valueOf(idMesero));
-        } catch (NegocioException ex) {
+        } catch (MesasException ex) {
             System.out.println("Error al obtener mesas: " + ex.getMessage());
         }
 
@@ -516,6 +518,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
             btnAgregar.addActionListener(e -> {
                 coordinador.abrirAgregarPedido(comanda);
+                SwingUtilities.getWindowAncestor(this).dispose();
             });
 
             JButton btnCancelar = new JButton("Cancelar comanda");

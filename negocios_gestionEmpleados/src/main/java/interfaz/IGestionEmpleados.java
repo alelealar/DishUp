@@ -7,6 +7,7 @@ package interfaz;
 
 import dtos.EmpleadoDTO;
 import excepcion.NegocioException;
+import excepciones.EmpleadosException;
 
 /**
  *
@@ -14,9 +15,9 @@ import excepcion.NegocioException;
  */
 public interface IGestionEmpleados {
     
-    EmpleadoDTO obtenerEmpleado(EmpleadoDTO empleado) throws NegocioException;
+    EmpleadoDTO obtenerEmpleado(EmpleadoDTO empleado) throws EmpleadosException;
 
-    EmpleadoDTO login(EmpleadoDTO empleado) throws NegocioException;
+    EmpleadoDTO login(EmpleadoDTO empleado) throws EmpleadosException;
 
-    void activarEmpleado(EmpleadoDTO empleado) throws NegocioException;
+    void activarEmpleado(EmpleadoDTO empleado) throws EmpleadosException;
 }
