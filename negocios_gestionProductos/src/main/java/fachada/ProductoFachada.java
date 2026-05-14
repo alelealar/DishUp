@@ -7,17 +7,17 @@ import dtos.ProductoIngredienteDTO;
 import enums.TipoProductoDTOInfraestructura;
 import excepcion.NegocioException;
 import excepciones.ProductosException;
+import interfaces.ISistemaInventario;
 import interfaz.IGestionProductos;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 public class ProductoFachada implements IGestionProductos{
 
     private final ProductoControl productoControl;
 
     public ProductoFachada() {
-        this.productoControl = new ProductoControl();
+        ISistemaInventario inventario = new InventarioFachada();
+        this.productoControl = new ProductoControl(inventario);
     }
 
     @Override

@@ -11,17 +11,17 @@ import enums.TipoProducto;
 import enums.TipoProductoDTOInfraestructura;
 import excepcion.NegocioException;
 import excepciones.InfraestructuraException;
-import fachada.InventarioFachada;
+import interfaces.ISistemaInventario;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProductoBO {
 
-    private final InventarioFachada fachadaInventario;
+    private final ISistemaInventario fachadaInventario;
     private final ProductoNegocioAdapter productoAdapter;
     private final IngredienteNegocioAdapter ingredienteAdapter;
 
-    public ProductoBO(InventarioFachada fachadaInventario) {
+    public ProductoBO(ISistemaInventario fachadaInventario) {
         this.fachadaInventario = fachadaInventario;
         this.productoAdapter = new ProductoNegocioAdapter();
         this.ingredienteAdapter = new IngredienteNegocioAdapter();

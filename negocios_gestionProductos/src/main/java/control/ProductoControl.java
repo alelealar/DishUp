@@ -6,7 +6,7 @@ import dtos.ProductoIngredienteDTO;
 import enums.TipoProductoDTOInfraestructura;
 import excepcion.NegocioException;
 import excepciones.ProductosException;
-import fachada.InventarioFachada;
+import interfaces.ISistemaInventario;
 import java.util.ArrayList;
 import java.util.List;
 import objetosNegocio.ProductoBO;
@@ -15,8 +15,8 @@ public class ProductoControl {
 
     private final ProductoBO productoBO;
 
-    public ProductoControl() {
-        this.productoBO = new ProductoBO((InventarioFachada) new InventarioFachada());
+    public ProductoControl(ISistemaInventario inventario) {
+        this.productoBO = new ProductoBO(inventario);
     }
 
     public List<ProductoDTO> obtenerProductos() throws NegocioException {

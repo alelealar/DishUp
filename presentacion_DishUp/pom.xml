@@ -1,83 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://www.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>com.262719</groupId>
         <artifactId>proyecto_DishUp</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
+
     <artifactId>presentacion_DishUp</artifactId>
     <packaging>jar</packaging>
+
     <dependencies>
+
+        <!-- Gestión de Mesas -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>negocios_gestionMesas</artifactId>
             <version>${project.version}</version>
+
+            <!-- Solo se excluyen dependencias que realmente no necesitas -->
             <exclusions>
                 <exclusion>
                     <groupId>com.262719</groupId>
                     <artifactId>dominio</artifactId>
                 </exclusion>
+
                 <exclusion>
                     <groupId>com.262719</groupId>
                     <artifactId>dtos_infraestructura</artifactId>
                 </exclusion>
+
                 <exclusion>
                     <groupId>com.262719</groupId>
                     <artifactId>infraestructura_inventario</artifactId>
                 </exclusion>
-                <exclusion>
-                    <groupId>com.262719</groupId>
-                    <artifactId>negocios_objetosNegocio</artifactId>
-                </exclusion>
             </exclusions>
         </dependency>
+
+        <!-- Gestión de Productos -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>negocios_gestionProductos</artifactId>
             <version>${project.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.262719</groupId>
-                    <artifactId>negocios_objetosNegocio</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
+
+        <!-- Gestión de Empleados -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>negocios_gestionEmpleados</artifactId>
             <version>${project.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.262719</groupId>
-                    <artifactId>negocios_objetosNegocio</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
+
+        <!-- Gestión de Comandas -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>negocios_gestionComandas</artifactId>
             <version>${project.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.262719</groupId>
-                    <artifactId>negocios_objetosNegocio</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
+
+        <!-- DTOs -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>dto_negocios</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>persistencia</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
+
     <properties>
         <maven.compiler.release>23</maven.compiler.release>
         <exec.mainClass>com.presentacion_dishup.Presentacion_DishUp</exec.mainClass>
     </properties>
+
 </project>
