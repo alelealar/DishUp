@@ -25,10 +25,6 @@
 
             <!-- Solo se excluyen dependencias que realmente no necesitas -->
             <exclusions>
-                <exclusion>
-                    <groupId>com.262719</groupId>
-                    <artifactId>dominio</artifactId>
-                </exclusion>
 
                 <exclusion>
                     <groupId>com.262719</groupId>

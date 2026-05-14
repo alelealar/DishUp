@@ -2,6 +2,8 @@ package adaptadores;
 
 import entidades.Empleado;
 import entidadesMongo.EmpleadoEntidadMongo;
+import enums.EstadoEmpleado;
+import enums.RolEmpleado;
 
 public class EmpleadoPersistenciaAdapter {
 
@@ -21,8 +23,8 @@ public class EmpleadoPersistenciaAdapter {
         mongo.setApellidoPaterno(empleado.getApellidoPaterno());
         mongo.setApellidoMaterno(empleado.getApellidoMaterno());
         mongo.setUser(empleado.getUser());
-        mongo.setRol(empleado.getRol());
-        mongo.setEstado(empleado.getEstado());
+        mongo.setRol(empleado.getRol().name());
+        mongo.setEstado(empleado.getEstado().name());
 
         return mongo;
     }
@@ -40,8 +42,8 @@ public class EmpleadoPersistenciaAdapter {
         empleado.setApellidoPaterno(mongo.getApellidoPaterno());
         empleado.setApellidoMaterno(mongo.getApellidoMaterno());
         empleado.setUser(mongo.getUser());
-        empleado.setRol(mongo.getRol());
-        empleado.setEstado(mongo.getEstado());
+        empleado.setRol(RolEmpleado.valueOf(mongo.getRol().toUpperCase()));
+        empleado.setEstado(EstadoEmpleado.valueOf(mongo.getEstado().toUpperCase()));
 
         return empleado;
     }

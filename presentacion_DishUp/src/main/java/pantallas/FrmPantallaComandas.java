@@ -465,7 +465,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             header.setBackground(Color.decode("#FFDA92"));
             header.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
-            JLabel lblTitulo = new JLabel(comanda.getNombreCliente().toUpperCase() + ": PENDIENTE");
+            JLabel lblTitulo = new JLabel(comanda.getNombreCliente().toUpperCase() + ": "+comanda.getEstado()+" | $"+comanda.getTotal());
             lblTitulo.setFont(new Font("Arial", Font.BOLD, 14));
 
             JButton btnPago = new JButton("Pago");

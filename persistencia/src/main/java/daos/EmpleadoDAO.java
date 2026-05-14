@@ -81,7 +81,6 @@ public class EmpleadoDAO implements IEmpleadoDAO {
 
         try {
             EmpleadoEntidadMongo empleadoMongo = coleccion.find(eq("user", user)).first();
-
             return empleadoAdapter.aDominio(empleadoMongo);
 
         } catch (MongoException ex) {

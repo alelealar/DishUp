@@ -23,13 +23,13 @@ public class EmpleadoEntidadMongo {
     private String apellidoPaterno;
     private String apellidoMaterno;
     private String user;
-    private RolEmpleado rol;
-    private EstadoEmpleado estado;
+    private String rol;
+    private String estado;
 
     public EmpleadoEntidadMongo() {
     }
 
-    public EmpleadoEntidadMongo(String id, String nombres, String apellidoPaterno, String apellidoMaterno, String user, RolEmpleado rol, EstadoEmpleado estado) {
+    public EmpleadoEntidadMongo(String id, String nombres, String apellidoPaterno, String apellidoMaterno, String user, String rol, String estado) {
         this.id = id;
         this.nombres = nombres;
         this.apellidoPaterno = apellidoPaterno;
@@ -79,19 +79,19 @@ public class EmpleadoEntidadMongo {
         this.user = user;
     }
 
-    public RolEmpleado getRol() {
+    public String getRol() {
         return rol;
     }
 
-    public void setRol(RolEmpleado rol) {
+    public void setRol(String rol) {
         this.rol = rol;
     }
 
-    public EstadoEmpleado getEstado() {
+    public String getEstado() {
         return estado;
     }
 
-    public void setEstado(EstadoEmpleado estado) {
+    public void setEstado(String estado) {
         this.estado = estado;
     }
 }
