@@ -31,7 +31,6 @@ public class DlgModificarProducto extends javax.swing.JDialog {
         // System.out.println("ID RECIBIDO: " + producto.getId());
         this.idProductoActual = producto.getId();
         this.precioProductoActual = producto.getPrecio();
-        this.tiempoPreparacionActual = producto.getTiempoPreparacion();
         lblNombreProducto.setText(producto.getNombre());
         configurarPanelIngredientes(ingredientesRemovibles);
         this.setLocationRelativeTo(null);

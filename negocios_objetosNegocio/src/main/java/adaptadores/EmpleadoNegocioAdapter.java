@@ -27,7 +27,7 @@ public class EmpleadoNegocioAdapter {
         dto.setApellidoMaterno(empleado.getApellidoMaterno());
         dto.setUser(empleado.getUser());
         dto.setRol(RolEmpleadoDTO.valueOf(empleado.getRol().name()));
-        dto.setEstado(EstadoEmpleadoDTO.valueOf(empleado.getRol().name()));
+        dto.setEstado(EstadoEmpleadoDTO.valueOf(empleado.getEstado().name()));
 
         return dto;
     }

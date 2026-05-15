@@ -6,6 +6,7 @@ package pantallas;
 
 import coordinador.CoordinadorInterfaces;
 import dtos.EmpleadoDTO;
+import enums.RolEmpleadoDTO;
 import excepciones.EmpleadosException;
 import javax.swing.JOptionPane;
 
@@ -162,7 +163,7 @@ public class FrmInicioSesión extends javax.swing.JFrame {
             coordinador.activarEmpleado(resultado);
             
             switch (resultado.getRol()) {
-                case "MESERO":
+                case RolEmpleadoDTO.MESERO:
                     coordinador.abrirFrmComandasMesero(resultado.getId(), resultado.getNombres());
                     break;
                 default:
