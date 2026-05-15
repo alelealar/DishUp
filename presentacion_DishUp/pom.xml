@@ -14,59 +14,39 @@
 
     <artifactId>presentacion_DishUp</artifactId>
     <packaging>jar</packaging>
-
     <dependencies>
-
-        <!-- Gestión de Mesas -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>dto_negocios</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>negocios_gestionMesas</artifactId>
             <version>${project.version}</version>
-
-            <!-- Solo se excluyen dependencias que realmente no necesitas -->
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>negocios_gestionProductos</artifactId>
+            <version>${project.version}</version>
             <exclusions>
-
-                <exclusion>
-                    <groupId>com.262719</groupId>
-                    <artifactId>dtos_infraestructura</artifactId>
-                </exclusion>
-
                 <exclusion>
                     <groupId>com.262719</groupId>
                     <artifactId>infraestructura_inventario</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
-
-        <!-- Gestión de Productos -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>negocios_gestionProductos</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <!-- Gestión de Empleados -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>negocios_gestionEmpleados</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-        <!-- Gestión de Comandas -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>negocios_gestionComandas</artifactId>
             <version>${project.version}</version>
         </dependency>
-
-        <!-- DTOs -->
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>dto_negocios</artifactId>
-            <version>${project.version}</version>
-        </dependency>
     </dependencies>
-
     <properties>
         <maven.compiler.release>23</maven.compiler.release>
         <exec.mainClass>com.presentacion_dishup.Presentacion_DishUp</exec.mainClass>

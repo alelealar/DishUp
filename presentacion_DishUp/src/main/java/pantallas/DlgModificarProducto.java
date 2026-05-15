@@ -113,7 +113,6 @@ public class DlgModificarProducto extends javax.swing.JDialog {
 
         lblSalir.setFont(new java.awt.Font("Hiragino Sans", 1, 24)); // NOI18N
         lblSalir.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
-        lblSalir.setText("X");
         lblSalir.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 lblSalirMouseClicked(evt);
@@ -138,9 +137,9 @@ public class DlgModificarProducto extends javax.swing.JDialog {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelNaranjaLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(lblSalir)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(26, 26, 26)
                 .addComponent(lblNombreProducto)
-                .addGap(101, 101, 101))
+                .addGap(81, 81, 81))
         );
 
         pnlBoton.setBackground(new java.awt.Color(255, 248, 235));

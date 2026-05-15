@@ -25,6 +25,7 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 
@@ -476,37 +477,90 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             header.add(lblTitulo, BorderLayout.WEST);
             header.add(btnPago, BorderLayout.EAST);
 
-            StringBuilder sb = new StringBuilder();
+            JPanel panelPedidos = new JPanel();
+            panelPedidos.setLayout(new BoxLayout(panelPedidos, BoxLayout.Y_AXIS));
+            panelPedidos.setBackground(Color.decode("#D9D9D9"));
 
             for (PedidoDTO ped : comanda.getPedidos()) {
 
-                sb.append("• ")
-                        .append(ped.getNombreProducto());
+                JLabel lblPedido = new JLabel();
+
+                String texto = "• " + ped.getNombreProducto();
 
                 if (ped.getDescripcion() != null
                         && !ped.getDescripcion().trim().isEmpty()) {
 
-                    sb.append(" (")
-                            .append(ped.getDescripcion())
-                            .append(")");
+                    texto += " (" + ped.getDescripcion() + ")";
                 }
 
-                sb.append("\n");
+                lblPedido.setText(texto);
+
+                lblPedido.setFont(new Font("Monospaced", Font.PLAIN, 12));
+
+                lblPedido.setBorder(
+                        BorderFactory.createEmptyBorder(5, 5, 5, 5)
+                );
+
+//                lblPedido.setBorder(
+//                        BorderFactory.createLineBorder(Color.ORANGE, 1)
+//                );
+                lblPedido.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+
+                // Hover bonito
+                lblPedido.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                    @Override
+                    public void mouseEntered(java.awt.event.MouseEvent e) {
+                        lblPedido.setOpaque(true);
+                        lblPedido.setBackground(Color.decode("#CFCFCF"));
+                    }
+
+                    @Override
+                    public void mouseExited(java.awt.event.MouseEvent e) {
+                        lblPedido.setOpaque(false);
+                        lblPedido.setBackground(null);
+                    }
+
+                    @Override
+                    public void mouseClicked(java.awt.event.MouseEvent e) {
+
+                        DlgDetallePedido dlg
+                                = new DlgDetallePedido(
+                                        null,
+                                        true,
+                                        ped
+                                );
+
+                        dlg.setVisible(true);
+                    }
+                });
+
+                panelPedidos.add(lblPedido);
             }
-
-            JTextArea txtPedidos = new JTextArea(sb.toString());
-            txtPedidos.setEditable(false);
-            txtPedidos.setOpaque(false);
-            txtPedidos.setFont(new Font("Monospaced", Font.PLAIN, 12));
-            txtPedidos.setLineWrap(true);
-            txtPedidos.setWrapStyleWord(true);
-
-            txtPedidos.setRows(Math.max(comanda.getPedidos().size(), 4));
 
             JPanel body = new JPanel(new BorderLayout());
             body.setBackground(Color.decode("#D9D9D9"));
             body.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-            body.add(txtPedidos, BorderLayout.CENTER);
+            JScrollPane scrollPedidos = new JScrollPane(panelPedidos);
+            scrollPedidos.setBorder(null);
+            scrollPedidos.setHorizontalScrollBarPolicy(
+                    JScrollPane.HORIZONTAL_SCROLLBAR_NEVER
+            );
+            scrollPedidos.setVerticalScrollBarPolicy(
+                    JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED
+            );
+
+            scrollPedidos.getVerticalScrollBar().setUnitIncrement(12);
+
+            body.add(scrollPedidos, BorderLayout.CENTER);
+
+            JLabel lblNota = new JLabel("Selecciona un pedido para ver su detalle");
+            lblNota.setFont(new Font("Arial", Font.ITALIC, 13));
+            lblNota.setForeground(Color.GRAY);
+            lblNota.setHorizontalAlignment(JLabel.CENTER);
+            lblNota.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
+
+            body.add(lblNota, BorderLayout.SOUTH);
 
             JPanel footer = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 10));
             footer.setBackground(Color.WHITE);
@@ -544,7 +598,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
                         break;
                 }
             }
-            
+
             btnCancelar.addActionListener(e -> {
 
                 int confirmacion = JOptionPane.showConfirmDialog(

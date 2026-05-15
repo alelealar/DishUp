@@ -39,7 +39,7 @@ public class ComandaNegocioAdapter {
                         comanda.getEstado().name()
                 )
         );
-        
+
         if (comanda.getMesa() != null) {
             dto.setNumMesa(comanda.getMesa().getNumero());
         }
@@ -60,6 +60,11 @@ public class ComandaNegocioAdapter {
                 pedidoDTO.setDescripcion(pedido.getDescripcion());
                 pedidoDTO.setPrecioProducto(pedido.getPrecioProducto());
                 pedidoDTO.setFechaPedido(pedido.getFechaPedido());
+                pedidoDTO.setEstado(
+                        enums.EstadoPedidoDTO.valueOf(
+                                pedido.getEstado().name()
+                        )
+                );
 
                 pedidosDTO.add(pedidoDTO);
             }
