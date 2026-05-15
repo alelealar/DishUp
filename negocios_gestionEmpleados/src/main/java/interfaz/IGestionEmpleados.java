@@ -6,12 +6,11 @@
 package interfaz;
 
 import dtos.EmpleadoDTO;
-import excepcion.NegocioException;
 import excepciones.EmpleadosException;
 
 /**
  *
- * @author Alejandra Leal Armenta, 262719
+ * @author DishUp
  */
 public interface IGestionEmpleados {
     

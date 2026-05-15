@@ -4,7 +4,10 @@ import control.EmpleadoControl;
 import dtos.EmpleadoDTO;
 import excepciones.EmpleadosException;
 import interfaz.IGestionEmpleados;
-
+/**
+ * 
+ * @author Home
+ */
 public class EmpleadoFachada implements IGestionEmpleados{
 
     private final EmpleadoControl empleadoControl;

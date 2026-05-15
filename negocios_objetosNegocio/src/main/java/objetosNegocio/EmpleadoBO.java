@@ -5,6 +5,7 @@ import daos.EmpleadoDAO;
 import dtos.EmpleadoDTO;
 import entidades.Empleado;
 import enums.EstadoEmpleado;
+import enums.EstadoEmpleadoDTO;
 import excepcion.NegocioException;
 import excepciones.PersistenciaException;
 import interfaces.IEmpleadoDAO;
@@ -110,12 +111,12 @@ public class EmpleadoBO {
             throw new NegocioException("Usuario obligatorio.");
         }
 
-        if (empleadoDTO.getRol() == null || empleadoDTO.getRol().isBlank()) {
+        if (empleadoDTO.getRol() == null) {
 
             throw new NegocioException("Rol obligatorio.");
         }
 
-        if (empleadoDTO.getEstado() == null || empleadoDTO.getEstado().isBlank()) {
+        if (empleadoDTO.getEstado() == null) {
 
             throw new NegocioException("Estado obligatorio.");
         }
