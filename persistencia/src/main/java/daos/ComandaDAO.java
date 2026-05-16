@@ -164,4 +164,34 @@ public class ComandaDAO implements IComandaDAO {
         }
     }
 
+    @Override
+    public List<Comanda> obtenerComandasListas() throws PersistenciaException {
+        try {
+            List<ComandaEntidadMongo> listaMongo = coleccion.find(eq("estado", "LISTA")).into(new ArrayList<>());
+
+            List<Comanda> lista = new ArrayList<>();
+
+            for (ComandaEntidadMongo mongo : listaMongo) {
+                lista.add(adapter.aDominio(mongo));
+            }
+
+            return lista;
+
+        } catch (MongoException e) {
+            throw new PersistenciaException("Error al obtener comandas listas", e);
+        }
+    }
+
+    @Override
+    public boolean actualizarComanda(String idComanda, List<Pedido> pedidos) throws PersistenciaException {
+        try {
+            UpdateResult result = coleccion.updateOne(
+                    eq("_id", new ObjectId(idComanda)),
+                    set("pedidos", pedidos)
+            );
+            return result.getModifiedCount() > 0;
+        } catch (MongoException e) {
+            throw new PersistenciaException("Error al actualizar comanda", e);
+        }
+    }
 }

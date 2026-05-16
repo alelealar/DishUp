@@ -10,8 +10,10 @@ import dtos.PedidoDTO;
 import dtos.ProductoDTO;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 
 /**
  *
@@ -42,6 +44,17 @@ public class DlgModificarProducto extends javax.swing.JDialog {
         jScrollPane1.setBorder(null);
         jScrollPane1.getViewport().setBackground(new java.awt.Color(255, 248, 235));
 
+        // Label del precio
+        JLabel lblPrecio = new JLabel("$" + precioProductoActual);
+        lblPrecio.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
+        lblPrecio.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 20));
+        lblPrecio.setBackground(new java.awt.Color(255, 248, 235));
+        lblPrecio.setOpaque(false);
+
+        pnlListaIngredientes.add(lblPrecio);
+
+        // Espacio opcional
+        pnlListaIngredientes.add(Box.createVerticalStrut(30));
         for (IngredienteEnProductoDTO ing : ingredientes) {
 
             JCheckBox check = new JCheckBox("Sin " + ing.getNombre());
@@ -263,7 +276,7 @@ public class DlgModificarProducto extends javax.swing.JDialog {
         }
 
         resultado = new PedidoDTO();
-        resultado.setId(idProductoActual);
+        resultado.setIdProducto(idProductoActual);
         resultado.setNombreProducto(lblNombreProducto.getText());
         resultado.setCantidad(1);
         resultado.setDescripcion(especificaciones.toString());

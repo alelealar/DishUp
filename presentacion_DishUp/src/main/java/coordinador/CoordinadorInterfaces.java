@@ -24,6 +24,9 @@ import interfaz.IGestionMesas;
 import interfaz.IGestionProductos;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import pantallas.DlgModificarProducto;
 import pantallas.DlgResumenComanda;
 import pantallas.FrmCliente;
@@ -81,6 +84,7 @@ public class CoordinadorInterfaces {
     public void frmClienteAFrmProductos(Integer mesa, String nombreCliente) {
         frmProductos = new FrmProductos(this);
         frmProductos.setMesaAndCliente(mesa, nombreCliente);
+        frmProductos.setModoNuevo();
         frmProductos.setVisible(true);
     }
 
@@ -92,15 +96,13 @@ public class CoordinadorInterfaces {
     }
 
     public void abrirPersonalizacionProducto(FrmProductos frm, ProductoDTO producto, List<IngredienteEnProductoDTO> removibles) {
-
         DlgModificarProducto dlg = new DlgModificarProducto(frm, producto, removibles);
         dlg.setVisible(true);
-
         PedidoDTO pedido = dlg.getResultado();
-
         if (pedido != null) {
+            pedido.setIdProducto(producto.getId());
             comandaTemporal.add(pedido);
-            frm.agregarPedidoVisual(pedido);
+            frm.agregarPedidoVisual(pedido, null); // null = modo nuevo
         }
     }
 
@@ -178,6 +180,12 @@ public class CoordinadorInterfaces {
 
     public void eliminarPedidoTemporal(PedidoDTO pedido) {
         comandaTemporal.remove(pedido);
+        if (comandaActual != null) {
+            comandaActual.getPedidos().remove(pedido);
+        }
+        if (frmProductos != null) {
+            frmProductos.refrescarPedidos();
+        }
     }
 
     public void abrirAgregarPedido(ComandaDTO comanda) {
@@ -196,28 +204,27 @@ public class CoordinadorInterfaces {
         frm.setVisible(true);
     }
 
-    public void agregarPedidosAComanda(ComandaDTO comanda, int numeroMesa, String nombreCliente) {
+    public void agregarPedidosAComanda(ComandaDTO comanda, List<PedidoDTO> nuevosPedidos) {
         try {
+            comanda.getPedidos().addAll(nuevosPedidos);
 
-            for (PedidoDTO pedido : comandaTemporal) {
-                comanda.getPedidos().add(pedido);
+            comandaFachada.agregarPedidosAComanda(comanda.getId(), nuevosPedidos);
+
+            if (frmComandas != null) {
+                frmComandas.setVisible(true);
+                frmComandas.actualizarPantalla();
             }
-
-            comandaFachada.agregarPedidosAComanda(comanda.getId(), comandaTemporal);
-
-            this.frmComandas.refrescarMesaActual();
-
-            if (this.frmProductos != null) {
-                this.frmProductos.dispose();
-                this.frmProductos = null;
+            if (frmProductos != null) {
+                frmProductos.dispose();
+                frmProductos = null;
             }
 
             comandaTemporal.clear();
-            this.frmComandas.setVisible(true);
 
         } catch (ComandasException e) {
             System.out.println("Error: " + e.getMessage());
         }
+
     }
 
     public void abrirResumenAgregarPedido(ComandaDTO comanda) {
@@ -241,4 +248,149 @@ public class CoordinadorInterfaces {
     public boolean eliminarComanda(String idComanda) throws ComandasException {
         return comandaFachada.eliminarComanda(idComanda);
     }
+
+    public List<Integer> obtenerMesasConComandasListas() {
+        try {
+            List<ComandaDTO> comandas = comandaFachada.obtenerComandasListas();
+
+            List<Integer> mesas = new ArrayList<>();
+
+            for (ComandaDTO c : comandas) {
+                if (!mesas.contains(c.getNumMesa())) {
+                    mesas.add(c.getNumMesa());
+                }
+            }
+
+            return mesas;
+
+        } catch (ComandasException e) {
+            return new ArrayList<>();
+        }
+    }
+
+    public void entregarComanda(String idComanda) throws ComandasException {
+        comandaFachada.entregarComanda(idComanda);
+
+        if (frmComandas != null) {
+            frmComandas.actualizarPantalla();
+        }
+    }
+
+    public void abrirEditarComanda(ComandaDTO comanda) {
+        comandaTemporal = new ArrayList<>(); // Limpiar temporal
+        FrmProductos frm = new FrmProductos(this);
+        this.frmProductos = frm; // Guardar referencia
+        frm.setMesaAndCliente(comanda.getNumMesa(), comanda.getNombreCliente());
+        frm.setModoEdicion(comanda);
+        frm.setVisible(true);
+    }
+
+    public void abrirResumenEditarComanda(ComandaDTO comandaEdicion) {
+        DlgResumenComanda dlg = new DlgResumenComanda(
+                this,
+                frmProductos,
+                comandaEdicion,
+                comandaTemporal
+        );
+        dlg.setVisible(true);
+    }
+
+    public List<PedidoDTO> getComandaTemporal() {
+        return new ArrayList<>(comandaTemporal);
+    }
+
+    public void abrirModificacionPedidoExistente(
+            FrmProductos frm,
+            PedidoDTO pedidoOriginal,
+            ComandaDTO comanda,
+            JPanel itemPanel,
+            JTextArea txtLista) {
+
+        // Necesitamos los ingredientes removibles del producto
+        List<IngredienteEnProductoDTO> removibles = obtenerIngredientesRemovibles(pedidoOriginal.getIdProducto());
+
+        // Creamos un ProductoDTO mínimo para pasarle al diálogo
+        ProductoDTO productoTemp = new ProductoDTO();
+        productoTemp.setId(pedidoOriginal.getIdProducto());
+        productoTemp.setNombre(pedidoOriginal.getNombreProducto());
+        productoTemp.setPrecio(pedidoOriginal.getPrecioProducto());
+
+        DlgModificarProducto dlg = new DlgModificarProducto(frm, productoTemp, removibles);
+        dlg.setVisible(true);
+
+        PedidoDTO modificado = dlg.getResultado();
+        if (modificado != null) {
+
+            // Mantener el id del producto
+            modificado.setIdProducto(pedidoOriginal.getIdProducto());
+
+            if (comanda != null) {
+
+                // EDICIÓN DE COMANDA EXISTENTE
+                int idx = comanda.getPedidos().indexOf(pedidoOriginal);
+
+                if (idx >= 0) {
+                    comanda.getPedidos().set(idx, modificado);
+                }
+
+            } else {
+
+                // PEDIDO NUEVO (TEMPORAL)
+                List<PedidoDTO> temporales = getComandaTemporalReal();
+
+                int idx = temporales.indexOf(pedidoOriginal);
+
+                if (idx >= 0) {
+                    temporales.set(idx, modificado);
+                }
+            }
+
+            String desc = (modificado.getDescripcion() != null
+                    && !modificado.getDescripcion().isEmpty())
+                    ? modificado.getDescripcion().replace(", ", "\n• ")
+                    : "";
+
+            txtLista.setText("• " + desc);
+
+            itemPanel.revalidate();
+            itemPanel.repaint();
+        }
+    }
+
+    public List<PedidoDTO> getComandaTemporalReal() {
+        return comandaTemporal;
+    }
+
+    public void limpiarComandaTemporal() {
+        comandaTemporal = new ArrayList<>();
+    }
+
+    public void actualizarComanda(ComandaDTO comanda, List<PedidoDTO> nuevosPedidos) {
+        try {
+            if (nuevosPedidos != null && !nuevosPedidos.isEmpty()) {
+                comanda.getPedidos().addAll(nuevosPedidos);
+            }
+
+            comandaFachada.actualizarComanda(comanda);
+            if (frmComandas != null) {
+                frmComandas.setVisible(true);
+                frmComandas.actualizarPantalla();
+            }
+            if (frmProductos != null) {
+                frmProductos.dispose();
+                frmProductos = null;
+            }
+
+            comandaTemporal.clear();
+
+        } catch (ComandasException e) {
+            JOptionPane.showMessageDialog(
+                    frmComandas,
+                    "Error al actualizar la comanda: " + e.getMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }
+
 }
