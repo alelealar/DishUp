@@ -48,6 +48,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
     public FrmPantallaComandas(CoordinadorInterfaces coordinador) {
         this.coordinador = coordinador;
         this.coordinador.setFrmComandas(this);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         initComponents();
         this.setLocationRelativeTo(null);
         panMesas.setLayout(new BoxLayout(panMesas, BoxLayout.Y_AXIS));
@@ -382,6 +383,22 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         } catch (MesasException ex) {
             System.out.println("Error al obtener mesas: " + ex.getMessage());
         }
+        List<Integer> mesasConComandasListas = coordinador.obtenerMesasConComandasListas();
+        mesas.sort((m1, m2) -> {
+            boolean m1Lista = mesasConComandasListas.contains(m1.getNumeroMesa());
+
+            boolean m2Lista = mesasConComandasListas.contains(m2.getNumeroMesa());
+
+            if (m1Lista && !m2Lista) {
+                return -1;
+            }
+
+            if (!m1Lista && m2Lista) {
+                return 1;
+            }
+
+            return Integer.compare(m1.getNumeroMesa(), m2.getNumeroMesa());
+        });
 
         for (MesaDTO mesa : mesas) {
             JButton btn = new JButton("Mesa " + mesa.getNumeroMesa());
@@ -401,7 +418,12 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
                 if (btnSeleccionado != null) {
 
-                    btnSeleccionado.setBackground(Color.decode("#FFE3AC"));
+                    if (mesasConComandasListas.contains(mesaSeleccionada.getNumeroMesa())) {
+                        btnSeleccionado.setBackground(Color.decode("#B9F6B1"));
+                    } else {
+                        btnSeleccionado.setBackground(Color.decode("#FFE3AC"));
+                    }
+
                     btnSeleccionado.setFont(new Font("Arial", Font.PLAIN, 18));
                     btnSeleccionado.setBorder(null);
                 }
@@ -415,12 +437,31 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
                 List<ComandaDTO> comandas = coordinador.getComandasDeMesa(mesa.getNumeroMesa());
                 mostrarComandasDeMesa(mesa.getNumeroMesa(), comandas);
-                System.out.println("Seleccionaste Mesa " + mesa);
+                // System.out.println("Seleccionaste Mesa " + mesa);
             });
 
-            btn.setBackground(Color.decode("#FFE3AC"));
-            btn.setFont(new Font("Arial", Font.PLAIN, 18));
-            btn.setBorder(null);
+            if (mesaSeleccionada != null && mesa.getNumeroMesa() == mesaSeleccionada.getNumeroMesa()) {
+                btn.setBackground(Color.decode("#FFD481"));
+                btn.setFont(new Font("Arial", Font.BOLD, 18));
+                btn.setBorder(BorderFactory.createLineBorder(Color.decode("#FFBE41"), 2));
+
+                btnSeleccionado = btn;
+
+                // Restaurar comportamiento de selección
+                btnLevantarComanda.setVisible(true);
+
+                List<ComandaDTO> comandas = coordinador.getComandasDeMesa(mesa.getNumeroMesa());
+
+                mostrarComandasDeMesa(mesa.getNumeroMesa(), comandas);
+            } else if (mesasConComandasListas.contains(mesa.getNumeroMesa())) {
+                btn.setBackground(Color.decode("#B9F6B1"));
+                btn.setFont(new Font("Arial", Font.PLAIN, 18));
+                btn.setBorder(null);
+            } else {
+                btn.setBackground(Color.decode("#FFE3AC"));
+                btn.setFont(new Font("Arial", Font.PLAIN, 18));
+                btn.setBorder(null);
+            }
 
             panMesas.add(btn);
             panMesas.add(Box.createVerticalStrut(28));
@@ -442,6 +483,22 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         } else {
             lblSeleccioneMesa.setVisible(false);
             lblEspacio.setVisible(false);
+
+            comandas.sort((c1, c2) -> {
+                boolean c1Lista = c1.getEstado().name().equals("LISTA");
+                boolean c2Lista = c2.getEstado().name().equals("LISTA");
+
+                if (c1Lista && !c2Lista) {
+                    return -1;
+                }
+
+                if (!c1Lista && c2Lista) {
+                    return 1;
+                }
+
+                return 0;
+            });
+
             for (ComandaDTO c : comandas) {
                 panComandasLlenas.add(new ComandaCard(c));
                 panComandasLlenas.add(Box.createVerticalStrut(10));
@@ -463,7 +520,12 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             setAlignmentX(Component.LEFT_ALIGNMENT);
 
             JPanel header = new JPanel(new BorderLayout());
-            header.setBackground(Color.decode("#FFDA92"));
+
+            if (comanda.getEstado() != null && comanda.getEstado().name().equals("LISTA")) {
+                header.setBackground(Color.decode("#B9F6B1"));
+            } else {
+                header.setBackground(Color.decode("#FFDA92"));
+            }
             header.setBorder(BorderFactory.createEmptyBorder(5, 10, 5, 10));
 
             JLabel lblTitulo = new JLabel(comanda.getNombreCliente().toUpperCase() + ": " + comanda.getEstado() + " | $" + comanda.getTotal());
@@ -485,7 +547,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
                 JLabel lblPedido = new JLabel();
 
-                String texto = "• " + ped.getNombreProducto();
+                String texto = "• " + ped.getNombreProducto() + " $" + ped.getPrecioProducto();
 
                 if (ped.getDescripcion() != null
                         && !ped.getDescripcion().trim().isEmpty()) {
@@ -575,26 +637,76 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
                 SwingUtilities.getWindowAncestor(this).dispose();
             });
 
+            JButton btnEditar = new JButton("Editar comanda");
+            btnEditar.setBackground(Color.decode("#FFAD72"));
+            btnEditar.setPreferredSize(new Dimension(140, 35));
+            btnEditar.setFocusPainted(false);
+
+            btnEditar.addActionListener(e -> {
+                coordinador.abrirEditarComanda(comanda);
+                SwingUtilities.getWindowAncestor(this).dispose();
+            });
+
             JButton btnCancelar = new JButton("Cancelar comanda");
             btnCancelar.setBackground(Color.decode("#FF9C9C"));
             btnCancelar.setPreferredSize(new Dimension(160, 35));
             btnCancelar.setFocusPainted(false);
 
+            JButton btnEntregar = new JButton("Entregar comanda");
+            btnEntregar.setBackground(Color.decode("#B9F6B1"));
+            btnEntregar.setPreferredSize(new Dimension(170, 35));
+            btnEntregar.setFocusPainted(false);
+
+            btnEntregar.addActionListener(e -> {
+
+                int confirmacion = JOptionPane.showConfirmDialog(
+                        this,
+                        "¿Seguro que deseas entregar esta comanda?",
+                        "Confirmar entrega",
+                        JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE
+                );
+
+                if (confirmacion == JOptionPane.YES_OPTION) {
+                    try {
+                        coordinador.entregarComanda(comanda.getId());
+
+                        JOptionPane.showMessageDialog(
+                                this,
+                                "Comanda entregada correctamente",
+                                "Éxito",
+                                JOptionPane.INFORMATION_MESSAGE
+                        );
+
+                        actualizarPantalla();
+
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(
+                                this,
+                                ex.getMessage(),
+                                "Error",
+                                JOptionPane.ERROR_MESSAGE
+                        );
+                    }
+                }
+            });
+
             if (comanda.getEstado() != null) {
-
                 switch (comanda.getEstado().name()) {
-
                     case "PENDIENTE":
-                        footer.add(btnAgregar);
+                        footer.add(btnEditar);
                         footer.add(btnCancelar);
                         break;
-
                     case "LISTA":
                         footer.add(btnAgregar);
+                        footer.add(btnEntregar);
                         break;
-
+                    case "EN_PREPARACION":
+                        footer.add(btnAgregar);
+                    case "ENTREGADA":
+                        footer.add(btnAgregar);
                     case "PAGADA":
-                        // No agregar botones
+                        // no mostrar botones
                         break;
                 }
             }
@@ -624,7 +736,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
                                     JOptionPane.INFORMATION_MESSAGE
                             );
 
-                            refrescarMesaActual();
+                            actualizarPantalla();
 
                         }
 
@@ -660,5 +772,10 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
     public void setMesero(String id, String empleado) {
         idMesero = id;
         lblEmpleado.setText(empleado);
+    }
+
+    public void actualizarPantalla() {
+        cargarMesas();
+        refrescarMesaActual();
     }
 }
