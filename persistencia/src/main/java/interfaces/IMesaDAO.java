@@ -26,4 +26,6 @@ public interface IMesaDAO {
     public void asignarMesaAMesero(Mesa mesa, Empleado mesero) throws PersistenciaException; 
     
     public List<Mesa> obtenerMesasDisponibles() throws PersistenciaException;
+    
+    void desasignarMesero(Mesa mesa) throws PersistenciaException;
 }

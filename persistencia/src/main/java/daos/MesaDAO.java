@@ -5,6 +5,7 @@ import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.*;
 import static com.mongodb.client.model.Updates.*;
+import com.mongodb.client.result.UpdateResult;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
 import conexion.ConexionMongo;
@@ -172,6 +173,24 @@ public class MesaDAO implements IMesaDAO {
             return mesasDominio;
         } catch (MongoException ex) {
             throw new PersistenciaException("No fue posible consultar las mesas disponibles", ex);
+        }
+    }
+    @Override
+    public void desasignarMesero(Mesa mesa) throws PersistenciaException {
+
+        if (mesa == null) {
+            throw new PersistenciaException("La mesa es nula");
+        }
+
+        try {
+            UpdateResult result = this.coleccion.updateOne(eq("_id", new ObjectId(mesa.getId())), unset("idMesero"));
+            
+            if (result.getMatchedCount() == 0) {
+                throw new PersistenciaException("No se encontró la mesa.");
+            }
+
+        } catch (MongoException ex) {
+            throw new PersistenciaException("No fue posible desasignar el mesero.", ex);
         }
     }
 }

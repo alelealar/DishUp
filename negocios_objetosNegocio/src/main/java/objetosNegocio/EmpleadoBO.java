@@ -2,35 +2,38 @@ package objetosNegocio;
 
 import adaptadores.EmpleadoNegocioAdapter;
 import daos.EmpleadoDAO;
+import daos.MesaDAO;
 import dtos.EmpleadoDTO;
 import entidades.Empleado;
+import entidades.Mesa;
 import enums.EstadoEmpleado;
 import excepcion.NegocioException;
 import excepciones.PersistenciaException;
 import interfaces.IEmpleadoDAO;
+import interfaces.IMesaDAO;
 import java.util.List;
 
 public class EmpleadoBO {
 
     private final IEmpleadoDAO empleadoDAO;
+    private final IMesaDAO mesaDAO;
     private final EmpleadoNegocioAdapter empleadoAdapter;
 
     public EmpleadoBO() {
         this.empleadoDAO = new EmpleadoDAO();
+        this.mesaDAO = new MesaDAO();
         this.empleadoAdapter = new EmpleadoNegocioAdapter();
     }
 
     public EmpleadoBO(IEmpleadoDAO empleadoDAO) {
         this.empleadoDAO = empleadoDAO;
+        this.mesaDAO = new MesaDAO();
         this.empleadoAdapter = new EmpleadoNegocioAdapter();
     }
 
     public EmpleadoDTO obtenerEmpleado(EmpleadoDTO empleadoDTO) throws NegocioException {
 
-        validarEmpleadoConsulta(empleadoDTO);
-
         try {
-
             Empleado empleado = empleadoAdapter.aEntidad(empleadoDTO);
 
             Empleado consultado = empleadoDAO.obtenerEmpleado(empleado);
@@ -42,24 +45,16 @@ public class EmpleadoBO {
             return empleadoAdapter.aDTO(consultado);
 
         } catch (PersistenciaException ex) {
-            throw new NegocioException("Error al consultar al empleado: "+ex.getMessage(), ex);
+            throw new NegocioException("Error al consultar empleado.", ex);
         }
     }
 
     public EmpleadoDTO login(EmpleadoDTO empleadoDTO) throws NegocioException {
 
-        if (empleadoDTO == null) {
-            throw new NegocioException("Empleado nulo.");
-        }
-
-        if (empleadoDTO.getUser() == null || empleadoDTO.getUser().isBlank()) {
-
-            throw new NegocioException("Usuario obligatorio.");
-        }
-
         try {
+            Empleado empleado = empleadoAdapter.aEntidad(empleadoDTO);
 
-            Empleado consultado = empleadoDAO.obtenerEmpleado(empleadoAdapter.aEntidad(empleadoDTO));
+            Empleado consultado = empleadoDAO.obtenerEmpleado(empleado);
 
             if (consultado == null) {
                 throw new NegocioException("Usuario incorrecto.");
@@ -68,108 +63,72 @@ public class EmpleadoBO {
             return empleadoAdapter.aDTO(consultado);
 
         } catch (PersistenciaException ex) {
-            throw new NegocioException("No fue posible iniciar sesión: "+ex.getMessage(), ex);
+            throw new NegocioException("No fue posible iniciar sesión.", ex);
         }
     }
 
     public void activarEmpleado(EmpleadoDTO empleadoDTO) throws NegocioException {
 
-        if (empleadoDTO == null) {
-            throw new NegocioException("Empleado nulo.");
-        }
-
-        if (empleadoDTO.getUser() == null || empleadoDTO.getUser().isBlank()) {
-            throw new NegocioException("Usuario obligatorio.");
-        }
-
         try {
+            Empleado empleado = empleadoAdapter.aEntidad(empleadoDTO);
 
-            Empleado consultado = empleadoDAO.obtenerEmpleado(empleadoAdapter.aEntidad(empleadoDTO));
+            Empleado consultado = empleadoDAO.obtenerEmpleado(empleado);
 
             if (consultado == null) {
                 throw new NegocioException("Empleado no encontrado.");
             }
 
-            empleadoDAO.actualizarEstadoEmpleado(
-                    consultado,
-                    EstadoEmpleado.ACTIVO
-            );
+            empleadoDAO.actualizarEstadoEmpleado(consultado, EstadoEmpleado.ACTIVO);
 
         } catch (PersistenciaException ex) {
-            throw new NegocioException("No fue posible activar el empleado: "+ex.getMessage(), ex);
+            throw new NegocioException("No fue posible activar el empleado.", ex);
         }
     }
 
-    public List<EmpleadoDTO> obtenerMeserosActivos() throws NegocioException{
-        
-        try{
-            List<Empleado> dominios = empleadoDAO.obtenerMeserosActivos();
-            
-            return empleadoAdapter.listaEntidadADTO(dominios);
-            
-        } catch (PersistenciaException ex) {
-            throw new NegocioException("Error al consultar a los meseros activos: "+ex.getMessage());
-        }
-    }
-    
-    public List<EmpleadoDTO> buscarMeserosNombreUser(EmpleadoDTO dto) throws NegocioException{
-        try{
-            List<Empleado> dominios = empleadoDAO.buscarMeserosPorUserNombre(dto.getUser(), dto.getNombres());
-            
-            return empleadoAdapter.listaEntidadADTO(dominios);
-            
-        } catch (PersistenciaException ex) {
-            throw new NegocioException("Error en la busqueda: "+ex.getMessage());
-        }
-    }
-    
     public void desactivarEmpleado(EmpleadoDTO empleadoDTO) throws NegocioException {
 
-        if (empleadoDTO == null) {
-            throw new NegocioException("Empleado nulo.");
-        }
-
-        if (empleadoDTO.getUser() == null || empleadoDTO.getUser().isBlank()) {
-            throw new NegocioException("Usuario obligatorio.");
-        }
-
         try {
+            Empleado empleado = empleadoAdapter.aEntidad(empleadoDTO);
 
-            Empleado consultado = empleadoDAO.obtenerEmpleado(empleadoAdapter.aEntidad(empleadoDTO));
+            Empleado consultado = empleadoDAO.obtenerEmpleado(empleado);
 
             if (consultado == null) {
                 throw new NegocioException("Empleado no encontrado.");
             }
+            empleadoDAO.actualizarEstadoEmpleado(consultado, EstadoEmpleado.INACTIVO);
 
-            empleadoDAO.actualizarEstadoEmpleado(
-                    consultado,
-                    EstadoEmpleado.INACTIVO
-            );
+            List<Mesa> mesasAsignadas = mesaDAO.obtenerMesasPorMesero(consultado.getId());
+
+            for (Mesa mesa : mesasAsignadas) {
+                mesaDAO.desasignarMesero(mesa);
+            }
 
         } catch (PersistenciaException ex) {
-            throw new NegocioException("No fue posible desactivar el empleado: "+ex.getMessage(), ex);
+            throw new NegocioException("No fue posible desactivar el empleado.", ex);
         }
     }
-    
-    private void validarEmpleadoConsulta(EmpleadoDTO empleadoDTO) throws NegocioException {
 
-        if (empleadoDTO == null) {
-            throw new NegocioException("Empleado nulo.");
+    public List<EmpleadoDTO> obtenerMeserosActivos() throws NegocioException {
+
+        try {
+            List<Empleado> empleados = empleadoDAO.obtenerMeserosActivos();
+            return empleadoAdapter.listaEntidadADTO(empleados);
+
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error al consultar meseros activos.", ex);
         }
+    }
 
-        if (empleadoDTO.getUser() == null || empleadoDTO.getUser().isBlank()) {
+    public List<EmpleadoDTO> buscarMeserosNombreUser(EmpleadoDTO dto) throws NegocioException {
 
-            throw new NegocioException("Usuario obligatorio.");
-        }
+        try {
+            List<Empleado> empleados =
+                    empleadoDAO.buscarMeserosPorUserNombre(dto.getUser(), dto.getNombres());
 
-        if (empleadoDTO.getRol() == null) {
+            return empleadoAdapter.listaEntidadADTO(empleados);
 
-            throw new NegocioException("Rol obligatorio.");
-        }
-
-        if (empleadoDTO.getEstado() == null) {
-
-            throw new NegocioException("Estado obligatorio.");
+        } catch (PersistenciaException ex) {
+            throw new NegocioException("Error en la búsqueda de meseros.", ex);
         }
     }
 }

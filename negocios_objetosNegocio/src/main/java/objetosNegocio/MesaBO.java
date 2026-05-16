@@ -7,14 +7,12 @@ import dtos.EmpleadoDTO;
 import dtos.MesaDTO;
 import entidades.Mesa;
 import enums.EstadoEmpleadoDTO;
-import enums.RolEmpleado;
+import enums.EstadoMesa;
 import enums.RolEmpleadoDTO;
 import excepcion.NegocioException;
 import excepciones.PersistenciaException;
 import interfaces.IMesaDAO;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * BO de mesas.
@@ -42,15 +40,9 @@ public class MesaBO {
         this.empleadoAdapter = new EmpleadoNegocioAdapter();
     }
 
-    public List<MesaDTO> obtenerMesasPorMesero(String idMesero) throws NegocioException {
-
-        if (idMesero == null || idMesero.isBlank()) {
-            throw new NegocioException("El id del mesero es inválido.");
-        }
-
+    public List<MesaDTO> obtenerMesasPorMesero(EmpleadoDTO empleado) throws NegocioException {
         try {
-
-            List<Mesa> mesas = mesaDAO.obtenerMesasPorMesero(idMesero);
+            List<Mesa> mesas = mesaDAO.obtenerMesasPorMesero(empleado.getId());
 
             return mesaAdapter.listaEntidadADTO(mesas);
 
@@ -61,14 +53,6 @@ public class MesaBO {
     }
     
     public MesaDTO obtenerMesa(MesaDTO mesa) throws NegocioException{
-        if(mesa == null){
-            throw new NegocioException("La mesa no puede ser nula");
-        }
-        
-        if (mesa.getIdMesa()== null || mesa.getIdMesa().isBlank()) {
-            throw new NegocioException("La mesa debe tener un ID");
-        }
-        
         try {
             Mesa obtenida = mesaDAO.obtenerMesa(mesaAdapter.aEntidad(mesa));
             
@@ -79,60 +63,50 @@ public class MesaBO {
         }
     }
     
-    public void eliminarMesa(MesaDTO mesa) throws NegocioException{
-        if(mesa == null){
-            throw new NegocioException("La mesa no puede ser nula");
-        }
-        
-        if (mesa.getIdMesa()== null || mesa.getIdMesa().isBlank()) {
-            throw new NegocioException("La mesa debe tener un ID");
-        }
-        
+    public void eliminarMesa(MesaDTO mesa) throws NegocioException{            
         try {
-            mesaDAO.eliminarMesa(mesaAdapter.aEntidad(mesa));
+            
+            Mesa entidad = mesaAdapter.aEntidad(mesa);
+
+            Mesa actual = mesaDAO.obtenerMesa(entidad);
+            
+            if (actual.getIdMesero() != null) {
+                throw new NegocioException("No se puede eliminar una mesa asignada a un mesero.");
+            }
+            
+            mesaDAO.eliminarMesa(entidad);
         } catch (PersistenciaException ex) {
             throw new NegocioException("No fue posible eliminar la mesa", ex);
         }
     }
     
     public void agregarMesa(MesaDTO mesa) throws NegocioException{
-        if(mesa == null){
-            throw new NegocioException("La mesa no puede ser nula");
-        }
-        
-        if (mesa.getIdMesa()== null || mesa.getIdMesa().isBlank()) {
-            throw new NegocioException("La mesa debe tener un ID");
-        }
-        
         try {
-            mesaDAO.insertarMesa(mesaAdapter.aEntidad(mesa));
+            Mesa entidad = mesaAdapter.aEntidad(mesa);
+
+            entidad.setIdMesero(null);
+            entidad.setEstado(EstadoMesa.LIBRE);
+
+            mesaDAO.insertarMesa(entidad);
         } catch (PersistenciaException ex) {
             throw new NegocioException("No fue posible agregar la mesa", ex);
         }
-    }
+    }  
     
     public void asignarMesaAMesero(MesaDTO mesa, EmpleadoDTO mesero) throws NegocioException{
-        if(mesa == null){
-            throw new NegocioException("La mesa no puede ser nula");
-        }
-        
-        if (mesa.getIdMesa()== null || mesa.getIdMesa().isBlank()) {
-            throw new NegocioException("La mesa debe tener un ID");
-        }
-        
-        if (mesero.getId() == null || mesero.getId().isBlank()) {
-            throw new NegocioException("El mesero debe tener un ID");
-        }
-        
-        if (mesero.getRol() != RolEmpleadoDTO.MESERO) {
-            throw new NegocioException("El empleado no es mesero");
-        }
-        
-        if (mesero.getEstado() != EstadoEmpleadoDTO.ACTIVO) {
-            throw new NegocioException("El mesero no está activo");
-        }
         try {
-            mesaDAO.asignarMesaAMesero(mesaAdapter.aEntidad(mesa), empleadoAdapter.aEntidad(mesero));
+            Mesa entidadMesa = mesaAdapter.aEntidad(mesa);
+            Mesa actual = mesaDAO.obtenerMesa(entidadMesa);
+
+            if (actual.getIdMesero() != null) {
+                throw new NegocioException("La mesa ya está asignada a un mesero.");
+            }
+
+            if (mesero.getEstado() != EstadoEmpleadoDTO.ACTIVO) {
+                throw new NegocioException("El mesero no está activo.");
+            }
+
+            mesaDAO.asignarMesaAMesero(entidadMesa, empleadoAdapter.aEntidad(mesero));
         } catch (PersistenciaException ex) {
             throw new NegocioException("No fue posible asignar la mesa al mesero", ex);
         }

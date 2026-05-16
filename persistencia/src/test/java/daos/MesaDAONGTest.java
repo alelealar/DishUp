@@ -3,7 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/EmptyTestNGTest.java to edit this template
  */
 package daos;
-/*
+
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.result.InsertOneResult;
 import conexion.ConexionMongo;
@@ -20,13 +20,13 @@ import org.bson.types.ObjectId;
 import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
-*/
+
 /**
  *
  * @author DishUp
  */
 
-/*
+
 public class MesaDAONGTest {
 
     @AfterEach
@@ -323,5 +323,67 @@ public class MesaDAONGTest {
         
         assertEquals(0, disponibles.size());
     }
+    
+    @Test
+    public void testDesasignarMesa_correcto() throws PersistenciaException{
+        MesaDAO mdao = new MesaDAO();
+        
+        MongoCollection<EmpleadoEntidadMongo> coleccion
+                = ConexionMongo.obtenerBaseDatos()
+                        .getCollection("empleados", EmpleadoEntidadMongo.class);
+
+        EmpleadoEntidadMongo empleadoMongo = new EmpleadoEntidadMongo();
+
+        empleadoMongo.setNombres("Alejandra");
+        empleadoMongo.setApellidoPaterno("Leal");
+        empleadoMongo.setApellidoMaterno("Armenta");
+        empleadoMongo.setUser("ME-001");
+        empleadoMongo.setRol(RolEmpleado.MESERO.name());
+        empleadoMongo.setEstado(EstadoEmpleado.ACTIVO.name());
+
+        InsertOneResult resultado = coleccion.insertOne(empleadoMongo);
+
+        String idMesero = resultado.getInsertedId()
+                .asObjectId()
+                .getValue()
+                .toHexString();
+        
+        Mesa mesa1 = new Mesa(1, EstadoMesa.LIBRE);
+        Mesa mesa2 = new Mesa(2, EstadoMesa.OCUPADA);
+        Mesa mesa3 = new Mesa(3, EstadoMesa.LIBRE);
+        Mesa mesa4 = new Mesa(4, EstadoMesa.LIBRE);
+        Mesa mesa5 = new Mesa(5, EstadoMesa.LIBRE);
+        
+        mesa1.setIdMesero(idMesero);
+        mesa2.setIdMesero(idMesero);
+        mesa3.setIdMesero(idMesero);
+        mesa5.setIdMesero(idMesero);
+        
+        mdao.insertarMesa(mesa1);
+        mdao.insertarMesa(mesa2);
+        mdao.insertarMesa(mesa3);
+        mdao.insertarMesa(mesa4);
+        mdao.insertarMesa(mesa5);
+        
+        List<Mesa> disponibles = mdao.obtenerMesasPorMesero(idMesero);
+        
+        assertEquals(4, disponibles.size());
+        
+        mdao.desasignarMesero(mesa1);
+        mdao.desasignarMesero(mesa2);
+        mdao.desasignarMesero(mesa3);
+        mdao.desasignarMesero(mesa5);
+        
+        List<Mesa> sinMesero = mdao.obtenerMesasPorMesero(idMesero);
+        
+        assertEquals(0, sinMesero.size()); 
+    }
+    
+    @Test
+    public void testDesasignarMesa_meseroNull() throws PersistenciaException{
+        MesaDAO mdao = new MesaDAO();
+        assertThrows(PersistenciaException.class, () -> {
+            mdao.desasignarMesero(null);
+        });
+    }
 }
-*/
