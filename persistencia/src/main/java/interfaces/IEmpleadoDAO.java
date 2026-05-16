@@ -14,8 +14,6 @@ import excepciones.PersistenciaException;
  * @author DishUp
  */
 public interface IEmpleadoDAO {
-
-    public Empleado insertarEmpleado(Empleado empleado) throws PersistenciaException;
     
     public Empleado obtenerEmpleado(Empleado empleado) throws PersistenciaException;
     

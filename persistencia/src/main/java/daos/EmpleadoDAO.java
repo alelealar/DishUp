@@ -26,32 +26,6 @@ public class EmpleadoDAO implements IEmpleadoDAO {
     }
 
     @Override
-    public Empleado insertarEmpleado(Empleado empleado) throws PersistenciaException {
-        if (empleado == null) {
-            throw new PersistenciaException("El empleado es nulo");
-        }
-
-        try {
-            EmpleadoEntidadMongo empleadoMongo = empleadoAdapter.aMongo(empleado);
-
-            InsertOneResult resultado = this.coleccion.insertOne(empleadoMongo);
-
-            if (resultado.getInsertedId() == null) {
-                throw new PersistenciaException("Error al guardar");
-            }
-
-            String idGenerado = resultado.getInsertedId().asObjectId().getValue().toHexString();
-
-            empleadoMongo.setId(idGenerado);
-
-            return empleadoAdapter.aDominio(empleadoMongo);
-
-        } catch (MongoException ex) {
-            throw new PersistenciaException("No fue posible insertar el empleado.", ex);
-        }
-    }
-
-    @Override
     public Empleado obtenerEmpleado(Empleado empleado) throws PersistenciaException {
         if (empleado == null) {
             throw new PersistenciaException("El empleado es nulo");

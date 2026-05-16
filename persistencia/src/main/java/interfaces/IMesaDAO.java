@@ -4,6 +4,7 @@
  */
 package interfaces;
 
+import entidades.Empleado;
 import entidades.Mesa;
 import excepciones.PersistenciaException;
 import java.util.List;
@@ -16,5 +17,13 @@ public interface IMesaDAO {
 
     public List<Mesa> obtenerMesasPorMesero(String idMesero) throws PersistenciaException;
 
-    public Mesa insertarMesa(Mesa mesa) throws PersistenciaException;
+    public void insertarMesa(Mesa mesa) throws PersistenciaException;
+    
+    public void eliminarMesa(Mesa mesa) throws PersistenciaException;
+    
+    public Mesa obtenerMesa(Mesa mesa) throws PersistenciaException;
+    
+    public void asignarMesaAMesero(Mesa mesa, Empleado mesero) throws PersistenciaException; 
+    
+    public List<Mesa> obtenerMesasDisponibles() throws PersistenciaException;
 }
