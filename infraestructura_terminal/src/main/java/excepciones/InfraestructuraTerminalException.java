@@ -8,12 +8,12 @@ package excepciones;
  *
  * @author valeria
  */
-public class InfraestructuraException extends Exception {
-    public InfraestructuraException(String message) {
+public class InfraestructuraTerminalException extends Exception {
+    public InfraestructuraTerminalException(String message) {
         super(message);
     }
 
-    public InfraestructuraException(String message, Throwable cause) {
+    public InfraestructuraTerminalException(String message, Throwable cause) {
         super(message, cause);
     }
 }

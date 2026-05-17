@@ -446,8 +446,18 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
                 panComandasLlenas.add(new ComandaCard(c));
                 panComandasLlenas.add(Box.createVerticalStrut(10));
             }
-            btnEnviarComandas.setVisible(false);
-            btnPagoGeneral.setVisible(true);
+            btnEnviarComandas.setVisible(true);
+            try {
+
+                boolean puedePagarMesa = coordinador.puedePagarMesa(numeroMesa);
+
+                btnPagoGeneral.setVisible(true);
+                btnPagoGeneral.setEnabled(puedePagarMesa);
+
+            } catch (Exception ex) {
+                btnPagoGeneral.setVisible(true);
+                btnPagoGeneral.setEnabled(false);
+            }
         }
 
         panComandasLlenas.revalidate();
@@ -473,6 +483,16 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             btnPago.setBackground(Color.decode("#FFB21D"));
             btnPago.setPreferredSize(new Dimension(80, 30));
             btnPago.setFocusPainted(false);
+            
+            try {
+                boolean puedePagar = coordinador.puedePagarComanda(comanda.getId());
+
+                btnPago.setVisible(puedePagar);
+                btnPago.setEnabled(puedePagar);
+
+            } catch (Exception ex) {
+                btnPago.setVisible(false);
+            }
 
             header.add(lblTitulo, BorderLayout.WEST);
             header.add(btnPago, BorderLayout.EAST);

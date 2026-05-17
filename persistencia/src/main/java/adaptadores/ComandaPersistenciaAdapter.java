@@ -2,9 +2,11 @@ package adaptadores;
 
 import entidades.Comanda;
 import entidades.Mesa;
+import entidades.Pago;
 import entidades.Pedido;
 import entidadesMongo.ComandaEntidadMongo;
 import entidadesMongo.MesaEntidadMongo;
+import entidadesMongo.PagoEntidadMongo;
 import entidadesMongo.PedidoEntidadMongo;
 import java.util.ArrayList;
 import java.util.List;
@@ -128,5 +130,9 @@ public class ComandaPersistenciaAdapter {
         comanda.setPedidos(pedidos);
 
         return comanda;
+    }
+
+    public PagoEntidadMongo aMongo(Pago pago) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 }

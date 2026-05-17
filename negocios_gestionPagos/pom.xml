@@ -6,18 +6,18 @@
         <artifactId>proyecto_DishUp</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>dtos_infraestructura</artifactId>
+    <artifactId>negocios_gestionPagos</artifactId>
     <packaging>jar</packaging>
     <dependencies>
         <dependency>
             <groupId>com.262719</groupId>
-            <artifactId>dominio</artifactId>
+            <artifactId>negocios_objetosNegocio</artifactId>
             <version>1.0-SNAPSHOT</version>
             <type>jar</type>
         </dependency>
     </dependencies>
     <properties>
-        <maven.compiler.release>23</maven.compiler.release>
-        <exec.mainClass>com.dtos_infraestructura.Dtos_infraestructura</exec.mainClass>
+        <maven.compiler.release>24</maven.compiler.release>
+        <exec.mainClass>com.negocios_gestionpagos.Negocios_gestionPagos</exec.mainClass>
     </properties>
 </project>

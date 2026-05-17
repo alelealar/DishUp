@@ -21,3 +21,4 @@ nbbuild/
 # OS
 Thumbs.db
 .DS_Store
+/negocios_objetosNegocio/nbproject/

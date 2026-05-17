@@ -13,14 +13,17 @@ import dtos.ProductoDTO;
 import enums.TipoProductoDTO;
 import excepciones.ComandasException;
 import excepciones.EmpleadosException;
+import excepciones.PagosException;
 import excepciones.ProductosException;
 import fachada.ComandaFachada;
 import fachada.EmpleadoFachada;
 import fachada.MesaFachada;
+import fachada.PagoFachada;
 import fachada.ProductoFachada;
 import interfaces.IGestionComandas;
 import interfaz.IGestionEmpleados;
 import interfaz.IGestionMesas;
+import interfaz.IGestionPagos;
 import interfaz.IGestionProductos;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,12 +50,14 @@ public class CoordinadorInterfaces {
     private IGestionComandas comandaFachada;
     private IGestionEmpleados empleadoFachada;
     private IGestionMesas mesaFachada;
+    private IGestionPagos pagoFachada;
 
     public CoordinadorInterfaces() {
         this.productoFachada = new ProductoFachada();
         this.comandaFachada = new ComandaFachada();
         this.empleadoFachada = new EmpleadoFachada();
         this.mesaFachada = new MesaFachada();
+        this.pagoFachada = new PagoFachada();
     }
 
     public void setFrmProductos(FrmProductos frmProductos) {
@@ -240,5 +245,13 @@ public class CoordinadorInterfaces {
 
     public boolean eliminarComanda(String idComanda) throws ComandasException {
         return comandaFachada.eliminarComanda(idComanda);
+    }
+
+    public boolean puedePagarComanda(String id) throws PagosException {
+        return pagoFachada.puedePagarComanda(id);
+    }
+
+    public boolean puedePagarMesa(int numeroMesa) throws PagosException {
+        return pagoFachada.puedePagarMesa(numeroMesa);
     }
 }

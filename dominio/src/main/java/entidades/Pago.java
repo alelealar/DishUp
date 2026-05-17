@@ -5,6 +5,7 @@
 package entidades;
 
 import enums.EstadoPago;
+import enums.EstadoPagoIndividual;
 import enums.MetodoPago;
 import java.time.LocalDateTime;
 
@@ -16,7 +17,7 @@ public class Pago {
     private String id;
     private MetodoPago metodoPago;
     private float monto;
-    private EstadoPago estadoPago;
+    private EstadoPagoIndividual estadoPago;
     private LocalDateTime fechaPago;
     
     private DetallePago detalles;
@@ -24,15 +25,15 @@ public class Pago {
     public Pago() {
     }
 
-    public Pago(String id, MetodoPago metodoPago, float monto, EstadoPago estadoPago, LocalDateTime fechaPago, DetallePago detalles) {
+    public Pago(String id, MetodoPago metodoPago, float monto, EstadoPagoIndividual estadoPago, LocalDateTime fechaPago, DetallePago detalles) {
         this.id = id;
         this.metodoPago = metodoPago;
         this.monto = monto;
         this.estadoPago = estadoPago;
         this.fechaPago = fechaPago;
         this.detalles = detalles;
-    } 
-
+    }
+    
     public String getId() {
         return id;
     }
@@ -57,11 +58,11 @@ public class Pago {
         this.monto = monto;
     }
 
-    public EstadoPago getEstadoPago() {
+    public EstadoPagoIndividual getEstadoPago() {
         return estadoPago;
     }
 
-    public void setEstadoPago(EstadoPago estadoPago) {
+    public void setEstadoPago(EstadoPagoIndividual estadoPago) {
         this.estadoPago = estadoPago;
     }
 

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package entidades;
+package dtos_infraestructura;
 
 import enums.Banco;
 import enums.TipoTarjeta;
@@ -11,20 +11,50 @@ import enums.TipoTarjeta;
  *
  * @author valeria
  */
-public class DetallePagoTarjeta extends DetallePago {
+public class RespuestaTerminalDTO {
+    private boolean aprobado;
+    private String mensaje;
+    private float monto;
     private String numeroAutorizacion;
     private String ultimos4Digitos;
     private Banco banco;
     private TipoTarjeta tipoTarjeta;
 
-    public DetallePagoTarjeta() {
+    public RespuestaTerminalDTO() {
     }
 
-    public DetallePagoTarjeta(String numeroAutorizacion, String ultimos4Digitos, Banco banco, TipoTarjeta tipoTarjeta) {
+    public RespuestaTerminalDTO(boolean aprobado, String mensaje, float monto, String numeroAutorizacion, String ultimos4Digitos, Banco banco, TipoTarjeta tipoTarjeta) {
+        this.aprobado = aprobado;
+        this.mensaje = mensaje;
+        this.monto = monto;
         this.numeroAutorizacion = numeroAutorizacion;
         this.ultimos4Digitos = ultimos4Digitos;
         this.banco = banco;
         this.tipoTarjeta = tipoTarjeta;
+    }
+
+    public boolean isAprobado() {
+        return aprobado;
+    }
+
+    public void setAprobado(boolean aprobado) {
+        this.aprobado = aprobado;
+    }
+
+    public String getMensaje() {
+        return mensaje;
+    }
+
+    public void setMensaje(String mensaje) {
+        this.mensaje = mensaje;
+    }
+
+    public float getMonto() {
+        return monto;
+    }
+
+    public void setMonto(float monto) {
+        this.monto = monto;
     }
 
     public String getNumeroAutorizacion() {
@@ -58,6 +88,5 @@ public class DetallePagoTarjeta extends DetallePago {
     public void setTipoTarjeta(TipoTarjeta tipoTarjeta) {
         this.tipoTarjeta = tipoTarjeta;
     }
-    
-    
 }
+

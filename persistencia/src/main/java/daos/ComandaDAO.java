@@ -1,31 +1,39 @@
 package daos;
 
 import adaptadores.ComandaPersistenciaAdapter;
+import adaptadores.PagoPersistenciaAdapter;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.model.Filters;
 import static com.mongodb.client.model.Filters.eq;
+import com.mongodb.client.model.Updates;
 import static com.mongodb.client.model.Updates.set;
 import com.mongodb.client.result.DeleteResult;
 import com.mongodb.client.result.InsertOneResult;
 import com.mongodb.client.result.UpdateResult;
 import conexion.ConexionMongo;
 import entidades.Comanda;
+import entidades.Pago;
 import entidades.Pedido;
 import entidadesMongo.ComandaEntidadMongo;
+import entidadesMongo.PagoEntidadMongo;
 import excepciones.PersistenciaException;
 import interfaces.IComandaDAO;
 import java.util.ArrayList;
 import java.util.List;
+import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 public class ComandaDAO implements IComandaDAO {
 
     private final MongoCollection<ComandaEntidadMongo> coleccion;
     private final ComandaPersistenciaAdapter adapter;
+    private final PagoPersistenciaAdapter adapterPago;
 
     public ComandaDAO() {
         this.coleccion = ConexionMongo.obtenerBaseDatos().getCollection("comandas", ComandaEntidadMongo.class);
         this.adapter = new ComandaPersistenciaAdapter();
+        this.adapterPago = new PagoPersistenciaAdapter();
     }
 
     @Override
@@ -164,4 +172,112 @@ public class ComandaDAO implements IComandaDAO {
         }
     }
 
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    /*
+    @Override
+    public boolean insertarPagoAComanda(String idComanda, Pago pago) throws PersistenciaException {
+        if (idComanda == null || idComanda.isBlank()) {
+            throw new PersistenciaException("El id de la comanda es inválido");
+        }
+        
+        if (pago == null){
+            throw new PersistenciaException("Pago nulo");
+        }
+        
+        try {
+            UpdateResult resultado = coleccion.updateOne(
+                    eq("_id", new ObjectId(idComanda)),
+                    com.mongodb.client.model.Updates.push("pagos",pago)
+            );
+
+            return resultado.getModifiedCount() > 0;
+
+        } catch (Exception ex) {
+            throw new PersistenciaException("No fue posible agregar el pago a la comanda.", ex);
+        }
+    }
+    */
+    
+    @Override
+    public boolean insertarPagoAComanda(String idComanda, Pago pago)
+            throws PersistenciaException {
+
+        if (idComanda == null || idComanda.isBlank()) {
+            throw new PersistenciaException("El id de la comanda es inválido");
+        }
+
+        if (pago == null) {
+            throw new PersistenciaException("Pago nulo");
+        }
+
+        try {
+            PagoEntidadMongo pagoMongo = adapter.aMongo(pago);
+
+            UpdateResult resultado = coleccion.updateOne(
+                    eq("_id", new ObjectId(idComanda)),
+                    Updates.push("pagos", pagoMongo)
+            );
+
+            return resultado.getModifiedCount() > 0;
+
+        } catch (Exception ex) {
+            throw new PersistenciaException(
+                    "No fue posible agregar el pago a la comanda.",
+                    ex
+            );
+        }
+    }
+
 }
+
