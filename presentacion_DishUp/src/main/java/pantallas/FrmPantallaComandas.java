@@ -681,7 +681,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             btnCancelar.setPreferredSize(new Dimension(160, 35));
             btnCancelar.setFocusPainted(false);
 
-            JButton btnEntregar = new JButton("Entregar comanda");
+            JButton btnEntregar = new JButton("Entregar pedidos listos");
             btnEntregar.setBackground(Color.decode("#B9F6B1"));
             btnEntregar.setPreferredSize(new Dimension(170, 35));
             btnEntregar.setFocusPainted(false);
@@ -690,7 +690,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
                 int confirmacion = JOptionPane.showConfirmDialog(
                         this,
-                        "¿Seguro que deseas entregar esta comanda?",
+                        "¿Seguro que deseas entregar pedidos listos?",
                         "Confirmar entrega",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE
@@ -725,6 +725,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
                     case "PENDIENTE":
                         footer.add(btnEditar);
                         footer.add(btnCancelar);
+                        footer.add(btnEntregar);
                         break;
                     case "LISTA":
                         footer.add(btnAgregar);
@@ -732,8 +733,10 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
                         break;
                     case "EN_PREPARACION":
                         footer.add(btnAgregar);
+                        footer.add(btnEntregar);
                     case "ENTREGADA":
                         footer.add(btnAgregar);
+                        footer.add(btnEntregar);
                     case "PAGADA":
                         // no mostrar botones
                         break;

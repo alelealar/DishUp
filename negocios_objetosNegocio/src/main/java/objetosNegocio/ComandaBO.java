@@ -95,7 +95,7 @@ public class ComandaBO {
             EstadoComanda nuevoEstado = calcularEstadoComanda(comandaActual.getPedidos());
 
             comandaDAO.actualizarEstado(idComanda, nuevoEstado.name());
-            
+
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al agregar pedidos", e);
         }
@@ -135,27 +135,7 @@ public class ComandaBO {
         }
     }
 
-    public void entregarComanda(String idComanda) throws NegocioException {
-        try {
-            ComandaDTO comanda = obtenerComandaPorId(idComanda);
-
-            for (PedidoDTO pedido : comanda.getPedidos()) {
-                if (pedido.getEstado() == EstadoPedidoDTO.LISTA) {
-                    pedido.setEstado(EstadoPedidoDTO.ENTREGADO);
-                }
-            }
-            actualizarComanda(comanda);
-
-            boolean actualizado = comandaDAO.actualizarEstado(idComanda, EstadoComanda.ENTREGADA.name());
-
-            if (!actualizado) {
-                throw new NegocioException("No se pudo actualizar");
-            }
-
-        } catch (PersistenciaException e) {
-            throw new NegocioException("Error al entregar comanda", e);
-        }
-    }
+    
 
     public ComandaDTO obtenerComandaPorId(String id) throws NegocioException {
         try {
@@ -201,5 +181,23 @@ public class ComandaBO {
             return EstadoComanda.LISTA;
         }
         return EstadoComanda.ENTREGADA;
+    }
+
+    public void recalcularYActualizarEstadoComanda(ComandaDTO comandaDTO) throws NegocioException {
+        try {
+            Comanda comanda = adapter.aEntidad(
+                    comandaDTO.getNombreCliente(),
+                    comandaDTO.getNumMesa(),
+                    comandaDTO.getPedidos(),
+                    null
+            );
+
+            EstadoComanda estado = calcularEstadoComanda(comanda.getPedidos());
+
+            comandaDAO.actualizarEstado(comandaDTO.getId(), estado.name());
+
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al recalcular estado", e);
+        }
     }
 }
