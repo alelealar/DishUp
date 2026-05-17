@@ -2,6 +2,7 @@ package fachada;
 
 import control.EmpleadoControl;
 import dtos.EmpleadoDTO;
+import dtos.MesaDTO;
 import excepciones.EmpleadosException;
 import interfaz.IGestionEmpleados;
 import java.util.List;
@@ -18,8 +19,8 @@ public class EmpleadoFachada implements IGestionEmpleados{
     }
 
     @Override
-    public EmpleadoDTO obtenerEmpleado(EmpleadoDTO empleado) throws EmpleadosException {
-        return empleadoControl.obtenerEmpleado(empleado);
+    public EmpleadoDTO obtenerEmpleadoPorMesa(MesaDTO mesa) throws EmpleadosException {
+        return empleadoControl.obtenerEmpleadoPorMesa(mesa);
     }
 
     @Override

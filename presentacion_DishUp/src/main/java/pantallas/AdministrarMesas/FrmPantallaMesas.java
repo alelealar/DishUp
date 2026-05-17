@@ -4,17 +4,40 @@
  */
 package pantallas.AdministrarMesas;
 
+import coordinador.CoordinadorInterfaces;
+import dtos.EmpleadoDTO;
+import dtos.MesaDTO;
+import enums.EstadoMesaDTO;
+import enums.RolEmpleadoDTO;
+import excepciones.EmpleadosException;
+import excepciones.MesasException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JButton;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
- * @author Home
+ * @author Alejandra Leal Armenta, 262719
  */
 public class FrmPantallaMesas extends javax.swing.JFrame {
+    private CoordinadorInterfaces coordinador;
+    EmpleadoDTO empleado;
+    
 
     /**
      * Creates new form FrmPantallaMesas
+     * @param coordinador
      */
-    public FrmPantallaMesas() {
+    public FrmPantallaMesas(CoordinadorInterfaces coordinador) {
+        this.coordinador = coordinador;
         initComponents();
+        recargarMeseros();
+        recargarMesas();
+        estiloTabla();
+        this.setLocationRelativeTo(null);
     }
 
     /**
@@ -26,6 +49,8 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jEditorPane1 = new javax.swing.JEditorPane();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         panHeader = new javax.swing.JPanel();
@@ -35,11 +60,14 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         scrollTabla = new javax.swing.JScrollPane();
         tblMeseros = new javax.swing.JTable();
-        scrollPanMesas = new javax.swing.JScrollPane();
-        panelMesas = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btnAgregarMesa = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        scrollPanMesas = new javax.swing.JScrollPane();
+        panelMesas = new javax.swing.JPanel();
+
+        jScrollPane1.setViewportView(jEditorPane1);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -91,18 +119,12 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
         jTextField1.setFont(new java.awt.Font("Segoe UI Variable", 0, 14)); // NOI18N
         jTextField1.setForeground(new java.awt.Color(153, 153, 153));
         jTextField1.setText("Buscar");
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
-            }
-        });
+
+        scrollTabla.setBackground(new java.awt.Color(255, 255, 255));
 
         tblMeseros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null},
-                {null, null},
-                {null, null},
-                {null, null}
+
             },
             new String [] {
                 "USUARIO", "Nombre"
@@ -125,23 +147,15 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
         });
         scrollTabla.setViewportView(tblMeseros);
 
-        javax.swing.GroupLayout panelMesasLayout = new javax.swing.GroupLayout(panelMesas);
-        panelMesas.setLayout(panelMesasLayout);
-        panelMesasLayout.setHorizontalGroup(
-            panelMesasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 190, Short.MAX_VALUE)
-        );
-        panelMesasLayout.setVerticalGroup(
-            panelMesasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 564, Short.MAX_VALUE)
-        );
-
-        scrollPanMesas.setViewportView(panelMesas);
-
-        jButton1.setBackground(new java.awt.Color(43, 43, 43));
-        jButton1.setFont(new java.awt.Font("Segoe UI Variable", 1, 14)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Agregar Mesa");
+        btnAgregarMesa.setBackground(new java.awt.Color(43, 43, 43));
+        btnAgregarMesa.setFont(new java.awt.Font("Segoe UI Variable", 1, 14)); // NOI18N
+        btnAgregarMesa.setForeground(new java.awt.Color(255, 255, 255));
+        btnAgregarMesa.setText("Agregar Mesa");
+        btnAgregarMesa.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                btnAgregarMesaMouseClicked(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Trebuchet MS", 1, 18)); // NOI18N
         jLabel2.setText("MESAS");
@@ -153,14 +167,45 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
-                .addGap(74, 74, 74))
+                .addGap(66, 66, 66))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addGap(17, 17, 17)
                 .addComponent(jLabel2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        scrollPanMesas.setBorder(null);
+        scrollPanMesas.setHorizontalScrollBarPolicy(javax.swing.ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPanMesas.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+
+        javax.swing.GroupLayout panelMesasLayout = new javax.swing.GroupLayout(panelMesas);
+        panelMesas.setLayout(panelMesasLayout);
+        panelMesasLayout.setHorizontalGroup(
+            panelMesasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 147, Short.MAX_VALUE)
+        );
+        panelMesasLayout.setVerticalGroup(
+            panelMesasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 476, Short.MAX_VALUE)
+        );
+
+        scrollPanMesas.setViewportView(panelMesas);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(19, 19, 19)
+                .addComponent(scrollPanMesas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(18, Short.MAX_VALUE))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(scrollPanMesas, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -170,22 +215,19 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(36, 36, 36)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(36, 36, 36)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(scrollTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 745, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(281, 281, 281)
-                                .addComponent(jLabel1)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(scrollTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 745, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(281, 281, 281)
+                        .addComponent(jLabel1))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(45, 45, 45)))
+                        .addContainerGap()
+                        .addComponent(btnAgregarMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(scrollPanMesas)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
@@ -197,19 +239,19 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
                 .addComponent(panHeader, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel1)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, 0)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(0, 0, 0)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(6, 6, 6)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(scrollTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(12, Short.MAX_VALUE))
-                    .addComponent(scrollPanMesas, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
+                        .addComponent(btnAgregarMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, 0)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -229,53 +271,44 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+    private void btnAgregarMesaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnAgregarMesaMouseClicked
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+            String input;
+            int numero;
+            
+            while (true) {
+                
+                input = JOptionPane.showInputDialog(this, "Ingresa un número:");
+                
+                if (input == null || input.isBlank()) return;
+                
+                if (input.trim().matches("\\d+")) {
+                    numero = Integer.parseInt(input.trim());
                     break;
                 }
+                
+                JOptionPane.showMessageDialog(this, "Solo números");
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(FrmPantallaMesas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(FrmPantallaMesas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(FrmPantallaMesas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(FrmPantallaMesas.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            MesaDTO mesa = new MesaDTO();
+            mesa.setNumeroMesa(numero);
+            coordinador.agregarMesa(mesa);
+            
+            recargarMesas();
+        } catch (MesasException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(), "ERROR", JOptionPane.WARNING_MESSAGE);
         }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new FrmPantallaMesas().setVisible(true);
-            }
-        });
-    }
+    }//GEN-LAST:event_btnAgregarMesaMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAgregarMesa;
     private javax.swing.JLabel imgLogo;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JEditorPane jEditorPane1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblEmpleado;
@@ -285,4 +318,146 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
     private javax.swing.JScrollPane scrollTabla;
     private javax.swing.JTable tblMeseros;
     // End of variables declaration//GEN-END:variables
+    
+    public void recargarMeseros() {
+        try {
+            List<EmpleadoDTO> meseros = coordinador.obtenerMeserosActivos();
+            cargarTabla(meseros);
+        } catch (EmpleadosException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }
+    
+    public void recargarMesas(){
+        try {
+            List<MesaDTO> mesas = coordinador.obtenerMesas();
+            System.out.println("Mesas: "+mesas);
+            cargarMesas(mesas);
+        } catch (MesasException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }
+    
+    private void cargarTabla(List<EmpleadoDTO> lista){
+        DefaultTableModel modelo = (DefaultTableModel) tblMeseros.getModel();
+        modelo.setRowCount(0);
+        
+        if (lista == null || lista.isEmpty()) {
+            return;
+        }
+        
+        for (EmpleadoDTO emp : lista) {
+
+            Object[] fila = new Object[2];
+
+            fila[0] = emp.getUser(); // USUARIO
+            fila[1] = emp.getNombres() + " " + emp.getApellidoPaterno() + " " + emp.getApellidoMaterno();
+
+            modelo.addRow(fila);
+        }
+    }
+    
+    private void estiloTabla() {
+
+        // Fondo blanco
+        tblMeseros.setBackground(java.awt.Color.WHITE);
+        tblMeseros.setOpaque(true);
+
+        // Solo líneas horizontales
+        tblMeseros.setShowVerticalLines(false);
+        tblMeseros.setShowHorizontalLines(true);
+        tblMeseros.setGridColor(new java.awt.Color(220, 220, 220)); // gris claro
+
+        // Header estilo
+        tblMeseros.getTableHeader().setBackground(new java.awt.Color(255, 202, 102));
+        tblMeseros.getTableHeader().setForeground(java.awt.Color.BLACK);
+        tblMeseros.getTableHeader().setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+
+        // Altura de filas
+        tblMeseros.setRowHeight(34);
+
+        // Ajuste de columnas
+        tblMeseros.getColumnModel().getColumn(0).setPreferredWidth(80);   // USUARIO (ID corto)
+        tblMeseros.getColumnModel().getColumn(1).setPreferredWidth(250);  // NOMBRE (más grande)
+
+        // Evitar reordenamiento raro
+        tblMeseros.getTableHeader().setReorderingAllowed(false);
+
+        scrollTabla.setViewportBorder(null);
+        scrollTabla.setBackground(java.awt.Color.WHITE);
+        scrollTabla.getViewport().setBackground(java.awt.Color.WHITE);
+        
+        scrollPanMesas.setViewportBorder(null);
+        scrollPanMesas.setBackground(java.awt.Color.WHITE);
+        scrollPanMesas.getViewport().setBackground(java.awt.Color.WHITE);
+        scrollPanMesas.getVerticalScrollBar().setBackground(java.awt.Color.WHITE);
+        scrollPanMesas.getHorizontalScrollBar().setBackground(java.awt.Color.WHITE);
+        scrollPanMesas.getVerticalScrollBar().setUI(new javax.swing.plaf.basic.BasicScrollBarUI());
+        scrollPanMesas.getVerticalScrollBar().setUnitIncrement(10);
+        scrollTabla.getVerticalScrollBar().setUnitIncrement(10);
+    }
+    
+    private void cargarMesas(List<MesaDTO> mesas) {
+
+        panelMesas.removeAll();
+        panelMesas.setLayout(new javax.swing.BoxLayout(panelMesas, javax.swing.BoxLayout.Y_AXIS));
+
+        for (MesaDTO mesa : mesas) {
+
+            JButton btnMesa = new JButton("Mesa " + mesa.getNumeroMesa());
+
+            btnMesa.setFocusPainted(false);
+            btnMesa.setBorderPainted(false);
+            btnMesa.setContentAreaFilled(true);
+            btnMesa.setOpaque(true);
+
+            btnMesa.setMaximumSize(new java.awt.Dimension(150, 50));
+            btnMesa.setPreferredSize(new java.awt.Dimension(150, 50));
+
+            btnMesa.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
+            
+            btnMesa.addActionListener(e -> {
+                seleccionarMesa(mesa);
+            });
+
+            if (mesa.getIdMesero() != null) {
+                btnMesa.setBackground(new java.awt.Color(160, 160, 160));
+                btnMesa.setForeground(java.awt.Color.WHITE);
+            } else {
+                btnMesa.setBackground(new java.awt.Color(255, 214, 140));
+                btnMesa.setForeground(java.awt.Color.BLACK);
+            }
+            panelMesas.add(btnMesa);
+            panelMesas.add(javax.swing.Box.createVerticalStrut(10));
+        }
+
+        panelMesas.revalidate();
+        panelMesas.repaint();
+    }
+    
+    private void seleccionarMesa(MesaDTO mesa) {        
+        try {
+            MesaDTO obtenida = coordinador.obtenerMesa(mesa);
+            System.out.println("Mesa: "+mesa );
+
+            if (obtenida.getIdMesero() == null) {
+                coordinador.setMeseroMesa(null, obtenida);
+
+            } else {
+
+                EmpleadoDTO completo = coordinador.obtenerEmpleado(mesa);
+                System.out.println("mesero: "+completo.toString());
+
+                coordinador.setMeseroMesa(completo, obtenida);
+            }
+
+        } catch (MesasException | EmpleadosException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage(),
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    public void setEmpleado(EmpleadoDTO em){
+        empleado = em;
+    }
 }

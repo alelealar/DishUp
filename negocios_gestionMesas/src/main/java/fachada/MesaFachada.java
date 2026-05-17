@@ -22,7 +22,7 @@ public class MesaFachada implements IGestionMesas{
 
     @Override
     public MesaDTO obtenerMesa(MesaDTO mesa) throws MesasException {
-        return mesaControl.obtenerMesa(mesa);
+        return mesaControl.obtenerMesaPorId(mesa);
     }
 
     @Override
@@ -43,5 +43,10 @@ public class MesaFachada implements IGestionMesas{
     @Override
     public List<MesaDTO> obtenerMesasDisponibles() throws MesasException {
         return mesaControl.obtenerMesasDisponibles();
+    }
+
+    @Override
+    public List<MesaDTO> obtenerMesas() throws MesasException {
+        return mesaControl.obtenerMesas();
     }
 }

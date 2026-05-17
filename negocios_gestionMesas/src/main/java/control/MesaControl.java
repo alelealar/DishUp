@@ -51,7 +51,7 @@ public class MesaControl {
         }
     }
 
-    public MesaDTO obtenerMesa(MesaDTO mesa) throws MesasException {
+    public MesaDTO obtenerMesaPorId(MesaDTO mesa) throws MesasException {
         validarMesa(mesa);
 
         try {
@@ -72,7 +72,9 @@ public class MesaControl {
     }
 
     public void agregarMesa(MesaDTO mesa) throws MesasException {
-        validarMesa(mesa);
+        if (mesa == null) {
+            throw new MesasException("La mesa no puede ser nula");
+        }
 
         if (mesa.getNumeroMesa()<= 0) {
             throw new MesasException("El número de mesa debe ser mayor a 0");
@@ -118,6 +120,14 @@ public class MesaControl {
     public List<MesaDTO> obtenerMesasDisponibles() throws MesasException {
         try {
             return mesaBO.obtenerMesasDisponibles();
+        } catch (NegocioException ex) {
+            throw new MesasException("No fue posible obtener las mesas disponibles.");
+        }
+    }
+    
+    public List<MesaDTO> obtenerMesas() throws MesasException {
+        try {
+            return mesaBO.obtenerMesas();
         } catch (NegocioException ex) {
             throw new MesasException("No fue posible obtener las mesas disponibles.");
         }

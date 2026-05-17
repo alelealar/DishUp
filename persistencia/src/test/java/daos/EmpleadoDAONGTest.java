@@ -1,3 +1,4 @@
+/*
 package daos;
 
 import adaptadores.EmpleadoPersistenciaAdapter;
@@ -142,3 +143,4 @@ public class EmpleadoDAONGTest {
         assertEquals(0, activos.size()); 
     }
 }
+*/

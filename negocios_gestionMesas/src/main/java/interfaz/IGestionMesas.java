@@ -26,4 +26,6 @@ public interface IGestionMesas {
     void asignarMesaAMesero(MesaDTO mesa, EmpleadoDTO mesero) throws MesasException;
 
     List<MesaDTO> obtenerMesasDisponibles() throws MesasException;
+    
+    List<MesaDTO> obtenerMesas() throws MesasException;
 }

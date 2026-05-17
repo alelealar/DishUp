@@ -4,6 +4,7 @@ import adaptadores.EmpleadoNegocioAdapter;
 import daos.EmpleadoDAO;
 import daos.MesaDAO;
 import dtos.EmpleadoDTO;
+import dtos.MesaDTO;
 import entidades.Empleado;
 import entidades.Mesa;
 import enums.EstadoEmpleado;
@@ -31,12 +32,13 @@ public class EmpleadoBO {
         this.empleadoAdapter = new EmpleadoNegocioAdapter();
     }
 
-    public EmpleadoDTO obtenerEmpleado(EmpleadoDTO empleadoDTO) throws NegocioException {
-
+    public EmpleadoDTO obtenerEmpleadoPorMesa(MesaDTO mesa) throws NegocioException {
+        if (mesa == null || mesa.getIdMesero() == null) {
+            return null;
+        }
         try {
-            Empleado empleado = empleadoAdapter.aEntidad(empleadoDTO);
 
-            Empleado consultado = empleadoDAO.obtenerEmpleado(empleado);
+            Empleado consultado = empleadoDAO.obtenerEmpleadoPorId(mesa.getIdMesero());
 
             if (consultado == null) {
                 throw new NegocioException("Empleado no encontrado.");
@@ -54,7 +56,7 @@ public class EmpleadoBO {
         try {
             Empleado empleado = empleadoAdapter.aEntidad(empleadoDTO);
 
-            Empleado consultado = empleadoDAO.obtenerEmpleado(empleado);
+            Empleado consultado = empleadoDAO.obtenerEmpleadoPorId(empleadoDTO.getId());
 
             if (consultado == null) {
                 throw new NegocioException("Usuario incorrecto.");
@@ -72,7 +74,7 @@ public class EmpleadoBO {
         try {
             Empleado empleado = empleadoAdapter.aEntidad(empleadoDTO);
 
-            Empleado consultado = empleadoDAO.obtenerEmpleado(empleado);
+            Empleado consultado = empleadoDAO.obtenerEmpleadoPorId(empleadoDTO.getId());
 
             if (consultado == null) {
                 throw new NegocioException("Empleado no encontrado.");
@@ -90,7 +92,7 @@ public class EmpleadoBO {
         try {
             Empleado empleado = empleadoAdapter.aEntidad(empleadoDTO);
 
-            Empleado consultado = empleadoDAO.obtenerEmpleado(empleado);
+            Empleado consultado = empleadoDAO.obtenerEmpleadoPorId(empleadoDTO.getId());
 
             if (consultado == null) {
                 throw new NegocioException("Empleado no encontrado.");

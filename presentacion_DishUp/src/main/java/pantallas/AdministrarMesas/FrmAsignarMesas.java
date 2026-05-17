@@ -6,7 +6,7 @@ package pantallas.AdministrarMesas;
 
 /**
  *
- * @author Home
+ * @author Alejandra Leal Armenta, 262719
  */
 public class FrmAsignarMesas extends javax.swing.JFrame {
 

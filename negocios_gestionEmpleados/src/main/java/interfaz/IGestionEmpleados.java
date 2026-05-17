@@ -6,6 +6,7 @@
 package interfaz;
 
 import dtos.EmpleadoDTO;
+import dtos.MesaDTO;
 import excepciones.EmpleadosException;
 import java.util.List;
 
@@ -15,7 +16,7 @@ import java.util.List;
  */
 public interface IGestionEmpleados {
     
-    EmpleadoDTO obtenerEmpleado(EmpleadoDTO empleado) throws EmpleadosException;
+    public EmpleadoDTO obtenerEmpleadoPorMesa(MesaDTO mesa) throws EmpleadosException;
 
     EmpleadoDTO login(EmpleadoDTO empleado) throws EmpleadosException;
 

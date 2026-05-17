@@ -29,21 +29,22 @@ public class EmpleadoDAO implements IEmpleadoDAO {
     }
 
     @Override
-    public Empleado obtenerEmpleado(Empleado empleado) throws PersistenciaException {
-        if (empleado == null) {
-            throw new PersistenciaException("El empleado es nulo");
-        }
-
-        if (empleado.getId() == null || empleado.getId().isBlank()) {
+    public Empleado obtenerEmpleadoPorId(String id) throws PersistenciaException {
+        if (id == null || id.isBlank()) {
             throw new PersistenciaException("El ID del empleado es inválido");
         }
 
         try {
-            EmpleadoEntidadMongo empleadoMongo = this.coleccion.find(
-                    eq("_id", new ObjectId(empleado.getId()))
-            ).first();
+            EmpleadoEntidadMongo empleadoMongo = this.coleccion.find(eq("_id", new ObjectId(id)) ).first();
+
+            if (empleadoMongo == null) {
+                throw new PersistenciaException("Empleado no encontrado");
+            }
 
             return empleadoAdapter.aDominio(empleadoMongo);
+
+        } catch (IllegalArgumentException ex) {
+            throw new PersistenciaException("El formato del ID es inválido.", ex);
 
         } catch (MongoException ex) {
             throw new PersistenciaException("No fue posible obtener el empleado.", ex);

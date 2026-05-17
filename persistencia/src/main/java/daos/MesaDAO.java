@@ -4,6 +4,7 @@ import adaptadores.MesaPersistenciaAdapter;
 import com.mongodb.MongoException;
 import com.mongodb.client.MongoCollection;
 import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Sorts.ascending;
 import static com.mongodb.client.model.Updates.*;
 import com.mongodb.client.result.UpdateResult;
 import com.mongodb.client.result.DeleteResult;
@@ -41,6 +42,7 @@ public class MesaDAO implements IMesaDAO {
         try {
             List<MesaEntidadMongo> mesasMongo = coleccion
                     .find(eq("idMesero", idMesero))
+                    .sort(ascending("numero"))
                     .into(new ArrayList<>());
 
             List<Mesa> mesasDominio = new ArrayList<>();
@@ -107,23 +109,38 @@ public class MesaDAO implements IMesaDAO {
     }
 
     @Override
-    public Mesa obtenerMesa(Mesa mesa) throws PersistenciaException {
-        if (mesa == null) {
+    public Mesa obtenerMesaPorId(String id) throws PersistenciaException {
+        if (id == null) {
             throw new PersistenciaException("La mesa es nula");
         }
         
-        if (mesa.getId() == null || mesa.getId().isBlank()) {
-            throw new PersistenciaException("La mesa no tiene id");
-        }
-        
         try{
-            MesaEntidadMongo mesaMongo = this.coleccion.find(eq("_id", new ObjectId(mesa.getId()))).first();
+            MesaEntidadMongo mesaMongo = this.coleccion.find(eq("_id", new ObjectId(id))).first();
             
             if (mesaMongo == null) {
                 throw new PersistenciaException("No se encontró la mesa");
             }
             
             return mesaAdapter.aDominio(mesaMongo);
+        } catch (MongoException ex) {
+            throw new PersistenciaException("No fue posible buscar la mesa.", ex);
+        }
+    }
+    
+    @Override
+    public Mesa obtenerMesaPorNumero(Integer numero) throws PersistenciaException{
+        if (numero == null) {
+            throw new PersistenciaException("El número de mesa es nulo");
+        }
+
+        try {
+            MesaEntidadMongo mesaMongo = this.coleccion.find(eq("numero", numero)).first();
+            if (mesaMongo == null) {
+                return null;
+            }
+
+            return mesaAdapter.aDominio(mesaMongo);
+
         } catch (MongoException ex) {
             throw new PersistenciaException("No fue posible buscar la mesa.", ex);
         }
@@ -162,7 +179,7 @@ public class MesaDAO implements IMesaDAO {
     @Override
     public List<Mesa> obtenerMesasDisponibles() throws PersistenciaException {
         try{
-            List<MesaEntidadMongo> mesasMongo = this.coleccion.find(exists("idMesero", false)).into(new ArrayList<>());
+            List<MesaEntidadMongo> mesasMongo = this.coleccion.find(exists("idMesero", false)).sort(ascending("numero")).into(new ArrayList<>());
             
             List<Mesa> mesasDominio = new ArrayList<>();
             
@@ -175,6 +192,24 @@ public class MesaDAO implements IMesaDAO {
             throw new PersistenciaException("No fue posible consultar las mesas disponibles", ex);
         }
     }
+    
+    @Override
+    public List<Mesa> obtenerMesas() throws PersistenciaException {
+        try{
+            List<MesaEntidadMongo> mesasMongo = this.coleccion.find().sort(ascending("numero")).into(new ArrayList<>());
+            
+            List<Mesa> mesasDominio = new ArrayList<>();
+            
+            for(MesaEntidadMongo m: mesasMongo){
+                mesasDominio.add(mesaAdapter.aDominio(m));
+            }
+            
+            return mesasDominio;
+        } catch (MongoException ex) {
+            throw new PersistenciaException("No fue posible consultar las mesas disponibles", ex);
+        }
+    }
+    
     @Override
     public void desasignarMesero(Mesa mesa) throws PersistenciaException {
 

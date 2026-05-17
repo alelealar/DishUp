@@ -13,6 +13,7 @@ import dtos.ProductoDTO;
 import enums.TipoProductoDTO;
 import excepciones.ComandasException;
 import excepciones.EmpleadosException;
+import excepciones.MesasException;
 import excepciones.ProductosException;
 import fachada.ComandaFachada;
 import fachada.EmpleadoFachada;
@@ -27,6 +28,7 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import pantallas.AdministrarMesas.panInfoMesa;
 import pantallas.DlgModificarProducto;
 import pantallas.DlgResumenComanda;
 import pantallas.FrmCliente;
@@ -45,6 +47,7 @@ public class CoordinadorInterfaces {
     private FrmPantallaComandas frmComandas;
     private FrmCliente frmCliente;
     private FrmProductos frmProductos;
+    private panInfoMesa panInfoMesa;
 
     private IGestionProductos productoFachada;
     private IGestionComandas comandaFachada;
@@ -155,13 +158,13 @@ public class CoordinadorInterfaces {
         return empleadoActual;
     }
 
-    public void abrirFrmComandasMesero(String id, String nombre) {
+    public void abrirFrmComandasMesero(EmpleadoDTO mesero, String nombre) {
         // FrmPantallaComandas frm = new FrmPantallaComandas(this);
         frmComandas = new FrmPantallaComandas(this);
-        frmComandas.setMesero(id, nombre);
+        frmComandas.setMesero(mesero, nombre);
         frmComandas.cargarMesas();
         frmComandas.setVisible(true);
-        frmComandas.setMesero(id, nombre);
+        frmComandas.setMesero(mesero, nombre);
         frmComandas.setVisible(true);
     }
 
@@ -392,5 +395,35 @@ public class CoordinadorInterfaces {
             );
         }
     }
+    
+    //-----------------------------CU ADMINISTRAR MESAS-------------------------------
+    
+    
+    public List<EmpleadoDTO> obtenerMeserosActivos() throws EmpleadosException{
+        return empleadoFachada.obtenerMeserosActivos();
+    }
+    
+    public List<MesaDTO> obtenerMesas() throws MesasException{
+        return mesaFachada.obtenerMesas();
+    }
+    
+    public MesaDTO obtenerMesa(MesaDTO mesa) throws MesasException{
+        return mesaFachada.obtenerMesa(mesa);
+    }
+    
+    public EmpleadoDTO obtenerEmpleado(MesaDTO mesa) throws EmpleadosException{
+        return empleadoFachada.obtenerEmpleadoPorMesa(mesa);
+    }
+    
+    public void agregarMesa(MesaDTO mesa) throws MesasException{
+        mesaFachada.agregarMesa(mesa);
+    }
+    
+    public void setMeseroMesa(EmpleadoDTO mesero, MesaDTO mesa){
+        panInfoMesa = new panInfoMesa();
+        panInfoMesa.setInfoMesa(mesero, mesa);
+        panInfoMesa.setVisible(true);
+    }
+    
 
 }

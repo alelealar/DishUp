@@ -2,6 +2,7 @@ package control;
 
 import daos.EmpleadoDAO;
 import dtos.EmpleadoDTO;
+import dtos.MesaDTO;
 import excepciones.EmpleadosException;
 import excepcion.NegocioException;
 import interfaces.IEmpleadoDAO;
@@ -17,18 +18,17 @@ public class EmpleadoControl {
         this.empleadoBO = new EmpleadoBO(empleadoDAO);
     }
 
-    public EmpleadoDTO obtenerEmpleado(EmpleadoDTO empleado) throws EmpleadosException {
-
-        if (empleado == null) {
-            throw new EmpleadosException("Empleado nulo.");
+    public EmpleadoDTO obtenerEmpleadoPorMesa(MesaDTO mesa) throws EmpleadosException {
+        
+        if (mesa == null) {
+            throw new EmpleadosException("La mesa no puede ser nula.");
         }
 
-        if (empleado.getUser() == null || empleado.getUser().isBlank()) {
-            throw new EmpleadosException("Usuario obligatorio.");
+        if (mesa.getIdMesa()== null || mesa.getIdMesa().isBlank()) {
+            throw new EmpleadosException("El ID de la mesa es obligatorio.");
         }
-
         try {
-            return empleadoBO.obtenerEmpleado(empleado);
+            return empleadoBO.obtenerEmpleadoPorMesa(mesa);
         } catch (NegocioException ex) {
             throw new EmpleadosException("No fue posible obtener la información del empleado.");
         }

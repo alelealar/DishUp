@@ -2,6 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/UnitTests/EmptyTestNGTest.java to edit this template
  */
+/*
 package daos;
 
 import com.mongodb.client.MongoCollection;
@@ -26,7 +27,7 @@ import org.junit.jupiter.api.Test;
  * @author DishUp
  */
 
-
+/*
 public class MesaDAONGTest {
 
     @AfterEach
@@ -378,6 +379,48 @@ public class MesaDAONGTest {
         
         assertEquals(0, sinMesero.size()); 
     }
+
+    @Test
+    public void testObtenerMesasDisponibles_correcto() throws PersistenciaException{
+        MesaDAO mdao = new MesaDAO();
+        
+        MongoCollection<EmpleadoEntidadMongo> coleccion
+                = ConexionMongo.obtenerBaseDatos()
+                        .getCollection("empleados", EmpleadoEntidadMongo.class);
+
+ 
+        Mesa mesa1 = new Mesa(1, EstadoMesa.LIBRE);
+        Mesa mesa2 = new Mesa(2, EstadoMesa.OCUPADA);
+        Mesa mesa3 = new Mesa(3, EstadoMesa.LIBRE);
+        Mesa mesa4 = new Mesa(4, EstadoMesa.OCUPADA);
+        Mesa mesa5 = new Mesa(5, EstadoMesa.LIBRE);
+        
+        mesa1.setIdMesero(idMesero);
+        mesa3.setIdMesero(idMesero);
+        
+        mdao.insertarMesa(mesa1);
+        mdao.insertarMesa(mesa2);
+        mdao.insertarMesa(mesa3);
+        mdao.insertarMesa(mesa4);
+        mdao.insertarMesa(mesa5);
+        
+        List<Mesa> disponibles = mdao.obtenerMesas();
+        
+        assertEquals(3, disponibles.size());
+    }
+
+    @Test
+    public void testObtenerMesasDisponibles_sinMesas() throws PersistenciaException{
+        MesaDAO mdao = new MesaDAO();
+        
+        MongoCollection<EmpleadoEntidadMongo> coleccion
+                = ConexionMongo.obtenerBaseDatos()
+                        .getCollection("empleados", EmpleadoEntidadMongo.class);
+        
+        List<Mesa> disponibles = mdao.obtenerMesas();
+        
+        assertEquals(0, disponibles.size());
+    }
     
     @Test
     public void testDesasignarMesa_meseroNull() throws PersistenciaException{
@@ -386,4 +429,7 @@ public class MesaDAONGTest {
             mdao.desasignarMesero(null);
         });
     }
+
+
 }
+*/

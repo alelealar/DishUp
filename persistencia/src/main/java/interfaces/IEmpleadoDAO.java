@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface IEmpleadoDAO {
     
-    public Empleado obtenerEmpleado(Empleado empleado) throws PersistenciaException;
+    public Empleado obtenerEmpleadoPorId(String id) throws PersistenciaException;
     
     public void actualizarEstadoEmpleado(Empleado empleado, EstadoEmpleado estado) throws PersistenciaException;
     
