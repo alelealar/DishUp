@@ -474,6 +474,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
     private JPanel contenedorComandas;
 
     public void mostrarComandasDeMesa(int numeroMesa, List<ComandaDTO> comandas) {
+
         panComandasLlenas.removeAll();
 
         if (comandas == null || comandas.isEmpty()) {
@@ -557,15 +558,27 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
                 JLabel lblPedido = new JLabel();
 
-                String texto = "• " + ped.getNombreProducto() + " $" + ped.getPrecioProducto();
+                String texto = "• " + ped.getNombreProducto();
 
                 if (ped.getDescripcion() != null
                         && !ped.getDescripcion().trim().isEmpty()) {
 
                     texto += " (" + ped.getDescripcion() + ")";
                 }
+                
+                String estadoTexto = ped.getEstado().name();
 
-                lblPedido.setText(texto);
+                switch (estadoTexto) {
+                    case "EN_PREPARACION":
+                        estadoTexto = "EN PREPARACIÓN";
+                        break;
+
+                    case "LISTA":
+                        estadoTexto = "LISTO";
+                        break;
+                }
+
+                lblPedido.setText(texto + " | $" + ped.getPrecioProducto() + " | " + estadoTexto);
 
                 switch (ped.getEstado()) {
                     case PENDIENTE:
@@ -800,4 +813,5 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         cargarMesas();
         refrescarMesaActual();
     }
+
 }
