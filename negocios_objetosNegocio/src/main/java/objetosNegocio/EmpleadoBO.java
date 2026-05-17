@@ -8,6 +8,7 @@ import dtos.MesaDTO;
 import entidades.Empleado;
 import entidades.Mesa;
 import enums.EstadoEmpleado;
+import enums.EstadoMesa;
 import excepcion.NegocioException;
 import excepciones.PersistenciaException;
 import interfaces.IEmpleadoDAO;
@@ -83,30 +84,35 @@ public class EmpleadoBO {
             empleadoDAO.actualizarEstadoEmpleado(consultado, EstadoEmpleado.ACTIVO);
 
         } catch (PersistenciaException ex) {
-            throw new NegocioException("No fue posible activar el empleado.", ex);
+            throw new NegocioException(ex.getMessage(), ex);
         }
     }
 
     public void desactivarEmpleado(EmpleadoDTO empleadoDTO) throws NegocioException {
 
         try {
-            Empleado empleado = empleadoAdapter.aEntidad(empleadoDTO);
-
             Empleado consultado = empleadoDAO.obtenerEmpleadoPorId(empleadoDTO.getId());
 
             if (consultado == null) {
                 throw new NegocioException("Empleado no encontrado.");
             }
-            empleadoDAO.actualizarEstadoEmpleado(consultado, EstadoEmpleado.INACTIVO);
 
             List<Mesa> mesasAsignadas = mesaDAO.obtenerMesasPorMesero(consultado.getId());
+            
+            for (Mesa mesa : mesasAsignadas) {
+                if (mesa.getEstado() == EstadoMesa.OCUPADA) {
+                    throw new NegocioException("No se puede desactivar el empleado porque tiene mesas ocupadas.");
+                }
+            } 
 
+            empleadoDAO.actualizarEstadoEmpleado(consultado, EstadoEmpleado.INACTIVO);
+               
             for (Mesa mesa : mesasAsignadas) {
                 mesaDAO.desasignarMesero(mesa);
             }
 
         } catch (PersistenciaException ex) {
-            throw new NegocioException("No fue posible desactivar el empleado.", ex);
+            throw new NegocioException(ex.getMessage(), ex);
         }
     }
 
@@ -117,7 +123,7 @@ public class EmpleadoBO {
             return empleadoAdapter.listaEntidadADTO(empleados);
 
         } catch (PersistenciaException ex) {
-            throw new NegocioException("Error al consultar meseros activos.", ex);
+            throw new NegocioException(ex.getMessage(), ex);
         }
     }
 

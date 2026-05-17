@@ -30,7 +30,7 @@ public class EmpleadoControl {
         try {
             return empleadoBO.obtenerEmpleadoPorMesa(mesa);
         } catch (NegocioException ex) {
-            throw new EmpleadosException("No fue posible obtener la información del empleado.");
+            throw new EmpleadosException(ex.getMessage());
         }
     }
 
@@ -47,7 +47,7 @@ public class EmpleadoControl {
         try {
             return empleadoBO.login(empleado);
         } catch (NegocioException ex) {
-            throw new EmpleadosException("Error al iniciar sesión del empleado.");
+            throw new EmpleadosException(ex.getMessage());
         }
     }
 
@@ -64,7 +64,7 @@ public class EmpleadoControl {
         try {
             empleadoBO.activarEmpleado(empleado);
         } catch (NegocioException ex) {
-            throw new EmpleadosException("No fue posible activar al empleado.");
+            throw new EmpleadosException(ex.getMessage());
         }
     }
 
@@ -81,7 +81,7 @@ public class EmpleadoControl {
         try {
             empleadoBO.desactivarEmpleado(empleado);
         } catch (NegocioException ex) {
-            throw new EmpleadosException("No fue posible desactivar al empleado.");
+            throw new EmpleadosException(ex.getMessage());
         }
     }
 
@@ -90,7 +90,7 @@ public class EmpleadoControl {
         try {
             return empleadoBO.obtenerMeserosActivos();
         } catch (NegocioException ex) {
-            throw new EmpleadosException("No fue posible consultar meseros activos.");
+            throw new EmpleadosException(ex.getMessage());
         }
     }
 
@@ -98,7 +98,7 @@ public class EmpleadoControl {
         try {
             return empleadoBO.buscarMeserosNombreUser(filtro);
         } catch (NegocioException ex) {
-            throw new EmpleadosException("Error en la búsqueda de meseros.");
+            throw new EmpleadosException(ex.getMessage());
         }
     }
 }

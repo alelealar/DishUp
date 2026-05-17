@@ -433,6 +433,10 @@ public class CoordinadorInterfaces {
         return empleadoFachada.buscarMeserosNombreUser(filtro);
     }
     
+    public void desactivarMesero(EmpleadoDTO mesero) throws EmpleadosException{
+        empleadoFachada.desactivarEmpleado(mesero);
+    }
+    
 
     public void entregarPedido(PedidoDTO pedido) throws ComandasException {
 

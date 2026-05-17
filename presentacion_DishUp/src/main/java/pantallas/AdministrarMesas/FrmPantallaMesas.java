@@ -8,8 +8,6 @@ package pantallas.AdministrarMesas;
 import coordinador.CoordinadorInterfaces;
 import dtos.EmpleadoDTO;
 import dtos.MesaDTO;
-import enums.EstadoMesaDTO;
-import enums.RolEmpleadoDTO;
 import excepciones.EmpleadosException;
 import excepciones.MesasException;
 import java.awt.Color;
@@ -31,6 +29,7 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
     Timer clickTimer;
     Timer searchTimer;
     EmpleadoDTO empleado;
+    private List<EmpleadoDTO> listaMeseros;
     
 
     /**
@@ -40,6 +39,7 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
     public FrmPantallaMesas(CoordinadorInterfaces coordinador) {
         this.coordinador = coordinador;
         initComponents();
+        eventosTabla();
         recargarMeseros();
         recargarMesas();
         estiloTabla();
@@ -388,7 +388,6 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
     public void recargarMesas(){
         try {
             List<MesaDTO> mesas = coordinador.obtenerMesas();
-            System.out.println("Mesas: "+mesas);
             cargarMesas(mesas);
         } catch (MesasException ex) {
             JOptionPane.showMessageDialog(this, ex.getMessage());
@@ -396,6 +395,8 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
     }
     
     private void cargarTabla(List<EmpleadoDTO> lista){
+        listaMeseros = lista;
+        
         DefaultTableModel modelo = (DefaultTableModel) tblMeseros.getModel();
         modelo.setRowCount(0);
         
@@ -508,6 +509,31 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
 
         panelMesas.revalidate();
         panelMesas.repaint();
+    }
+    
+    private void eventosTabla(){
+        tblMeseros.addMouseListener(new java.awt.event.MouseAdapter() {
+        @Override
+        public void mouseClicked(java.awt.event.MouseEvent e) {
+
+            if (e.getClickCount() == 2) {
+
+                int fila = tblMeseros.getSelectedRow();
+                EmpleadoDTO seleccionado = listaMeseros.get(fila);
+                
+                int opcion = JOptionPane.showConfirmDialog(FrmPantallaMesas.this, "¿Está seguro de desactivar al mesero " + seleccionado.getUser() + " " + seleccionado.getNombres() + "?", "CONFIRMACIÓN", JOptionPane.YES_NO_OPTION );
+                if(opcion == YES_OPTION){
+                    try {
+                        coordinador.desactivarMesero(seleccionado);
+                        recargarMesas();
+                        recargarMeseros();
+                    } catch (EmpleadosException ex) {
+                        JOptionPane.showMessageDialog(FrmPantallaMesas.this, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            }
+        }
+    });
     }
     
     private void obtenerInfoMesa(MesaDTO mesa) {        
