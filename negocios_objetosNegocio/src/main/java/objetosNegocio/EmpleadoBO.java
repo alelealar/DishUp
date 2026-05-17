@@ -121,11 +121,15 @@ public class EmpleadoBO {
         }
     }
 
-    public List<EmpleadoDTO> buscarMeserosNombreUser(EmpleadoDTO dto) throws NegocioException {
-
+    public List<EmpleadoDTO> buscarMeserosNombreUser(String filtro) throws NegocioException {
         try {
-            List<Empleado> empleados =
-                    empleadoDAO.buscarMeserosPorUserNombre(dto.getUser(), dto.getNombres());
+            List<Empleado> empleados;
+
+            if (filtro == null || filtro.isBlank()) {
+                empleados = empleadoDAO.obtenerMeserosActivos();
+            } else {
+                empleados = empleadoDAO.buscarMeserosPorUserNombre(filtro);
+            }
 
             return empleadoAdapter.listaEntidadADTO(empleados);
 

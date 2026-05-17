@@ -429,6 +429,10 @@ public class CoordinadorInterfaces {
         mesaFachada.eliminarMesa(mesa);
     }
     
+    public List<EmpleadoDTO> buscar(String filtro) throws EmpleadosException{
+        return empleadoFachada.buscarMeserosNombreUser(filtro);
+    }
+    
 
     public void entregarPedido(PedidoDTO pedido) throws ComandasException {
 

@@ -44,7 +44,7 @@ public class EmpleadoFachada implements IGestionEmpleados{
     }
 
     @Override
-    public List<EmpleadoDTO> buscarMeserosNombreUser(EmpleadoDTO empleado) throws EmpleadosException {
-        return empleadoControl.buscarMeserosNombreUser(empleado);
+    public List<EmpleadoDTO> buscarMeserosNombreUser(String filtro) throws EmpleadosException {
+        return empleadoControl.buscarMeserosPorUserNombre(filtro);
     }
 }

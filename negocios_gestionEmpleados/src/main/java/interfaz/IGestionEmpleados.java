@@ -26,5 +26,5 @@ public interface IGestionEmpleados {
 
     List<EmpleadoDTO> obtenerMeserosActivos() throws EmpleadosException;
 
-    List<EmpleadoDTO> buscarMeserosNombreUser(EmpleadoDTO empleado) throws EmpleadosException;
+    public List<EmpleadoDTO> buscarMeserosNombreUser(String filtro) throws EmpleadosException;
 }

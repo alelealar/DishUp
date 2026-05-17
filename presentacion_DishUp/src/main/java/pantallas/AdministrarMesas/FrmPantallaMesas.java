@@ -12,6 +12,7 @@ import enums.EstadoMesaDTO;
 import enums.RolEmpleadoDTO;
 import excepciones.EmpleadosException;
 import excepciones.MesasException;
+import java.awt.Color;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,7 +29,7 @@ import javax.swing.table.DefaultTableModel;
 public class FrmPantallaMesas extends javax.swing.JFrame {
     private CoordinadorInterfaces coordinador;
     Timer clickTimer;
-    private boolean doubleClick = false;
+    Timer searchTimer;
     EmpleadoDTO empleado;
     
 
@@ -62,7 +63,7 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
         imgLogo = new javax.swing.JLabel();
         lblEmpleado = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
+        txtBuscador = new javax.swing.JTextField();
         scrollTabla = new javax.swing.JScrollPane();
         tblMeseros = new javax.swing.JTable();
         btnAgregarMesa = new javax.swing.JButton();
@@ -121,9 +122,27 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
                         .addGap(24, 24, 24))))
         );
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI Variable", 0, 14)); // NOI18N
-        jTextField1.setForeground(new java.awt.Color(153, 153, 153));
-        jTextField1.setText("Buscar");
+        txtBuscador.setFont(new java.awt.Font("Segoe UI Variable", 0, 14)); // NOI18N
+        txtBuscador.setForeground(new java.awt.Color(153, 153, 153));
+        txtBuscador.setText("Buscar...");
+        txtBuscador.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                txtBuscadorFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtBuscadorFocusLost(evt);
+            }
+        });
+        txtBuscador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtBuscadorActionPerformed(evt);
+            }
+        });
+        txtBuscador.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscadorKeyReleased(evt);
+            }
+        });
 
         scrollTabla.setBackground(new java.awt.Color(255, 255, 255));
 
@@ -222,7 +241,7 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 322, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(scrollTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 745, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(281, 281, 281)
@@ -248,15 +267,13 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtBuscador, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(scrollTabla, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnAgregarMesa, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(0, 0, 0)
-                        .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                    .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -304,6 +321,41 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btnAgregarMesaMouseClicked
 
+    private void txtBuscadorFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscadorFocusGained
+        txtBuscador.setText("");
+    }//GEN-LAST:event_txtBuscadorFocusGained
+
+    private void txtBuscadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtBuscadorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtBuscadorActionPerformed
+
+    private void txtBuscadorFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtBuscadorFocusLost
+        txtBuscador.setText("Buscar...");
+        txtBuscador.setForeground(Color.decode("#999999"));
+    }//GEN-LAST:event_txtBuscadorFocusLost
+
+    private void txtBuscadorKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscadorKeyReleased
+        if (searchTimer != null) {
+            searchTimer.stop();
+        }
+
+        searchTimer = new javax.swing.Timer(1500, e -> {
+
+            String filtro = txtBuscador.getText().trim();
+
+            try {
+                List<EmpleadoDTO> lista = coordinador.buscar(filtro);
+                cargarTabla(lista);
+
+            } catch (EmpleadosException ex) {
+                JOptionPane.showMessageDialog(this, ex.getMessage());
+            }
+        });
+
+        searchTimer.setRepeats(false);
+        searchTimer.start();
+    }//GEN-LAST:event_txtBuscadorKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAgregarMesa;
     private javax.swing.JLabel imgLogo;
@@ -315,13 +367,13 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JLabel lblEmpleado;
     private javax.swing.JPanel panHeader;
     private javax.swing.JPanel panelMesas;
     private javax.swing.JScrollPane scrollPanMesas;
     private javax.swing.JScrollPane scrollTabla;
     private javax.swing.JTable tblMeseros;
+    private javax.swing.JTextField txtBuscador;
     // End of variables declaration//GEN-END:variables
     
     public void recargarMeseros() {

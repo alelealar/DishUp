@@ -96,7 +96,7 @@ public class EmpleadoDAO implements IEmpleadoDAO {
     }
 
     @Override
-    public List<Empleado> buscarMeserosPorUserNombre(String user, String nombre) throws PersistenciaException {
+    public List<Empleado> buscarMeserosPorUserNombre(String filtro) throws PersistenciaException {
         try{
             
             List<Bson> filtros = new ArrayList<>();
@@ -104,14 +104,14 @@ public class EmpleadoDAO implements IEmpleadoDAO {
             filtros.add(eq("rol", RolEmpleado.MESERO));
             filtros.add(eq("estado", EstadoEmpleado.ACTIVO));
             
-            if (user != null && !user.isBlank()) {
-                filtros.add(regex("user", ".*" + user + ".*", "i"));
+            if (filtro != null && !filtro.isBlank()) {
+
+                filtros.add(or(
+                    regex("user", ".*" + filtro + ".*", "i"),
+                    regex("nombres", ".*" + filtro + ".*", "i")
+                ));
             }
-            
-            if (nombre != null && !nombre.isBlank()) {
-                filtros.add(regex("nombre", ".*" + nombre + ".*", "i"));
-            }
-            
+
             List<EmpleadoEntidadMongo> activosMongo = coleccion.find(and(filtros)).into(new ArrayList<>());
             
             List<Empleado> dominios = new ArrayList<>();

@@ -142,5 +142,44 @@ public class EmpleadoDAONGTest {
         assertNotNull(activos);
         assertEquals(0, activos.size()); 
     }
+
+    @Test
+    public void testBuscarMeserosPorUserNombre_correcto() throws PersistenciaException {
+
+        EmpleadoEntidadMongo emp1 = new EmpleadoEntidadMongo( null, "Alejandra", "Leal", "Armenta", "ale123", RolEmpleado.MESERO.name(), EstadoEmpleado.ACTIVO.name() );
+
+        EmpleadoEntidadMongo emp2 = new EmpleadoEntidadMongo( null, "Carlos", "Ramirez", "Lopez", "carlos99", RolEmpleado.MESERO.name(), EstadoEmpleado.ACTIVO.name() );
+
+        insertarEmpleadoMongo(emp1);
+        insertarEmpleadoMongo(emp2);
+
+        List<Empleado> resultado = emDAO.buscarMeserosPorUserNombre("ale");
+
+        assertNotNull(resultado);
+        assertEquals(1, resultado.size());
+        assertEquals("ale123", resultado.get(0).getUser());
+    }
+
+    @Test
+    public void testBuscarMeserosPorUserNombre_sinCoincidencias() throws PersistenciaException {
+
+        EmpleadoEntidadMongo emp1 = new EmpleadoEntidadMongo(
+                null,
+                "Luis",
+                "Hernandez",
+                "Morales",
+                "luis01",
+                RolEmpleado.MESERO.name(),
+                EstadoEmpleado.ACTIVO.name()
+        );
+
+        insertarEmpleadoMongo(emp1);
+
+        List<Empleado> resultado =
+                emDAO.buscarMeserosPorUserNombre("zzz");
+
+        assertNotNull(resultado);
+        assertEquals(0, resultado.size());
+    }
 }
 */

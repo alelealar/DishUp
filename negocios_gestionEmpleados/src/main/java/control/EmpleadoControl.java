@@ -94,14 +94,9 @@ public class EmpleadoControl {
         }
     }
 
-    public List<EmpleadoDTO> buscarMeserosNombreUser(EmpleadoDTO dto) throws EmpleadosException {
-
-        if (dto == null) {
-            throw new EmpleadosException("Empleado nulo.");
-        }
-
+    public List<EmpleadoDTO> buscarMeserosPorUserNombre(String filtro)throws EmpleadosException {
         try {
-            return empleadoBO.buscarMeserosNombreUser(dto);
+            return empleadoBO.buscarMeserosNombreUser(filtro);
         } catch (NegocioException ex) {
             throw new EmpleadosException("Error en la búsqueda de meseros.");
         }

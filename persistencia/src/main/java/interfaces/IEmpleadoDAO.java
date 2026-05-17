@@ -22,5 +22,5 @@ public interface IEmpleadoDAO {
     
     public List<Empleado> obtenerMeserosActivos() throws PersistenciaException;
     
-    public List<Empleado> buscarMeserosPorUserNombre(String user, String nombre) throws PersistenciaException;
+    public List<Empleado> buscarMeserosPorUserNombre(String filtro) throws PersistenciaException;
 }
