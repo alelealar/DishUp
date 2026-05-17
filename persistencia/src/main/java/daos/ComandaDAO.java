@@ -12,6 +12,7 @@ import conexion.ConexionMongo;
 import entidades.Comanda;
 import entidades.Pedido;
 import entidadesMongo.ComandaEntidadMongo;
+import entidadesMongo.PedidoEntidadMongo;
 import excepciones.PersistenciaException;
 import interfaces.IComandaDAO;
 import java.util.ArrayList;
@@ -167,18 +168,29 @@ public class ComandaDAO implements IComandaDAO {
     @Override
     public List<Comanda> obtenerComandasListas() throws PersistenciaException {
         try {
-            List<ComandaEntidadMongo> listaMongo = coleccion.find(eq("estado", "LISTA")).into(new ArrayList<>());
-
+            List<ComandaEntidadMongo> listaMongo = coleccion.find().into(new ArrayList<>());
             List<Comanda> lista = new ArrayList<>();
 
             for (ComandaEntidadMongo mongo : listaMongo) {
-                lista.add(adapter.aDominio(mongo));
+
+                boolean tienePedidosListos = false;
+
+                for (PedidoEntidadMongo pedido : mongo.getPedidos()) {
+                    if (pedido.getEstado().name().equals("LISTA")) {
+                        tienePedidosListos = true;
+                        break;
+                    }
+                }
+
+                if (tienePedidosListos) {
+                    lista.add(adapter.aDominio(mongo));
+                }
             }
 
             return lista;
 
         } catch (MongoException e) {
-            throw new PersistenciaException("Error al obtener comandas listas", e);
+            throw new PersistenciaException("Error al obtener comandas con pedidos listos", e);
         }
     }
 

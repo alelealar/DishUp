@@ -9,6 +9,7 @@ import coordinador.CoordinadorInterfaces;
 import dtos.ComandaDTO;
 import dtos.MesaDTO;
 import dtos.PedidoDTO;
+import enums.EstadoPedidoDTO;
 import excepciones.MesasException;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -485,8 +486,8 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             lblEspacio.setVisible(false);
 
             comandas.sort((c1, c2) -> {
-                boolean c1Lista = c1.getEstado().name().equals("LISTA");
-                boolean c2Lista = c2.getEstado().name().equals("LISTA");
+                boolean c1Lista = tienePedidosListos(c1);
+                boolean c2Lista = tienePedidosListos(c2);
 
                 if (c1Lista && !c2Lista) {
                     return -1;
@@ -511,6 +512,15 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
         panComandasLlenas.repaint();
     }
 
+    private boolean tienePedidosListos(ComandaDTO comanda) {
+        for (PedidoDTO pedido : comanda.getPedidos()) {
+            if (pedido.getEstado() == EstadoPedidoDTO.LISTA) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public class ComandaCard extends JPanel {
 
         public ComandaCard(ComandaDTO comanda) {
@@ -521,7 +531,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
             JPanel header = new JPanel(new BorderLayout());
 
-            if (comanda.getEstado() != null && comanda.getEstado().name().equals("LISTA")) {
+            if (tienePedidosListos(comanda)) {
                 header.setBackground(Color.decode("#B9F6B1"));
             } else {
                 header.setBackground(Color.decode("#FFDA92"));
@@ -557,7 +567,25 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
                 lblPedido.setText(texto);
 
-                lblPedido.setFont(new Font("Monospaced", Font.PLAIN, 12));
+                switch (ped.getEstado()) {
+                    case PENDIENTE:
+                        lblPedido.setForeground(Color.decode("#CF2C21"));
+                        break;
+
+                    case EN_PREPARACION:
+                        lblPedido.setForeground(Color.decode("#FA8411"));
+                        break;
+
+                    case LISTA:
+                        lblPedido.setForeground(Color.decode("#2E9E48"));
+                        break;
+
+                    case ENTREGADO:
+                        lblPedido.setForeground(Color.BLACK);
+                        break;
+                }
+
+                lblPedido.setFont(new Font("Monospaced", Font.BOLD, 14));
 
                 lblPedido.setBorder(
                         BorderFactory.createEmptyBorder(5, 5, 5, 5)
@@ -590,7 +618,8 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
                                 = new DlgDetallePedido(
                                         null,
                                         true,
-                                        ped
+                                        ped,
+                                        coordinador
                                 );
 
                         dlg.setVisible(true);
@@ -652,7 +681,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
             btnCancelar.setPreferredSize(new Dimension(160, 35));
             btnCancelar.setFocusPainted(false);
 
-            JButton btnEntregar = new JButton("Entregar comanda");
+            JButton btnEntregar = new JButton("Entregar pedidos listos");
             btnEntregar.setBackground(Color.decode("#B9F6B1"));
             btnEntregar.setPreferredSize(new Dimension(170, 35));
             btnEntregar.setFocusPainted(false);
@@ -661,7 +690,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
 
                 int confirmacion = JOptionPane.showConfirmDialog(
                         this,
-                        "¿Seguro que deseas entregar esta comanda?",
+                        "¿Seguro que deseas entregar pedidos listos?",
                         "Confirmar entrega",
                         JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE
@@ -696,6 +725,7 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
                     case "PENDIENTE":
                         footer.add(btnEditar);
                         footer.add(btnCancelar);
+                        footer.add(btnEntregar);
                         break;
                     case "LISTA":
                         footer.add(btnAgregar);
@@ -703,8 +733,10 @@ public class FrmPantallaComandas extends javax.swing.JFrame {
                         break;
                     case "EN_PREPARACION":
                         footer.add(btnAgregar);
+                        footer.add(btnEntregar);
                     case "ENTREGADA":
                         footer.add(btnAgregar);
+                        footer.add(btnEntregar);
                     case "PAGADA":
                         // no mostrar botones
                         break;

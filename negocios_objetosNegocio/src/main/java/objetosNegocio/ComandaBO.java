@@ -10,6 +10,8 @@ import dtos_infraestructura.InventarioRequestDTO;
 import entidades.Comanda;
 import entidades.Pedido;
 import enums.EstadoComanda;
+import enums.EstadoPedido;
+import enums.EstadoPedidoDTO;
 import excepcion.NegocioException;
 import excepciones.PersistenciaException;
 import fachada.InventarioFachada;
@@ -33,10 +35,14 @@ public class ComandaBO {
         this.productoBO = new ProductoBO(inventarioAPI);
     }
 
-    public void crearComanda(String nombreCliente, int numeroMesa,
-            List<PedidoDTO> pedidosDTO, EmpleadoDTO empleadoActual) throws NegocioException {
+    public void crearComanda(String nombreCliente, int numeroMesa, List<PedidoDTO> pedidosDTO, EmpleadoDTO empleadoActual) throws NegocioException {
         procesarComanda(pedidosDTO);
+        for (PedidoDTO pedido : pedidosDTO) {
+            pedido.setEstado(EstadoPedidoDTO.PENDIENTE);
+        }
         Comanda comanda = adapter.aEntidad(nombreCliente, numeroMesa, pedidosDTO, empleadoActual);
+        comanda.setEstado(calcularEstadoComanda(comanda.getPedidos()));
+
         try {
             comandaDAO.insertarComanda(comanda);
         } catch (PersistenciaException e) {
@@ -60,7 +66,9 @@ public class ComandaBO {
         try {
             List<Comanda> comandas = comandaDAO.obtenerComandasPorMesa(numeroMesa);
             List<ComandaDTO> listaDTO = new ArrayList<>();
-            for (Comanda c : comandas) listaDTO.add(adapter.aDTO(c));
+            for (Comanda c : comandas) {
+                listaDTO.add(adapter.aDTO(c));
+            }
             return listaDTO;
         } catch (PersistenciaException e) {
             throw new RuntimeException("Error al obtener comandas", e);
@@ -68,13 +76,26 @@ public class ComandaBO {
     }
 
     public void agregarPedidosAComanda(String idComanda, List<PedidoDTO> pedidosDTO) throws NegocioException {
+        for (PedidoDTO pedido : pedidosDTO) {
+            pedido.setEstado(EstadoPedidoDTO.PENDIENTE);
+        }
+
         procesarComanda(pedidosDTO);
+
         List<Pedido> pedidos = pedidoAdapter.listaAEntidad(pedidosDTO);
         try {
             for (Pedido pedido : pedidos) {
                 boolean ok = comandaDAO.agregarPedidoAComanda(idComanda, pedido);
-                if (!ok) throw new NegocioException("No se pudo agregar el pedido");
+                if (!ok) {
+                    throw new NegocioException("No se pudo agregar el pedido");
+                }
             }
+
+            Comanda comandaActual = comandaDAO.obtenerPorId(idComanda);
+            EstadoComanda nuevoEstado = calcularEstadoComanda(comandaActual.getPedidos());
+
+            comandaDAO.actualizarEstado(idComanda, nuevoEstado.name());
+
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al agregar pedidos", e);
         }
@@ -92,7 +113,9 @@ public class ComandaBO {
     public boolean eliminarComanda(String idComanda) throws NegocioException {
         try {
             boolean eliminada = comandaDAO.eliminarComanda(idComanda);
-            if (!eliminada) throw new NegocioException("No se pudo eliminar la comanda");
+            if (!eliminada) {
+                throw new NegocioException("No se pudo eliminar la comanda");
+            }
             return true;
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al eliminar la comanda", e);
@@ -103,29 +126,78 @@ public class ComandaBO {
         try {
             List<Comanda> comandas = comandaDAO.obtenerComandasListas();
             List<ComandaDTO> listaDTO = new ArrayList<>();
-            for (Comanda c : comandas) listaDTO.add(adapter.aDTO(c));
+            for (Comanda c : comandas) {
+                listaDTO.add(adapter.aDTO(c));
+            }
             return listaDTO;
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al obtener comandas listas", e);
         }
     }
 
-    public void entregarComanda(String idComanda) throws NegocioException {
-        try {
-            boolean actualizado = comandaDAO.actualizarEstado(idComanda, EstadoComanda.ENTREGADA.name());
-            if (!actualizado) throw new NegocioException("No se pudo actualizar");
-        } catch (PersistenciaException e) {
-            throw new NegocioException("Error al entregar comanda", e);
-        }
-    }
+    
 
     public ComandaDTO obtenerComandaPorId(String id) throws NegocioException {
         try {
             Comanda comanda = comandaDAO.obtenerPorId(id);
-            if (comanda == null) return null;
+            if (comanda == null) {
+                return null;
+            }
             return adapter.aDTO(comanda);
         } catch (PersistenciaException e) {
             throw new NegocioException("Error al obtener comanda", e);
+        }
+    }
+
+    private EstadoComanda calcularEstadoComanda(List<Pedido> pedidos) {
+
+        boolean hayPendiente = false;
+        boolean hayPreparacion = false;
+        boolean hayLista = false;
+
+        for (Pedido p : pedidos) {
+            switch (p.getEstado()) {
+                case PENDIENTE:
+                    hayPendiente = true;
+                    break;
+                case EN_PREPARACION:
+                    hayPreparacion = true;
+                    break;
+                case LISTA:
+                    hayLista = true;
+                    break;
+                case ENTREGADO:
+                    break;
+            }
+        }
+
+        if (hayPendiente) {
+            return EstadoComanda.PENDIENTE;
+        }
+        if (hayPreparacion) {
+            return EstadoComanda.EN_PREPARACION;
+        }
+        if (hayLista) {
+            return EstadoComanda.LISTA;
+        }
+        return EstadoComanda.ENTREGADA;
+    }
+
+    public void recalcularYActualizarEstadoComanda(ComandaDTO comandaDTO) throws NegocioException {
+        try {
+            Comanda comanda = adapter.aEntidad(
+                    comandaDTO.getNombreCliente(),
+                    comandaDTO.getNumMesa(),
+                    comandaDTO.getPedidos(),
+                    null
+            );
+
+            EstadoComanda estado = calcularEstadoComanda(comanda.getPedidos());
+
+            comandaDAO.actualizarEstado(comandaDTO.getId(), estado.name());
+
+        } catch (PersistenciaException e) {
+            throw new NegocioException("Error al recalcular estado", e);
         }
     }
 }

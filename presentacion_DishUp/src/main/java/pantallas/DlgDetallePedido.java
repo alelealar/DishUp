@@ -1,5 +1,6 @@
 package pantallas;
 
+import coordinador.CoordinadorInterfaces;
 import dtos.PedidoDTO;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -21,17 +22,19 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 
 /**
- * 
+ *
  * @author DishUp
  */
 public class DlgDetallePedido extends JDialog {
 
     private PedidoDTO pedido;
 
-    public DlgDetallePedido(java.awt.Frame parent, boolean modal, PedidoDTO pedido) {
-        super(parent, modal);
+    private CoordinadorInterfaces coordinador;
 
+    public DlgDetallePedido(java.awt.Frame parent, boolean modal, PedidoDTO pedido, CoordinadorInterfaces coordinador) {
+        super(parent, modal);
         this.pedido = pedido;
+        this.coordinador = coordinador;
 
         setSize(450, 500);
         setLocationRelativeTo(null);
@@ -143,6 +146,12 @@ public class DlgDetallePedido extends JDialog {
         btnCancelar.setPreferredSize(new Dimension(140, 40));
         btnCancelar.setFont(new Font("Trebuchet MS", Font.BOLD, 14));
 
+        JButton btnEntregar = new JButton("Entregar pedido");
+        btnEntregar.setBackground(Color.decode("#B9F6B1"));
+        btnEntregar.setFocusPainted(false);
+        btnEntregar.setPreferredSize(new Dimension(160, 40));
+        btnEntregar.setFont(new Font("Trebuchet MS", Font.BOLD, 14));
+
         btnModificar.addActionListener(e -> {
 
             JOptionPane.showMessageDialog(
@@ -172,8 +181,59 @@ public class DlgDetallePedido extends JDialog {
             }
         });
 
-        footer.add(btnModificar);
-        footer.add(btnCancelar);
+        btnEntregar.addActionListener(e -> {
+
+            int opcion = JOptionPane.showConfirmDialog(
+                    this,
+                    "¿Marcar pedido como entregado?",
+                    "Confirmación",
+                    JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE
+            );
+
+            if (opcion == JOptionPane.YES_OPTION) {
+
+                try {
+
+                    coordinador.entregarPedido(pedido);
+
+                    JOptionPane.showMessageDialog(
+                            this,
+                            "Pedido entregado correctamente",
+                            "Éxito",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+
+                    dispose();
+
+                } catch (Exception ex) {
+
+                    JOptionPane.showMessageDialog(
+                            this,
+                            ex.getMessage(),
+                            "Error",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
+            }
+        });
+
+        switch (pedido.getEstado()) {
+            case PENDIENTE:
+                footer.add(btnModificar);
+                footer.add(btnCancelar);
+                break;
+
+            case EN_PREPARACION:
+                break;
+
+            case LISTA:
+                footer.add(btnEntregar);
+                break;
+
+            case ENTREGADO:
+                break;
+        }
 
         panelPrincipal.add(footer, BorderLayout.SOUTH);
     }
