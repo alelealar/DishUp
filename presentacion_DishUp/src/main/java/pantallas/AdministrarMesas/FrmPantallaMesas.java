@@ -4,6 +4,7 @@
  */
 package pantallas.AdministrarMesas;
 
+
 import coordinador.CoordinadorInterfaces;
 import dtos.EmpleadoDTO;
 import dtos.MesaDTO;
@@ -16,6 +17,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
+import static javax.swing.JOptionPane.YES_OPTION;
+import javax.swing.Timer;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -24,6 +27,8 @@ import javax.swing.table.DefaultTableModel;
  */
 public class FrmPantallaMesas extends javax.swing.JFrame {
     private CoordinadorInterfaces coordinador;
+    Timer clickTimer;
+    private boolean doubleClick = false;
     EmpleadoDTO empleado;
     
 
@@ -416,8 +421,26 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
 
             btnMesa.setAlignmentX(java.awt.Component.CENTER_ALIGNMENT);
             
-            btnMesa.addActionListener(e -> {
-                seleccionarMesa(mesa);
+            btnMesa.addMouseListener(new java.awt.event.MouseAdapter() {
+
+                @Override
+                public void mouseClicked(java.awt.event.MouseEvent e) {
+
+                    if (e.getClickCount() == 2) {
+                        if (clickTimer != null) {
+                            clickTimer.stop();
+                        }
+
+                        eliminarMesa(mesa);
+                        return;
+                    }
+                    clickTimer = new javax.swing.Timer(200, ev -> {
+                        obtenerInfoMesa(mesa);
+                    });
+
+                    clickTimer.setRepeats(false);
+                    clickTimer.start();
+                }
             });
 
             if (mesa.getIdMesero() != null) {
@@ -435,7 +458,7 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
         panelMesas.repaint();
     }
     
-    private void seleccionarMesa(MesaDTO mesa) {        
+    private void obtenerInfoMesa(MesaDTO mesa) {        
         try {
             MesaDTO obtenida = coordinador.obtenerMesa(mesa);
             System.out.println("Mesa: "+mesa );
@@ -445,7 +468,7 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
 
             } else {
 
-                EmpleadoDTO completo = coordinador.obtenerEmpleado(mesa);
+                EmpleadoDTO completo = coordinador.obtenerEmpleadoPorMesa(mesa);
                 System.out.println("mesero: "+completo.toString());
 
                 coordinador.setMeseroMesa(completo, obtenida);
@@ -457,6 +480,30 @@ public class FrmPantallaMesas extends javax.swing.JFrame {
         }
     }
     
+    private void eliminarMesa(MesaDTO mesa){
+        if(mesa.getIdMesero() != null){
+        try {
+            EmpleadoDTO mesero = coordinador.obtenerEmpleadoPorMesa(mesa);
+            JOptionPane.showMessageDialog(FrmPantallaMesas.this, "La mesa está asignada al mesero "+mesero.getNombres()+".\nDesvincule la mesa para su eliminación", "AVISO", JOptionPane.INFORMATION_MESSAGE);
+            return;
+        } catch (EmpleadosException ex) {
+            JOptionPane.showMessageDialog(FrmPantallaMesas.this, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+        }
+        } else {
+            int opcion = JOptionPane.showConfirmDialog(FrmPantallaMesas.this, "¿Está seguro de eliminar la mesa " + mesa.getNumeroMesa() + "?", "Confirmación", JOptionPane.YES_NO_OPTION );
+            if(opcion == YES_OPTION){
+                try {
+                    coordinador.eliminarMesa(mesa);
+                    recargarMesas();
+                } catch (MesasException ex) {
+                    JOptionPane.showMessageDialog(FrmPantallaMesas.this, ex.getMessage(), "ERROR", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+
+        }
+    }
+    
+        
     public void setEmpleado(EmpleadoDTO em){
         empleado = em;
     }

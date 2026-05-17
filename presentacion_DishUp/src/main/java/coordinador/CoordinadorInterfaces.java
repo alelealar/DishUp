@@ -411,7 +411,7 @@ public class CoordinadorInterfaces {
         return mesaFachada.obtenerMesa(mesa);
     }
     
-    public EmpleadoDTO obtenerEmpleado(MesaDTO mesa) throws EmpleadosException{
+    public EmpleadoDTO obtenerEmpleadoPorMesa(MesaDTO mesa) throws EmpleadosException{
         return empleadoFachada.obtenerEmpleadoPorMesa(mesa);
     }
     
@@ -423,6 +423,10 @@ public class CoordinadorInterfaces {
         panInfoMesa = new panInfoMesa();
         panInfoMesa.setInfoMesa(mesero, mesa);
         panInfoMesa.setVisible(true);
+    }
+    
+    public void eliminarMesa(MesaDTO mesa) throws MesasException{
+        mesaFachada.eliminarMesa(mesa);
     }
     
 
