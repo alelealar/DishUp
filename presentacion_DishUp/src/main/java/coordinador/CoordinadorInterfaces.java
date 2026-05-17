@@ -393,4 +393,13 @@ public class CoordinadorInterfaces {
         }
     }
 
+    public void entregarPedido(PedidoDTO pedido) throws ComandasException {
+
+       // comandaFachada.entregarPedido(pedido);
+
+        if (frmComandas != null) {
+            frmComandas.actualizarPantalla();
+        }
+    }
+
 }

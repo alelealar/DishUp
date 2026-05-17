@@ -3,6 +3,7 @@ package control;
 import dtos.ComandaDTO;
 import dtos.EmpleadoDTO;
 import dtos.PedidoDTO;
+import enums.EstadoPedidoDTO;
 import excepcion.NegocioException;
 import excepciones.ComandasException;
 import java.util.List;
@@ -82,7 +83,9 @@ public class ComandaControl {
         }
         try {
             ComandaDTO comanda = comandaBO.obtenerComandaPorId(idComanda);
-            if (comanda == null) throw new ComandasException("La comanda no existe");
+            if (comanda == null) {
+                throw new ComandasException("La comanda no existe");
+            }
             if (!comanda.getEstado().name().equals("PENDIENTE")) {
                 throw new ComandasException("Solo se pueden cancelar comandas en estado PENDIENTE");
             }
@@ -106,13 +109,27 @@ public class ComandaControl {
         }
         try {
             ComandaDTO comanda = comandaBO.obtenerComandaPorId(idComanda);
-            if (comanda == null) throw new ComandasException("La comanda no existe");
-            if (!comanda.getEstado().name().equals("LISTA")) {
-                throw new ComandasException("Solo las comandas LISTAS pueden entregarse");
+            if (comanda == null) {
+                throw new ComandasException("La comanda no existe");
+            }
+            boolean hayPedidosListos = false;
+
+            for (PedidoDTO pedido : comanda.getPedidos()) {
+
+                if (pedido.getEstado() == EstadoPedidoDTO.LISTA) {
+
+                    hayPedidosListos = true;
+                    break;
+                }
+            }
+
+            if (!hayPedidosListos) {
+                throw new ComandasException("No hay pedidos listos para entregar");
             }
             comandaBO.entregarComanda(idComanda);
         } catch (NegocioException ex) {
             throw new ComandasException("No fue posible entregar la comanda: " + ex.getMessage());
         }
     }
+    
 }
